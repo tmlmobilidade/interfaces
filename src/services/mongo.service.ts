@@ -1,7 +1,7 @@
 import { Collection, Db, DbOptions, MongoClient, MongoClientOptions } from 'mongodb';
 
-export class MongoDbService {
-	private static _instance: MongoDbService;
+export class MongoService {
+	private static _instance: MongoService;
 	private _client: MongoClient;
 
 	constructor(uri: string, options?: MongoClientOptions) {
@@ -18,16 +18,16 @@ export class MongoDbService {
 	/**
    * Get the singleton instance of MongoDbService.
    */
-	public static getInstance(uri?: string, options?: MongoClientOptions): MongoDbService {
-		if (!MongoDbService._instance) {
+	public static getInstance(uri?: string, options?: MongoClientOptions): MongoService {
+		if (!MongoService._instance) {
 			if (!uri) {
 				throw new Error('MongoDB URI is required');
 			}
 
-			MongoDbService._instance = new MongoDbService(uri, options);
+			MongoService._instance = new MongoService(uri, options);
 		}
 
-		return MongoDbService._instance;
+		return MongoService._instance;
 	}
 
 	/**

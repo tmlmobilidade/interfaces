@@ -1,0 +1,14 @@
+name: tml-interfaces-local
+
+
+
+services:
+  stops-db:
+    image: mongo:latest
+    ports:
+      - 37001:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - ./data/stops-db:/data/db
