@@ -7,7 +7,6 @@ class RidesClass extends MongoCollectionClass<Ride> {
 
 	private constructor() {
 		super();
-		this.connect(process.env.TML_INTERFACES_RIDES);
 	}
 
 	public static getInstance() {
@@ -19,6 +18,10 @@ class RidesClass extends MongoCollectionClass<Ride> {
 
 	protected getCollectionName() {
 		return 'rides';
+	}
+
+	protected getDbUri() {
+		return process.env.TML_INTERFACES_RIDES;
 	}
 
 	/**

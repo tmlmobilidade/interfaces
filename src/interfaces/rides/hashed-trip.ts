@@ -7,7 +7,6 @@ class HashedTripsClass extends MongoCollectionClass<HashedTrip> {
 
 	private constructor() {
 		super();
-		this.connect(process.env.TML_INTERFACES_RIDES);
 	}
 
 	public static getInstance() {
@@ -19,6 +18,10 @@ class HashedTripsClass extends MongoCollectionClass<HashedTrip> {
 
 	protected getCollectionName() {
 		return 'hashed_trips';
+	}
+
+	protected getDbUri() {
+		return process.env.TML_INTERFACES_RIDES;
 	}
 
 	/**

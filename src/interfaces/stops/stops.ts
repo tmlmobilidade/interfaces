@@ -7,7 +7,6 @@ class StopsClass extends MongoCollectionClass<Stop> {
 
 	private constructor() {
 		super();
-		this.connect(process.env.TML_INTERFACES_STOPS);
 	}
 
 	public static getInstance() {
@@ -19,6 +18,10 @@ class StopsClass extends MongoCollectionClass<Stop> {
 
 	protected getCollectionName() {
 		return 'stops';
+	}
+
+	protected getDbUri() {
+		return process.env.TML_INTERFACES_STOPS;
 	}
 
 	/**

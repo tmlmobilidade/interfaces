@@ -8,15 +8,18 @@ export abstract class MongoCollectionClass<T> {
 	// Abstract method for subclasses to provide the MongoDB collection name
 	protected abstract getCollectionName(): string;
 
+	// Abstract method for subclasses to provide the MongoDB database URI
+	protected abstract getDbUri(): string;
+
 	/**
 	 * Establishes a connection to the Mongo database and initializes the collection.
 	 * @param dbUri Mongo database URI
 	 * @param options Optional Mongo client connection options
 	 * @throws {Error} If connection fails
 	 */
-	async connect(dbUri: string, options?: MongoClientOptions) {
+	async connect(options?: MongoClientOptions) {
 		try {
-			this.mongoService = new MongoService(dbUri, options);
+			this.mongoService = new MongoService(this.getDbUri(), options);
 			await this.mongoService.connect();
 			this.mongoCollection = await this.mongoService.getCollection<T>(
 				this.mongoService.client.db('production'),
@@ -25,7 +28,7 @@ export abstract class MongoCollectionClass<T> {
 			console.log(`⤷ Connected to ${this.getCollectionName()}.`);
 		}
 		catch (error) {
-			throw new Error(`Error connecting to ${this.getCollectionName()}: ${error.message}`);
+			throw new Error(`Error connecting to ${this.getCollectionName()}`);
 		}
 	}
 

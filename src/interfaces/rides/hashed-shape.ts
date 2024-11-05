@@ -6,7 +6,6 @@ class HashedShapesClass extends MongoCollectionClass<HashedShape> {
 
 	private constructor() {
 		super();
-		this.connect(process.env.TML_INTERFACES_RIDES);
 	}
 
 	public static getInstance() {
@@ -18,6 +17,10 @@ class HashedShapesClass extends MongoCollectionClass<HashedShape> {
 
 	protected getCollectionName() {
 		return 'hashed_shapes';
+	}
+
+	protected getDbUri() {
+		return process.env.TML_INTERFACES_RIDES;
 	}
 
 	/**
