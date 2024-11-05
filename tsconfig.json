@@ -5,7 +5,6 @@
 		"paths": {
 			"@/*": ["./src/*"]
 		},
-		"rootDir": "src",
 		"types": ["jest"]
 	},
 	"include": ["src/**/*.ts", "test/**/*.ts"],
