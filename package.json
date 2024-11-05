@@ -1,7 +1,29 @@
 {
 	"name": "@tmlmobilidade/interfaces",
-	"license": "MIT",
-	"repository": "https://github.com/tmlmobilidade/interfaces",
+	"version": "1.0.0",
+	"author": "João de Vasconcelos",
+	"license": "AGPL-3.0-or-later",
+	"homepage": "https://github.com/tmlmobilidade/interfaces#readme",
+	"bugs": {
+		"url": "https://github.com/tmlmobilidade/interfaces/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tmlmobilidade/interfaces.git"
+	},
+	"keywords": [
+		"public transit",
+		"tml",
+		"transportes metropolitanos de lisboa",
+		"interfaces"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"type": "module",
+	"files": [
+		"dist/"
+	],
 	"scripts": {
 		"build": "tsc",
 		"dev": "dotenv-run -- tsx src/stops/index.ts",
