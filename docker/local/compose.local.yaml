@@ -10,5 +10,31 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: production
     volumes:
-      - ./data/stops-db:/data/db
+      - ./data/stops.dump:/dump/db.dump
+      - ./setup.sh:/docker-entrypoint-initdb.d/setup.sh
+  
+  lines-db:
+    image: mongo:latest
+    ports:
+      - 37002:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: production
+    volumes:
+      - ./data/lines.dump:/dump/db.dump
+      - ./setup.sh:/docker-entrypoint-initdb.d/setup.sh
+
+  rides-db:
+    image: mongo:latest
+    ports:
+      - 37003:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: production
+    volumes:
+      - ./data/rides-hashed.dump:/dump/db.dump
+      - ./setup.sh:/docker-entrypoint-initdb.d/setup.sh

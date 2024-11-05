@@ -1,7 +1,6 @@
 import { Collection, Db, DbOptions, MongoClient, MongoClientOptions } from 'mongodb';
 
 export class MongoService {
-	private static _instance: MongoService;
 	private _client: MongoClient;
 
 	constructor(uri: string, options?: MongoClientOptions) {
@@ -16,18 +15,10 @@ export class MongoService {
 	}
 
 	/**
-   * Get the singleton instance of MongoDbService.
-   */
-	public static getInstance(uri?: string, options?: MongoClientOptions): MongoService {
-		if (!MongoService._instance) {
-			if (!uri) {
-				throw new Error('MongoDB URI is required');
-			}
-
-			MongoService._instance = new MongoService(uri, options);
-		}
-
-		return MongoService._instance;
+	 * Aggregates data from a collection.
+	 */
+	async aggregate<T>(collection: Collection<T>, pipeline: Document[]) {
+		return collection.aggregate(pipeline).toArray();
 	}
 
 	/**
@@ -76,6 +67,16 @@ export class MongoService {
 		return db.collection<T>(collectionName);
 	}
 
+	/**
+	 * Watches a collection for changes.
+	 */
+	async watch<T>(collection: Collection<T>) {
+		return collection.watch();
+	}
+
+	/**
+	 * Get the MongoClient instance.
+	 */
 	get client(): MongoClient {
 		return this._client;
 	}
