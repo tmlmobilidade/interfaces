@@ -38,7 +38,7 @@ export abstract class MongoCollectionClass<T> {
 	 * @param filter - The filter criteria to match documents
 	 * @returns A promise that resolves to the count of matching documents
 	 */
-	async count(filter: Filter<T>) {
+	async count(filter?: Filter<T>) {
 		return this.mongoCollection.countDocuments(filter);
 	}
 
