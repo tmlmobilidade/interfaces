@@ -25,16 +25,17 @@ export class MongoConnector {
      * Connect to MongoDB and return the database instance.
      */
 	async connect(): Promise<MongoClient> {
-		if (!this._client || !this._client) {
-			try {
-				await this._client.connect();
-				console.log('⤷ Connected to MongoDB.');
-			}
-			catch (error) {
-				throw new Error('Error connecting to MongoDB', { cause: error });
-			}
+		if (!this._client) {
+			throw new Error('MongoClient not initialized');
 		}
-		return this._client;
+
+		try {
+			await this._client.connect();
+			return this._client;
+		}
+		catch (error) {
+			throw new Error('Error connecting to MongoDB', { cause: error });
+		}
 	}
 
 	/**

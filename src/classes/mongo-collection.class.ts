@@ -13,12 +13,12 @@ export abstract class MongoCollectionClass<T> {
 
 	/**
 	 * Establishes a connection to the Mongo database and initializes the collection.
-	 * @param dbUri Mongo database URI
 	 * @param options Optional Mongo client connection options
 	 * @throws {Error} If connection fails
 	 */
 	async connect(options?: MongoClientOptions) {
 		try {
+			console.log(`⤷ Connecting to ${this.getCollectionName()}...`);
 			this.mongoConnector = new MongoConnector(this.getDbUri(), options);
 			await this.mongoConnector.connect();
 			this.mongoCollection = await this.mongoConnector.getCollection<T>(
@@ -72,13 +72,13 @@ export abstract class MongoCollectionClass<T> {
 	/**
 	 * Finds multiple documents matching the filter criteria with optional pagination and sorting.
 	 *
-	 * @param filter - The filter criteria to match documents
-	 * @param perPage - Optional number of documents per page for pagination
-	 * @param page - Optional page number for pagination
-	 * @param sort - Optional sort specification
+	 * @param filter - (Optional) filter criteria to match documents
+	 * @param perPage - (Optional) number of documents per page for pagination
+	 * @param page - (Optional) page number for pagination
+	 * @param sort - (Optional) sort specification
 	 * @returns A promise that resolves to an array of matching documents
 	 */
-	async findMany(filter: Filter<T>, perPage?: number, page?: number, sort?: Sort) {
+	async findMany(filter?: Filter<T>, perPage?: number, page?: number, sort?: Sort) {
 		const query = this.mongoCollection.find(filter);
 		if (perPage) query.limit(perPage);
 		if (page && perPage) query.skip(perPage * (page - 1));
