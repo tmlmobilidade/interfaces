@@ -15,7 +15,7 @@ export interface QueryOptions {
 	where?: Record<string, any>
 }
 
-export class TrinoService {
+export class TrinoConnector {
 	private catalog: string;
 	private client: Trino;
 	private schema: string;

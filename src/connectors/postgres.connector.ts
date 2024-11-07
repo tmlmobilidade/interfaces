@@ -5,7 +5,7 @@ export interface PostgresConfig {
 	uri: string
 }
 
-export class PostgresService {
+export class PostgresConnector {
 	private client: Client;
 
 	constructor(config: PostgresConfig) {

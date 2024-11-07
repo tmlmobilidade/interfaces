@@ -10,35 +10,35 @@ export interface SshConfig {
 	tunnelOptions: TunnelOptions
 }
 
-export interface SshTunnelServiceOptions {
+export interface SshTunnelConnectorOptions {
 	maxRetries?: number
 }
 
-export class SshTunnelService {
-	private static _instance: SshTunnelService;
+export class SshTunnelConnector {
+	private static _instance: SshTunnelConnector;
 	private _server: Server;
 	private config: SshConfig;
-	private options: SshTunnelServiceOptions;
+	private options: SshTunnelConnectorOptions;
 	private retries = 0;
 
-	constructor(config: SshConfig, options?: SshTunnelServiceOptions) {
+	constructor(config: SshConfig, options?: SshTunnelConnectorOptions) {
 		this.config = config;
 		this.options = options;
 	}
 
 	/**
-     * Get the singleton instance of SshTunnelService.
+     * Get the singleton instance of SshTunnelConnector.
      */
-	public static getInstance(config?: SshConfig, options?: SshTunnelServiceOptions): SshTunnelService {
-		if (!SshTunnelService._instance) {
+	public static getInstance(config?: SshConfig, options?: SshTunnelConnectorOptions): SshTunnelConnector {
+		if (!SshTunnelConnector._instance) {
 			if (!config) {
 				throw new Error('SSH Config is required');
 			}
 
-			SshTunnelService._instance = new SshTunnelService(config, options);
+			SshTunnelConnector._instance = new SshTunnelConnector(config, options);
 		}
 
-		return SshTunnelService._instance;
+		return SshTunnelConnector._instance;
 	}
 
 	/**
@@ -53,8 +53,8 @@ export class SshTunnelService {
      *
      * @example
      * ```typescript
-     * const sshTunnelService = new SshTunnelService(config);
-     * sshTunnelService.connect();
+     * const sshTunnelConnector = new SshTunnelConnector(config);
+     * sshTunnelConnector.connect();
      * ```
      */
 	async connect() {

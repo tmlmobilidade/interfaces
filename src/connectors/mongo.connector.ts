@@ -1,6 +1,6 @@
 import { Collection, Db, DbOptions, MongoClient, MongoClientOptions } from 'mongodb';
 
-export class MongoService {
+export class MongoConnector {
 	private _client: MongoClient;
 
 	constructor(uri: string, options?: MongoClientOptions) {

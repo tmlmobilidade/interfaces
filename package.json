@@ -1,21 +1,21 @@
 {
-	"name": "@tmlmobilidade/interfaces",
+	"name": "@tmlmobilidade/services",
 	"version": "1.0.0",
-	"author": "João de Vasconcelos",
+	"author": "João de Vasconcelos & Jusi Monteiro",
 	"license": "AGPL-3.0-or-later",
-	"homepage": "https://github.com/tmlmobilidade/interfaces#readme",
+	"homepage": "https://github.com/tmlmobilidade/services#readme",
 	"bugs": {
-		"url": "https://github.com/tmlmobilidade/interfaces/issues"
+		"url": "https://github.com/tmlmobilidade/services/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/tmlmobilidade/interfaces.git"
+		"url": "git+https://github.com/tmlmobilidade/services.git"
 	},
 	"keywords": [
 		"public transit",
 		"tml",
 		"transportes metropolitanos de lisboa",
-		"interfaces"
+		"services"
 	],
 	"publishConfig": {
 		"access": "public"
@@ -31,10 +31,15 @@
 		"test:watch": "jest --watch"
 	},
 	"exports": {
-		".": {
+		"./interfaces": {
 			"import": "./dist/interfaces/index.js",
 			"require": "./dist/interfaces/index.js",
 			"types": "./dist/interfaces/index.d.ts"
+		},
+		"./providers": {
+			"import": "./dist/providers/index.js",
+			"require": "./dist/providers/index.js",
+			"types": "./dist/providers/index.d.ts"
 		},
 		"./types": {
 			"import": "./dist/types/index.js",

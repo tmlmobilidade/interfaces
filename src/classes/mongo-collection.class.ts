@@ -1,9 +1,9 @@
-import { MongoService } from '@/services/mongo.service';
+import { MongoConnector } from '@/connectors/mongo.connector';
 import { Collection, Filter, MongoClientOptions, ObjectId, OptionalUnlessRequiredId, Sort } from 'mongodb';
 
 export abstract class MongoCollectionClass<T> {
 	protected mongoCollection: Collection<T>;
-	protected mongoService: MongoService;
+	protected mongoConnector: MongoConnector;
 
 	// Abstract method for subclasses to provide the MongoDB collection name
 	protected abstract getCollectionName(): string;
@@ -19,10 +19,10 @@ export abstract class MongoCollectionClass<T> {
 	 */
 	async connect(options?: MongoClientOptions) {
 		try {
-			this.mongoService = new MongoService(this.getDbUri(), options);
-			await this.mongoService.connect();
-			this.mongoCollection = await this.mongoService.getCollection<T>(
-				this.mongoService.client.db('production'),
+			this.mongoConnector = new MongoConnector(this.getDbUri(), options);
+			await this.mongoConnector.connect();
+			this.mongoCollection = await this.mongoConnector.getCollection<T>(
+				this.mongoConnector.client.db('production'),
 				this.getCollectionName(),
 			);
 			console.log(`⤷ Connected to ${this.getCollectionName()}.`);
@@ -56,7 +56,7 @@ export abstract class MongoCollectionClass<T> {
 	 * Disconnects from the MongoDB database.
 	 */
 	async disconnect() {
-		await this.mongoService.disconnect();
+		await this.mongoConnector.disconnect();
 	}
 
 	/**
