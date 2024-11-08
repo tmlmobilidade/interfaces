@@ -23,6 +23,14 @@ export async function createHashedTripIndexes(collection: Collection<unknown>) {
 	]);
 }
 
+export async function createMunicipalityIndexes(collection: Collection<unknown>) {
+	return await collection.createIndexes([
+		{ background: true, key: { code: 1 }, unique: true },
+		{ background: true, key: { name: 1 } },
+		{ background: true, key: { prefix: 1 } },
+	]);
+}
+
 export async function createOrganizationIndexes(collection: Collection<unknown>) {
 	return await collection.createIndexes([
 		{ background: true, key: { name: 1 }, unique: true },
@@ -94,6 +102,8 @@ export async function createIndexFactory(database: Db, collectionName: string) {
 			return await createHashedShapeIndexes(collection);
 		case 'hashed_trips':
 			return await createHashedTripIndexes(collection);
+		case 'municipalities':
+			return await createMunicipalityIndexes(collection);
 		case 'organizations':
 			return await createOrganizationIndexes(collection);
 		case 'rides':

@@ -2,6 +2,7 @@ export * from './agencies.interface';
 export * from './files.interface';
 export * from './hashed-shape.interface';
 export * from './hashed-trip.interface';
+export * from './municipalities.interface';
 export * from './organizations.interface';
 export * from './rides.interface';
 export * from './roles.interface';
