@@ -1,4 +1,5 @@
 import { MongoConnector } from '@/connectors/mongo.connector';
+import { createIndexFactory } from '@/lib/mongo-indexes';
 import { Collection, Filter, MongoClientOptions, ObjectId, OptionalUnlessRequiredId, Sort } from 'mongodb';
 
 export abstract class MongoCollectionClass<T> {
@@ -25,6 +26,7 @@ export abstract class MongoCollectionClass<T> {
 				this.mongoConnector.client.db('production'),
 				this.getCollectionName(),
 			);
+			await createIndexFactory(this.mongoConnector.client.db('production'), this.getCollectionName());
 			console.log(`⤷ Connected to ${this.getCollectionName()}.`);
 		}
 		catch (error) {
