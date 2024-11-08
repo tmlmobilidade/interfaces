@@ -18,6 +18,8 @@ describe('UsersClass', () => {
 		it('should find a user by their email', async () => {
 			const user = await users.findByEmail(mockUsers[0].email);
 			expect(user?.email).toBe(mockUsers[0].email);
+
+			expect(user?.password_hash).toBeUndefined();
 		});
 
 		it('should return null if the user is not found', async () => {
@@ -30,6 +32,8 @@ describe('UsersClass', () => {
 		it('should find a user by their ID', async () => {
 			const user = await users.findById(mockUsers[0]._id.toString());
 			expect(user?._id.toString()).toBe(mockUsers[0]._id.toString());
+
+			expect(user?.password_hash).toBeUndefined();
 		});
 
 		it('should return null if the ID does not exist', async () => {
@@ -50,6 +54,10 @@ describe('UsersClass', () => {
 				const matches = user.organization_ids.some(id => orgIds.includes(id.toString()));
 				expect(matches).toBe(true);
 			});
+
+			result.forEach((user) => {
+				expect(user.password_hash).toBeUndefined();
+			});
 		});
 
 		it('should return an empty array if no users are found for the organization code', async () => {
@@ -69,6 +77,10 @@ describe('UsersClass', () => {
 			result.forEach((user) => {
 				expect(user.role_ids.map(id => id.toString())).toContain(roleId);
 			});
+
+			result.forEach((user) => {
+				expect(user.password_hash).toBeUndefined();
+			});
 		});
 
 		it('should return an empty array if no users have the specified role', async () => {
@@ -85,6 +97,10 @@ describe('UsersClass', () => {
 			const page = 1;
 			const result = await users.findMany({}, perPage, page, sort);
 			expect(result.length).toBeLessThanOrEqual(perPage);
+
+			result.forEach((user) => {
+				expect(user.password_hash).toBeUndefined();
+			});
 		});
 
 		it('should return an empty array if no users match the filter', async () => {
@@ -99,6 +115,8 @@ describe('UsersClass', () => {
 			const filter = { email: mockUsers[0].email };
 			const user = await users.findOne(filter);
 			expect(user?.email).toBe(mockUsers[0].email);
+
+			expect(user?.password_hash).toBeUndefined();
 		});
 
 		it('should return null if no user matches the filter', async () => {
@@ -123,6 +141,8 @@ describe('UsersClass', () => {
 			const insertedUser = await users.findById(newUser._id.toString());
 			expect(insertedUser).toBeDefined();
 			expect(insertedUser?.email).toBe(newUser.email);
+
+			expect(insertedUser?.password_hash).toBeUndefined();
 		});
 
 		it('should throw an error if the user already exists', async () => {
