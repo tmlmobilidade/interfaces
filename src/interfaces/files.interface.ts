@@ -1,4 +1,5 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { File } from '@/types';
 
 class FilesClass extends MongoCollectionClass<File> {
@@ -8,9 +9,11 @@ class FilesClass extends MongoCollectionClass<File> {
 		super();
 	}
 
-	public static getInstance() {
+	public static async getInstance() {
 		if (!FilesClass._instance) {
-			FilesClass._instance = new FilesClass();
+			const instance = new FilesClass();
+			await instance.connect();
+			FilesClass._instance = instance;
 		}
 		return FilesClass._instance;
 	}
@@ -47,4 +50,4 @@ class FilesClass extends MongoCollectionClass<File> {
 	// }
 }
 
-export const files = FilesClass.getInstance();
+export const files = AsyncSingletonProxy(FilesClass);

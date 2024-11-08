@@ -7,6 +7,7 @@ class UsersClass extends MongoCollectionClass<User> {
 
 	private constructor() {
 		super();
+		this.connect();
 	}
 
 	public static getInstance() {

@@ -1,4 +1,5 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { HashedShape } from '@/types/ride';
 import { Filter } from 'mongodb';
 class HashedShapesClass extends MongoCollectionClass<HashedShape> {
@@ -8,9 +9,11 @@ class HashedShapesClass extends MongoCollectionClass<HashedShape> {
 		super();
 	}
 
-	public static getInstance() {
+	public static async getInstance() {
 		if (!HashedShapesClass._instance) {
-			HashedShapesClass._instance = new HashedShapesClass();
+			const instance = new HashedShapesClass();
+			await instance.connect();
+			HashedShapesClass._instance = instance;
 		}
 		return HashedShapesClass._instance;
 	}
@@ -45,4 +48,4 @@ class HashedShapesClass extends MongoCollectionClass<HashedShape> {
 	}
 }
 
-export const hashedShapes = HashedShapesClass.getInstance();
+export const hashedShapes = AsyncSingletonProxy(HashedShapesClass);

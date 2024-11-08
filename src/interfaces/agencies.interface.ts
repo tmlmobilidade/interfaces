@@ -1,4 +1,5 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { Agency } from '@/types';
 
 class AgenciesClass extends MongoCollectionClass<Agency> {
@@ -8,9 +9,11 @@ class AgenciesClass extends MongoCollectionClass<Agency> {
 		super();
 	}
 
-	public static getInstance() {
+	public static async getInstance() {
 		if (!AgenciesClass._instance) {
-			AgenciesClass._instance = new AgenciesClass();
+			const instance = new AgenciesClass();
+			await instance.connect();
+			AgenciesClass._instance = instance;
 		}
 		return AgenciesClass._instance;
 	}
@@ -24,4 +27,4 @@ class AgenciesClass extends MongoCollectionClass<Agency> {
 	}
 }
 
-export const agencies = AgenciesClass.getInstance();
+export const agencies = AsyncSingletonProxy(AgenciesClass);

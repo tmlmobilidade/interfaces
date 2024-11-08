@@ -1,4 +1,5 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { HashedTrip } from '@/types/ride';
 import { Filter } from 'mongodb';
 
@@ -9,9 +10,11 @@ class HashedTripsClass extends MongoCollectionClass<HashedTrip> {
 		super();
 	}
 
-	public static getInstance() {
+	public static async getInstance() {
 		if (!HashedTripsClass._instance) {
-			HashedTripsClass._instance = new HashedTripsClass();
+			const instance = new HashedTripsClass();
+			await instance.connect();
+			HashedTripsClass._instance = instance;
 		}
 		return HashedTripsClass._instance;
 	}
@@ -46,4 +49,4 @@ class HashedTripsClass extends MongoCollectionClass<HashedTrip> {
 	}
 }
 
-export const hashedTrips = HashedTripsClass.getInstance();
+export const hashedTrips = AsyncSingletonProxy(HashedTripsClass);

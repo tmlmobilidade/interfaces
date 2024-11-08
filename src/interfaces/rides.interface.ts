@@ -1,4 +1,5 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { Ride } from '@/types/ride';
 import { Filter } from 'mongodb';
 
@@ -9,9 +10,11 @@ class RidesClass extends MongoCollectionClass<Ride> {
 		super();
 	}
 
-	public static getInstance() {
+	public static async getInstance() {
 		if (!RidesClass._instance) {
-			RidesClass._instance = new RidesClass();
+			const instance = new RidesClass();
+			await instance.connect();
+			RidesClass._instance = instance;
 		}
 		return RidesClass._instance;
 	}
@@ -56,4 +59,4 @@ class RidesClass extends MongoCollectionClass<Ride> {
 	}
 }
 
-export const rides = RidesClass.getInstance();
+export const rides = AsyncSingletonProxy(RidesClass);

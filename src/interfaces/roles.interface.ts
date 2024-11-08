@@ -1,4 +1,5 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { Role } from '@/types';
 import { Filter } from 'mongodb';
 
@@ -9,9 +10,11 @@ class RolesClass extends MongoCollectionClass<Role> {
 		super();
 	}
 
-	public static getInstance() {
+	public static async getInstance() {
 		if (!RolesClass._instance) {
-			RolesClass._instance = new RolesClass();
+			const instance = new RolesClass();
+			await instance.connect();
+			RolesClass._instance = instance;
 		}
 		return RolesClass._instance;
 	}
@@ -35,4 +38,4 @@ class RolesClass extends MongoCollectionClass<Role> {
 	}
 }
 
-export const roles = RolesClass.getInstance();
+export const roles = AsyncSingletonProxy(RolesClass);

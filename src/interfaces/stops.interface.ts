@@ -1,4 +1,5 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { Stop } from '@/types/stop';
 import { Filter, Sort } from 'mongodb';
 
@@ -9,9 +10,11 @@ class StopsClass extends MongoCollectionClass<Stop> {
 		super();
 	}
 
-	public static getInstance() {
+	public static async getInstance() {
 		if (!StopsClass._instance) {
-			StopsClass._instance = new StopsClass();
+			const instance = new StopsClass();
+			await instance.connect();
+			StopsClass._instance = instance;
 		}
 		return StopsClass._instance;
 	}
@@ -73,4 +76,5 @@ class StopsClass extends MongoCollectionClass<Stop> {
 	}
 }
 
-export const stops = StopsClass.getInstance();
+// Create a proxy to delay access to methods until the instance is initialized
+export const stops = AsyncSingletonProxy(StopsClass);
