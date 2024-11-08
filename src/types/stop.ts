@@ -7,6 +7,7 @@ export interface Stop {
 	locality: string
 	longitude: number
 	municipality: ObjectId
+	municipality_code: string
 	name: string
 	operational_status: string
 	short_name: string

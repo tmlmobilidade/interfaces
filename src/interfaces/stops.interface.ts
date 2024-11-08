@@ -34,7 +34,7 @@ class StopsClass extends MongoCollectionClass<Stop> {
 	 * @returns A promise that resolves to the matching stop document or null if not found
 	 */
 	async findByCode(code: string) {
-		return this.mongoCollection.findOne({ code } as Filter<Stop>);
+		return await this.mongoCollection.findOne({ code } as Filter<Stop>);
 	}
 
 	/**

@@ -13,6 +13,15 @@ export abstract class MongoCollectionClass<T> {
 	protected abstract getDbUri(): string;
 
 	/**
+	 * Gets all documents in the collection.
+	 *
+	 * @returns A promise that resolves to an array of all documents
+	 */
+	async all() {
+		return await this.mongoCollection.find().toArray();
+	}
+
+	/**
 	 * Establishes a connection to the Mongo database and initializes the collection.
 	 * @param options Optional Mongo client connection options
 	 * @throws {Error} If connection fails
@@ -148,15 +157,6 @@ export abstract class MongoCollectionClass<T> {
 	 */
 	async updateMany(filter: Filter<T>, updateFields: Partial<T>) {
 		return this.mongoCollection.updateMany(filter, { $set: { ...updateFields, updated_at: new Date() } });
-	}
-
-	/**
-	 * Gets all documents in the collection.
-	 *
-	 * @returns A promise that resolves to an array of all documents
-	 */
-	get all() {
-		return this.mongoCollection.find().toArray();
 	}
 
 	/**

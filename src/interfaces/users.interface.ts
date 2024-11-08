@@ -81,7 +81,7 @@ class UsersClass extends MongoCollectionClass<User> {
 	 * @returns A promise that resolves to the matching user document or null if not found
 	 */
 	async findByRole(role: string) {
-		const users = await this.mongoCollection.find({ role_ids: { $in: [role] } } as Filter<User>).toArray();
+		const users = await this.mongoCollection.find({ role_ids: { $in: [new ObjectId(role)] } } as unknown as Filter<User>).toArray();
 		return users.map(user => this.deletePasswordHash(user));
 	}
 
