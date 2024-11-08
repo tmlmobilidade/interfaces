@@ -4,7 +4,7 @@ export interface User {
 	created_at: Date
 	email: string
 	email_verified?: Date
-	organization_ids: string[]
+	organization_ids: ObjectId[]
 	password_hash: string
 	permissions: Permission<unknown>[]
 	phone: string
@@ -51,10 +51,10 @@ export interface Session {
 
 export interface LoginDto {
 	email: string
-	password_hash: string
+	password: string
 }
 
 export interface RegisterDto {
 	email: string
-	password_hash: string
+	password: string
 }

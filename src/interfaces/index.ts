@@ -5,5 +5,7 @@ export * from './hashed-trip.interface';
 export * from './organizations.interface';
 export * from './rides.interface';
 export * from './roles.interface';
+export * from './sessions.interface';
 export * from './stops.interface';
 export * from './users.interface';
+export * from './verification-tokens.interface';

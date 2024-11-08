@@ -1,12 +1,9 @@
-import { roles } from '@/interfaces';
-import { sessions } from '@/interfaces/sessions.interface';
-import { users } from '@/interfaces/users.interface';
+import { roles, sessions, users } from '@/interfaces';
 import HttpException from '@/lib/http-exception';
 import HttpStatus from '@/lib/http-status';
-import MongoError from '@/lib/mongo-error';
 import { generateRandomToken } from '@/lib/utils';
-import { LoginDto, RegisterDto } from '@/types';
-import { MongoServerError } from 'mongodb';
+import { LoginDto } from '@/types';
+import bcrypt from 'bcrypt';
 
 class AuthProvider {
 	/**
@@ -74,7 +71,9 @@ class AuthProvider {
 				throw new HttpException(HttpStatus.UNAUTHORIZED, 'User not found');
 			}
 
-			if (user.password_hash !== dto.password_hash) {
+			const password_hash = await bcrypt.compare(dto.password, user.password_hash);
+
+			if (!password_hash) {
 				throw new HttpException(HttpStatus.UNAUTHORIZED, 'Invalid password');
 			}
 
@@ -101,51 +100,7 @@ class AuthProvider {
 		await sessions.deleteOne({ token: session_token });
 	}
 
-	/**
-	 * Register a new user
-	 *
-	 * @param dto - The registration data transfer object containing:
-	 *   - email: Email address for the new user
-	 *   - password_hash: Password hash already generated with bcrypt on client side
-	 * @returns The newly created session for the registered user
-	 * @throws {HttpException}
-	 *   - CONFLICT if user already exists
-	 *   - INTERNAL_SERVER_ERROR if registration fails
-	 */
-	static async register(dto: RegisterDto) {
-		// TODO: Implement caching with redis
-
-		try {
-			const user = await users.insertOne({
-				created_at: new Date(),
-				email: dto.email,
-				organization_ids: [],
-				password_hash: dto.password_hash,
-				permissions: [],
-				phone: '',
-				role_ids: [],
-				session_ids: [],
-				updated_at: new Date(),
-				verification_token_ids: [],
-			});
-
-			const session = await sessions.insertOne({
-				token: generateRandomToken(),
-				user_id: user.insertedId.toString(),
-			});
-
-			return session;
-		}
-		catch (error) {
-			if (error instanceof MongoServerError && error.code === MongoError.DUPLICATE_KEY) {
-				throw new HttpException(HttpStatus.CONFLICT, 'User already exists');
-			}
-
-			throw new HttpException(HttpStatus.INTERNAL_SERVER_ERROR, 'Error registering user', error);
-		}
-	}
-
-	static async resetPassword(email: string, password_hash: string) {
+	static async resetPassword(email: string, password: string) {
 		// TODO: Implement password reset
 		throw new Error('Not implemented');
 	}
