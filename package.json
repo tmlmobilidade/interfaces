@@ -24,7 +24,7 @@
 		"dist/"
 	],
 	"scripts": {
-		"build": "tsc && tsc-alias",
+		"build": "rimraf ./dist && tsc -p tsconfig.prod.json && tsc-alias",
 		"dev": "dotenv-run -- tsx src/stops/index.ts",
 		"docker:local": "docker compose -f docker/local/compose.local.yaml up -d",
 		"test": "jest",
@@ -63,6 +63,7 @@
 		"@types/jest": "^29.5.14",
 		"@types/node": "^22.8.5",
 		"jest": "^29.7.0",
+		"rimraf": "^6.0.1",
 		"ts-jest": "^29.2.5",
 		"tsc-alias": "^1.8.10",
 		"turbo": "^2.2.3",
