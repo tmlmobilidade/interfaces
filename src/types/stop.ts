@@ -3,50 +3,14 @@ import { ObjectId } from 'mongodb';
 export interface Stop {
 	code: string
 	createdAt: Date
-	docking_bay_type: string
-	has_abusive_parking: string
-	has_bench: string
-	has_cover: string
-	has_crossing: string
-	has_electricity: string
-	has_flag: string
-	has_flat_access: string
-	has_h2oa_signage: string
-	has_lighting: string
-	has_mupi: string
-	has_network_map: string
-	has_pip_audio: string
-	has_pip_realtime: string
-	has_pip_static: string
-	has_pole: string
-	has_schedules: string
-	has_shelter: string
-	has_sidewalk: string
-	has_tactile_access: string
-	has_tactile_schedules: string
-	has_trash_bin: string
-	has_wide_access: string
-	is_locked: boolean
 	latitude: number
 	locality: string
 	longitude: number
-	media: ObjectId[]
 	municipality: ObjectId
 	name: string
-	name_new: string
-	near_boat: boolean
-	near_light_rail: boolean
-	near_school: boolean
-	near_subway: boolean
-	near_train: boolean
-	near_transit_office: boolean
 	operational_status: string
-	shelter_code: string
-	shelter_maintainer: string
 	short_name: string
-	short_name_auto: boolean
 	tts_name: string
 	updatedAt: Date
-	wheelchair_boarding: string
 	zones: ObjectId[]
 }
