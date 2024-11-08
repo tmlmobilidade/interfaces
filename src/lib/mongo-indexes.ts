@@ -72,7 +72,6 @@ export async function createStopIndexes(collection: Collection<unknown>) {
 export async function createUserIndexes(collection: Collection<unknown>) {
 	return await collection.createIndexes([
 		{ background: true, key: { email: 1 }, unique: true },
-		{ background: true, key: { phone: 1 }, unique: true },
 		{ background: true, key: { 'profile.first_name': 1, 'profile.last_name': 1 } },
 		{ background: true, key: { session_ids: 1 } },
 		{ background: true, key: { role_ids: 1 } },

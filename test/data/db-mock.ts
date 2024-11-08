@@ -26,12 +26,14 @@ export const mockUsers: WithId<User>[] = [
 		_id: new ObjectId('672e3c37ae64cf8f5992ecb7'),
 		created_at: new Date(),
 		email: 'writer@example.com',
+		first_name: 'Writer',
+		last_name: 'User',
 		organization_ids: [
 			new ObjectId('672e3d807d2772b2a1a4bcbc'),
 		],
 		password_hash: 'hashedPassword',
 		permissions: [],
-		phone: '',
+		phone: '1234567890',
 		role_ids: [new ObjectId('672e31fdfe34edeb0e94f595')],
 		session_ids: [],
 		updated_at: new Date(),
@@ -39,8 +41,12 @@ export const mockUsers: WithId<User>[] = [
 	},
 	{
 		_id: new ObjectId('672e3c7efa72c301e0cca74b'),
+		avatar: '',
+		bio: '',
 		created_at: new Date(),
 		email: 'reader@example.com',
+		first_name: 'Reader',
+		last_name: 'User',
 		organization_ids: [
 
 			new ObjectId('672e3d807d2772b2a1a4bcbc'),
@@ -50,15 +56,7 @@ export const mockUsers: WithId<User>[] = [
 		permissions: [
 			mockPermissions[4],
 		],
-		phone: '',
-		profile: {
-			avatar: '',
-			bio: '',
-			created_at: new Date(),
-			first_name: 'Reader',
-			last_name: 'User',
-			updated_at: new Date(),
-		},
+		phone: '0987654321',
 		role_ids: [new ObjectId('672e32054a4dc901df83dfdc')],
 		session_ids: [],
 		updated_at: new Date(),

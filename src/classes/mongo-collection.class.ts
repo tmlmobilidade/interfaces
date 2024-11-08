@@ -39,7 +39,7 @@ export abstract class MongoCollectionClass<T> {
 			console.log(`⤷ Connected to ${this.getCollectionName()}.`);
 		}
 		catch (error) {
-			throw new Error(`Error connecting to ${this.getCollectionName()}`);
+			throw new Error(`Error connecting to ${this.getCollectionName()}`, { cause: error });
 		}
 	}
 
@@ -86,8 +86,8 @@ export abstract class MongoCollectionClass<T> {
 	 * @param id - The ID of the document to find
 	 * @returns A promise that resolves to the matching document or null if not found
 	 */
-	async findById(id: string) {
-		return this.mongoCollection.findOne({ _id: new ObjectId(id) } as unknown as Filter<T>);
+	async findById(id: ObjectId | string) {
+		return this.mongoCollection.findOne({ _id: id instanceof ObjectId ? id : new ObjectId(id) } as unknown as Filter<T>);
 	}
 
 	/**
@@ -157,6 +157,17 @@ export abstract class MongoCollectionClass<T> {
 	 */
 	async updateMany(filter: Filter<T>, updateFields: Partial<T>) {
 		return this.mongoCollection.updateMany(filter, { $set: { ...updateFields, updated_at: new Date() } });
+	}
+
+	/**
+	 * Updates a single document matching the filter criteria.
+	 *
+	 * @param filter - The filter criteria to match the document to update
+	 * @param updateFields - The fields to update in the document
+	 * @returns A promise that resolves to the result of the update operation
+	 */
+	async updateOne(filter: Filter<T>, updateFields: Partial<T>) {
+		return this.mongoCollection.updateOne(filter, { $set: { ...updateFields, updated_at: new Date() } });
 	}
 
 	/**

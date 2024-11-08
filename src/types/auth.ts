@@ -1,27 +1,21 @@
 import { ObjectId } from 'mongodb';
 
 export interface User {
+	avatar?: string
+	bio?: string
 	created_at: Date
 	email: string
 	email_verified?: Date
+	first_name: string
+	last_name: string
 	organization_ids: ObjectId[]
 	password_hash: string
 	permissions: Permission<unknown>[]
 	phone: string
-	profile?: UserProfile
 	role_ids: ObjectId[]
 	session_ids: ObjectId[]
 	updated_at: Date
 	verification_token_ids: ObjectId[]
-}
-
-export interface UserProfile {
-	avatar?: string
-	bio?: string
-	created_at: Date
-	first_name: string
-	last_name: string
-	updated_at: Date
 }
 
 export interface Role {

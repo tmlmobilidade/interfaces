@@ -8,7 +8,6 @@ class UsersClass extends MongoCollectionClass<User> {
 
 	private constructor() {
 		super();
-		this.connect();
 	}
 
 	public static async getInstance() {
@@ -54,8 +53,8 @@ class UsersClass extends MongoCollectionClass<User> {
 	 * @param id - The ID of the document to find
 	 * @returns A promise that resolves to the matching document or null if not found
 	 */
-	async findById(id: string) {
-		const user = await this.mongoCollection.findOne({ _id: new ObjectId(id) } as unknown as Filter<User>);
+	async findById(id: ObjectId | string) {
+		const user = await this.mongoCollection.findOne({ _id: id instanceof ObjectId ? id : new ObjectId(id) } as unknown as Filter<User>);
 		if (!user) {
 			return null;
 		}
@@ -69,8 +68,8 @@ class UsersClass extends MongoCollectionClass<User> {
 	 * @param code - The code of the organization to find users for
 	 * @returns A promise that resolves to the matching user documents or null if not found
 	 */
-	async findByOrganization(code: string) {
-		const users = await this.mongoCollection.find({ organization_code: code } as Filter<User>).toArray();
+	async findByOrganization(id: ObjectId | string) {
+		const users = await this.mongoCollection.find({ organization_ids: { $in: [id instanceof ObjectId ? id : new ObjectId(id)] } } as unknown as Filter<User>).toArray();
 		return users.map(user => this.deletePasswordHash(user));
 	}
 
