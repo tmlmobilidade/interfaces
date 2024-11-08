@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 /**
  * Creates a proxy for a singleton class that delays method access until the instance is initialized.
  *
@@ -17,4 +19,8 @@ export function AsyncSingletonProxy<T extends object>(cls: { getInstance: () => 
 			};
 		},
 	});
+}
+
+export function generateRandomToken() {
+	return Buffer.from(uuid()).toString('base64');
 }

@@ -55,6 +55,16 @@ export abstract class MongoCollectionClass<T> {
 	}
 
 	/**
+	 * Deletes a single document matching the filter criteria.
+	 *
+	 * @param filter - The filter criteria to match the document to delete
+	 * @returns A promise that resolves to the result of the delete operation
+	 */
+	async deleteOne(filter: Filter<T>) {
+		return this.mongoCollection.deleteOne(filter);
+	}
+
+	/**
 	 * Disconnects from the MongoDB database.
 	 */
 	async disconnect() {
@@ -86,6 +96,16 @@ export abstract class MongoCollectionClass<T> {
 		if (page && perPage) query.skip(perPage * (page - 1));
 		if (sort) query.sort(sort);
 		return query.toArray();
+	}
+
+	/**
+	 * Finds a single document matching the filter criteria.
+	 *
+	 * @param filter - The filter criteria to match the document
+	 * @returns A promise that resolves to the matching document or null if not found
+	 */
+	async findOne(filter: Filter<T>) {
+		return this.mongoCollection.findOne(filter);
 	}
 
 	/**

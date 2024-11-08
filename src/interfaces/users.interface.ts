@@ -1,7 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { User } from '@/types';
-import { Filter } from 'mongodb';
+import { Filter, ObjectId, Sort, WithId } from 'mongodb';
 
 class UsersClass extends MongoCollectionClass<User> {
 	private static _instance: UsersClass;
@@ -28,14 +28,39 @@ class UsersClass extends MongoCollectionClass<User> {
 		return process.env.TML_INTERFACES_AUTH;
 	}
 
+	private deletePasswordHash(user: WithId<User>) {
+		delete user.password_hash;
+		return user;
+	}
+
 	/**
-     * Finds a user document by its email.
-     *
-     * @param email - The email of the user to find
-     * @returns A promise that resolves to the matching user document or null if not found
+	 * Finds a user document by its email.
+	 *
+	 * @param email - The email of the user to find
+	 * @returns A promise that resolves to the matching user document or null if not found
 	 */
 	async findByEmail(email: string) {
-		return this.mongoCollection.findOne({ email } as Filter<User>);
+		const user = await this.mongoCollection.findOne({ email } as Filter<User>);
+		if (!user) {
+			return null;
+		}
+
+		return this.deletePasswordHash(user);
+	}
+
+	/**
+	 * Finds a document by its ID.
+	 *
+	 * @param id - The ID of the document to find
+	 * @returns A promise that resolves to the matching document or null if not found
+	 */
+	async findById(id: string) {
+		const user = await this.mongoCollection.findOne({ _id: new ObjectId(id) } as unknown as Filter<User>);
+		if (!user) {
+			return null;
+		}
+
+		return this.deletePasswordHash(user);
 	}
 
 	/**
@@ -45,7 +70,8 @@ class UsersClass extends MongoCollectionClass<User> {
 	 * @returns A promise that resolves to the matching user documents or null if not found
 	 */
 	async findByOrganization(code: string) {
-		return this.mongoCollection.find({ organization_code: code } as Filter<User>).toArray();
+		const users = await this.mongoCollection.find({ organization_code: code } as Filter<User>).toArray();
+		return users.map(user => this.deletePasswordHash(user));
 	}
 
 	/**
@@ -55,7 +81,35 @@ class UsersClass extends MongoCollectionClass<User> {
 	 * @returns A promise that resolves to the matching user document or null if not found
 	 */
 	async findByRole(role: string) {
-		return this.mongoCollection.find({ role_ids: { $in: [role] } } as Filter<User>).toArray();
+		const users = await this.mongoCollection.find({ role_ids: { $in: [role] } } as Filter<User>).toArray();
+		return users.map(user => this.deletePasswordHash(user));
+	}
+
+	/**
+	 * Finds multiple documents matching the filter criteria with optional pagination and sorting.
+	 *
+	 * @param filter - (Optional) filter criteria to match documents
+	 * @param perPage - (Optional) number of documents per page for pagination
+	 * @param page - (Optional) page number for pagination
+	 * @param sort - (Optional) sort specification
+	 * @returns A promise that resolves to an array of matching documents
+	 */
+	async findMany(filter?: Filter<User>, perPage?: number, page?: number, sort?: Sort) {
+		const query = this.mongoCollection.find(filter);
+		if (perPage) query.limit(perPage);
+		if (page && perPage) query.skip(perPage * (page - 1));
+		if (sort) query.sort(sort);
+		const users = await query.toArray();
+		return users.map(user => this.deletePasswordHash(user));
+	}
+
+	async findOne(filter: Filter<User>) {
+		const user = await this.mongoCollection.findOne(filter);
+		if (!user) {
+			return null;
+		}
+
+		return this.deletePasswordHash(user);
 	}
 }
 

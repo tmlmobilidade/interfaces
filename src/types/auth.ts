@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb';
+
 export interface User {
 	created_at: Date
 	email: string
@@ -7,10 +9,10 @@ export interface User {
 	permissions: Permission<unknown>[]
 	phone: string
 	profile?: UserProfile
-	role_ids: string[]
-	session_ids: string[]
+	role_ids: ObjectId[]
+	session_ids: ObjectId[]
 	updated_at: Date
-	verification_token_ids: string[]
+	verification_token_ids: ObjectId[]
 }
 
 export interface UserProfile {
@@ -45,4 +47,14 @@ export interface Session {
 	expires_at?: Date
 	token: string
 	user_id: string
+}
+
+export interface LoginDto {
+	email: string
+	password_hash: string
+}
+
+export interface RegisterDto {
+	email: string
+	password_hash: string
 }
