@@ -22,11 +22,9 @@ export interface UserProfile {
 	first_name: string
 	last_name: string
 	updated_at: Date
-	user_id: string
 }
 
 export interface Role {
-	id: string
 	name: string
 	permissions: Permission<unknown>[]
 }
