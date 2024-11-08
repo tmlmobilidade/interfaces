@@ -78,6 +78,13 @@ export async function createVerificationTokenIndexes(collection: Collection<unkn
 	]);
 }
 
+export async function createZoneIndexes(collection: Collection<unknown>) {
+	return await collection.createIndexes([
+		{ background: true, key: { code: 1 }, unique: true },
+		{ background: true, key: { name: 1 } },
+	]);
+}
+
 export async function createIndexFactory(database: Db, collectionName: string) {
 	const collection = database.collection(collectionName);
 	switch (collectionName) {
@@ -101,6 +108,8 @@ export async function createIndexFactory(database: Db, collectionName: string) {
 			return await createUserIndexes(collection);
 		case 'verification_tokens':
 			return await createVerificationTokenIndexes(collection);
+		case 'zones':
+			return await createZoneIndexes(collection);
 		default:
 			return null;
 	}
