@@ -27,7 +27,7 @@
 		"build": "rimraf ./dist && tsc -p tsconfig.prod.json && tsc-alias",
 		"dev": "dotenv-run -- tsx src/stops/index.ts",
 		"docker:local": "docker compose -f docker/local/compose.local.yaml up -d",
-		"test": "jest",
+		"test": "jest --silent",
 		"test:watch": "jest --watch"
 	},
 	"exports": {

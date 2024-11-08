@@ -56,7 +56,6 @@ export async function seedDatabase(db: Db) {
 	];
 
 	for (const collection of collections) {
-		const result = await db.collection(collection.name).insertMany(collection.data);
-		console.log(`Inserted ${result.insertedCount} documents into ${collection.name}`);
+		await db.collection(collection.name).insertMany(collection.data);
 	}
 }
