@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 
 export interface Stop {
 	code: string
-	createdAt: Date
+	created_at: Date
 	latitude: number
 	locality: string
 	longitude: number
@@ -11,6 +11,6 @@ export interface Stop {
 	operational_status: string
 	short_name: string
 	tts_name: string
-	updatedAt: Date
+	updated_at: Date
 	zones: ObjectId[]
 }

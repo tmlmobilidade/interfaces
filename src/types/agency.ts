@@ -1,6 +1,6 @@
 export interface Agency {
 	code: string
-	createdAt: Date
+	created_at: Date
 	email: string
 	fare_url: string
 	is_locked: boolean
@@ -11,6 +11,6 @@ export interface Agency {
 	price_per_km: number
 	timezone: string
 	total_vkm_per_year: number
-	updatedAt: Date
+	updated_at: Date
 	url: string
 }

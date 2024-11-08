@@ -5,11 +5,11 @@ export interface Zone {
 	border_opacity: number
 	border_width: number
 	code: string
-	createdAt: Date
+	created_at: Date
 	fill_color: string
 	fill_opacity: number
 	geojson: GeoJSON
 	is_locked: boolean
 	name: string
-	updatedAt: Date
+	updated_at: Date
 }

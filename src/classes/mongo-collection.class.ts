@@ -115,7 +115,7 @@ export abstract class MongoCollectionClass<T> {
 	 * @returns A promise that resolves to the result of the insert operation
 	 */
 	async insertMany(docs: OptionalUnlessRequiredId<T>[]) {
-		return this.mongoCollection.insertMany(docs);
+		return this.mongoCollection.insertMany(docs.map(doc => ({ ...doc, created_at: new Date(), updated_at: new Date() })));
 	}
 
 	/**
@@ -125,7 +125,7 @@ export abstract class MongoCollectionClass<T> {
 	 * @returns A promise that resolves to the result of the insert operation
 	 */
 	async insertOne(doc: OptionalUnlessRequiredId<T>) {
-		return this.mongoCollection.insertOne(doc);
+		return this.mongoCollection.insertOne({ ...doc, created_at: new Date(), updated_at: new Date() });
 	}
 
 	/**
@@ -136,7 +136,7 @@ export abstract class MongoCollectionClass<T> {
 	 * @returns A promise that resolves to the result of the update operation
 	 */
 	async update(filter: Filter<T>, updateFields: Partial<T>) {
-		return this.mongoCollection.updateOne(filter, { $set: updateFields });
+		return this.mongoCollection.updateOne(filter, { $set: { ...updateFields, updated_at: new Date() } });
 	}
 
 	/**
@@ -147,7 +147,7 @@ export abstract class MongoCollectionClass<T> {
 	 * @returns A promise that resolves to the result of the update operation
 	 */
 	async updateMany(filter: Filter<T>, updateFields: Partial<T>) {
-		return this.mongoCollection.updateMany(filter, { $set: updateFields });
+		return this.mongoCollection.updateMany(filter, { $set: { ...updateFields, updated_at: new Date() } });
 	}
 
 	/**
