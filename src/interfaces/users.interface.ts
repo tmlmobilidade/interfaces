@@ -36,41 +36,44 @@ class UsersClass extends MongoCollectionClass<User> {
 	 * Finds a user document by its email.
 	 *
 	 * @param email - The email of the user to find
+	 * @param includePasswordHash - Whether to include the password hash in the result
 	 * @returns A promise that resolves to the matching user document or null if not found
 	 */
-	async findByEmail(email: string) {
+	async findByEmail(email: string, includePasswordHash = false) {
 		const user = await this.mongoCollection.findOne({ email } as Filter<User>);
 		if (!user) {
 			return null;
 		}
 
-		return this.deletePasswordHash(user);
+		return includePasswordHash ? user : this.deletePasswordHash(user);
 	}
 
 	/**
 	 * Finds a document by its ID.
 	 *
 	 * @param id - The ID of the document to find
+	 * @param includePasswordHash - Whether to include the password hash in the result
 	 * @returns A promise that resolves to the matching document or null if not found
 	 */
-	async findById(id: ObjectId | string) {
+	async findById(id: ObjectId | string, includePasswordHash = false) {
 		const user = await this.mongoCollection.findOne({ _id: id instanceof ObjectId ? id : new ObjectId(id) } as unknown as Filter<User>);
 		if (!user) {
 			return null;
 		}
 
-		return this.deletePasswordHash(user);
+		return includePasswordHash ? user : this.deletePasswordHash(user);
 	}
 
 	/**
 	 * Finds users by their organization code
 	 *
 	 * @param code - The code of the organization to find users for
+	 * @param includePasswordHash - Whether to include the password hash in the result
 	 * @returns A promise that resolves to the matching user documents or null if not found
 	 */
-	async findByOrganization(id: ObjectId | string) {
+	async findByOrganization(id: ObjectId | string, includePasswordHash = false) {
 		const users = await this.mongoCollection.find({ organization_ids: { $in: [id instanceof ObjectId ? id : new ObjectId(id)] } } as unknown as Filter<User>).toArray();
-		return users.map(user => this.deletePasswordHash(user));
+		return includePasswordHash ? users : users.map(user => this.deletePasswordHash(user));
 	}
 
 	/**
@@ -79,9 +82,9 @@ class UsersClass extends MongoCollectionClass<User> {
 	 * @param role - The role of the user to find
 	 * @returns A promise that resolves to the matching user document or null if not found
 	 */
-	async findByRole(role: string) {
+	async findByRole(role: string, includePasswordHash = false) {
 		const users = await this.mongoCollection.find({ role_ids: { $in: [new ObjectId(role)] } } as unknown as Filter<User>).toArray();
-		return users.map(user => this.deletePasswordHash(user));
+		return includePasswordHash ? users : users.map(user => this.deletePasswordHash(user));
 	}
 
 	/**
