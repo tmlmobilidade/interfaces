@@ -25,6 +25,16 @@ class VerificationTokensClass extends MongoCollectionClass<VerificationToken> {
 	protected getDbUri(): string {
 		return process.env.TML_INTERFACES_AUTH;
 	}
+
+	/**
+	 * Finds a verification token by its token.
+	 *
+	 * @param token - The token to find
+	 * @returns The verification token or null if not found
+	 */
+	async findByToken(token: string) {
+		return this.findOne({ token });
+	}
 }
 
 export const verificationTokens = AsyncSingletonProxy(VerificationTokensClass);
