@@ -49,6 +49,13 @@ describe('ZonesClass', () => {
 		});
 	});
 
+	describe('findByName', () => {
+		it('should find a zone by its name', async () => {
+			const zone = await zones.findByName(newZone.name);
+			expect(zone?.name).toBe(newZone.name);
+		});
+	});
+
 	describe('updateByCode', () => {
 		it('should update a zone\'s name', async () => {
 			const updatedFields = { name: 'Updated Zone Name' };
