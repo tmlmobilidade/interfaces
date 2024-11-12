@@ -36,6 +36,17 @@ class MunicipalitiesClass extends MongoCollectionClass<Municipality> {
 	async findByCode(code: string) {
 		return this.mongoCollection.findOne({ code } as Filter<Municipality>);
 	}
+
+	/**
+	 * Updates a municipality by its code
+	 *
+	 * @param code - The code of the municipality to update
+	 * @param fields - The fields to update
+	 * @returns A promise that resolves to the result of the update operation
+	 */
+	async updateByCode(code: string, fields: Partial<Municipality>) {
+		return this.mongoCollection.updateOne({ code } as Filter<Municipality>, { $set: fields });
+	}
 }
 
 export const municipalities = AsyncSingletonProxy(MunicipalitiesClass);
