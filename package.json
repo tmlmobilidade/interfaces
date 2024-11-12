@@ -28,7 +28,7 @@
 		"dev": "dotenv-run -- tsx src/stops/index.ts",
 		"docker:local": "docker compose -f docker/local/compose.local.yaml up -d",
 		"test": "jest",
-		"test:prod": "jest --silent",
+		"test:prod": "jest --silent --coverage",
 		"test:watch": "jest --watch"
 	},
 	"exports": {
