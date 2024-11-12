@@ -179,19 +179,19 @@ describe('UsersClass', () => {
 		it('should update a user\'s email', async () => {
 			const userId = mockUsers[0]._id;
 			const updateFields = { email: 'updated_email@example.com' };
-			const updateResult = await users.update({ _id: userId }, updateFields);
+			const updateResult = await users.updateById(userId, updateFields);
 			expect(updateResult.modifiedCount).toBe(1);
 
 			const updatedUser = await users.findById(userId);
 			expect(updatedUser?.email).toBe(updateFields.email);
 
-			await users.update({ _id: userId }, { email: mockUsers[0].email });
+			await users.updateById(userId, { email: mockUsers[0].email });
 		});
 
 		it('should return modifiedCount as 0 if the user does not exist', async () => {
 			const nonExistentId = new ObjectId().toString();
 			const updateFields = { email: 'nonexistent@example.com' };
-			const updateResult = await users.update({ _id: new ObjectId(nonExistentId) }, updateFields);
+			const updateResult = await users.updateById(new ObjectId(nonExistentId), updateFields);
 			expect(updateResult.modifiedCount).toBe(0);
 		});
 	});

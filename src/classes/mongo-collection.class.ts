@@ -144,8 +144,8 @@ export abstract class MongoCollectionClass<T> {
 	 * @param updateFields - The fields to update in the document
 	 * @returns A promise that resolves to the result of the update operation
 	 */
-	async update(filter: Filter<T>, updateFields: Partial<T>) {
-		return this.mongoCollection.updateOne(filter, { $set: { ...updateFields, updated_at: new Date() } });
+	async updateById(id: ObjectId | string, updateFields: Partial<T>) {
+		return this.mongoCollection.updateOne({ _id: id instanceof ObjectId ? id : new ObjectId(id) } as unknown as Filter<T>, { $set: { ...updateFields, updated_at: new Date() } });
 	}
 
 	/**
