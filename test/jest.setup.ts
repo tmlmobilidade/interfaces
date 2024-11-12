@@ -20,6 +20,7 @@ beforeAll(async () => {
 	process.env.TML_INTERFACES_ORGANIZATIONS = uri;
 	process.env.TML_INTERFACES_AGENCIES = uri;
 	process.env.TML_INTERFACES_ZONES = uri;
+	process.env.TML_INTERFACES_RIDES = uri;
 
 	// Initialize MongoConnector
 	mongoConnector = new MongoConnector(uri);
