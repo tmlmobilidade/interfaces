@@ -36,6 +36,17 @@ class OrganizationsClass extends MongoCollectionClass<Organization> {
 	async findByCode(code: string) {
 		return this.mongoCollection.findOne({ code } as Filter<Organization>);
 	}
+
+	/**
+	 * Updates an organization by its code
+	 *
+	 * @param code - The code of the organization to update
+	 * @param fields - The fields to update
+	 * @returns A promise that resolves to the result of the update operation
+	 */
+	async updateByCode(code: string, fields: Partial<Organization>) {
+		return this.mongoCollection.updateOne({ code } as Filter<Organization>, { $set: fields });
+	}
 }
 
 export const organizations = AsyncSingletonProxy(OrganizationsClass);
