@@ -38,7 +38,7 @@ export interface VerificationToken {
 export interface Session {
 	expires_at?: Date
 	token: string
-	user_id: string
+	user_id: ObjectId
 }
 
 export interface LoginDto {

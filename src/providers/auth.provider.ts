@@ -2,7 +2,7 @@ import { roles, sessions, users } from '@/interfaces';
 import HttpException from '@/lib/http-exception';
 import HttpStatus from '@/lib/http-status';
 import { generateRandomToken } from '@/lib/utils';
-import { LoginDto } from '@/types';
+import { LoginDto, Session } from '@/types';
 import bcrypt from 'bcrypt';
 
 class AuthProvider {
@@ -24,7 +24,7 @@ class AuthProvider {
 			throw new HttpException(HttpStatus.UNAUTHORIZED, 'Session not found');
 		}
 
-		const user = await users.findById(session.user_id);
+		const user = await users.findOne({ _id: session.user_id });
 
 		if (!user) {
 			throw new HttpException(HttpStatus.UNAUTHORIZED, 'User not found');
@@ -64,29 +64,30 @@ class AuthProvider {
 	static async login(dto: LoginDto) {
 		// TODO: Implement caching with redis
 
-		try {
-			const user = await users.findByEmail(dto.email);
+		const user = await users.findByEmail(dto.email, true);
 
-			if (!user) {
-				throw new HttpException(HttpStatus.UNAUTHORIZED, 'User not found');
-			}
-
-			const password_hash = await bcrypt.compare(dto.password, user.password_hash);
-
-			if (!password_hash) {
-				throw new HttpException(HttpStatus.UNAUTHORIZED, 'Invalid password');
-			}
-
-			const session = await sessions.insertOne({
-				token: generateRandomToken(),
-				user_id: user._id.toString(),
-			});
-
-			return session;
+		if (!user) {
+			throw new HttpException(HttpStatus.UNAUTHORIZED, 'User not found');
 		}
-		catch (error) {
-			throw new HttpException(HttpStatus.INTERNAL_SERVER_ERROR, 'Error logging in user', error);
+
+		const password_hash = await bcrypt.compare(dto.password, user.password_hash);
+
+		if (!password_hash) {
+			throw new HttpException(HttpStatus.UNAUTHORIZED, 'Invalid password');
 		}
+
+		const session: Session = {
+			token: generateRandomToken(),
+			user_id: user._id,
+		};
+
+		const result = await sessions.insertOne(session);
+
+		if (!result.acknowledged) {
+			throw new HttpException(HttpStatus.INTERNAL_SERVER_ERROR, 'Error logging in user');
+		}
+
+		return session;
 	}
 
 	/**
