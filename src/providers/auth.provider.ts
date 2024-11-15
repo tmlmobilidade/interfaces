@@ -2,10 +2,48 @@ import { roles, sessions, users } from '@/interfaces';
 import HttpException from '@/lib/http-exception';
 import HttpStatus from '@/lib/http-status';
 import { generateRandomToken } from '@/lib/utils';
-import { LoginDto, Session } from '@/types';
+import { LoginDto, Permission, Session } from '@/types';
 import bcrypt from 'bcrypt';
+import { mergekit } from 'mergekit';
 
 class AuthProvider {
+	/**
+	 * Get Permissions
+	 *
+	 * @param session_token - The session token
+	 * @param scope - The scope to check
+	 * @param action - The action to check
+	 * @returns The permissions that the user has
+	 */
+	static async getPermissions<T>(session_token: string, scope: string, action: string): Promise<Permission<T>> {
+		const user = await this.getUser(session_token);
+		const role_list = await roles.findMany({ _id: { $in: user.role_ids } });
+
+		let permission: Permission<T> | undefined;
+
+		try {
+			// Join all permissions from all roles and user permissions
+			permission = mergekit([
+				...role_list.flatMap(role => role.permissions),
+				...user.permissions,
+			], {
+				appendArrays: true,
+				dedupArrays: true,
+				onlyObjectWithKeyValues: [{ key: 'scope', value: scope }, { key: 'action', value: action }],
+			},
+			);
+		}
+		catch (e) {
+			throw new HttpException(HttpStatus.INTERNAL_SERVER_ERROR, 'Error getting permissions', { cause: e });
+		}
+
+		if (!permission || Object.keys(permission).length === 0) {
+			throw new HttpException(HttpStatus.FORBIDDEN, 'User does not have permission');
+		}
+
+		return permission;
+	}
+
 	/**
 	 * Gets a user by their session token
 	 *
@@ -31,24 +69,6 @@ class AuthProvider {
 		}
 
 		return user;
-	}
-
-	/**
-	 * Has Permission
-	 *
-	 * @param session_token - The session token
-	 * @param scope - The scope to check
-	 * @param action - The action to check
-	 * @returns True if the user has the permission, false otherwise
-	 */
-	static async hasPermission(session_token: string, scope: string, action: string) {
-		const user = await this.getUser(session_token);
-		const role_list = await roles.findMany({ _id: { $in: user.role_ids } });
-
-		// Join all permissions from all roles and user permissions
-		const permissions = [...role_list.flatMap(role => role.permissions), ...user.permissions];
-
-		return permissions.some(permission => permission.scope === scope && permission.action === action);
 	}
 
 	/**

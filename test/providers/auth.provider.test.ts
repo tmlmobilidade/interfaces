@@ -2,12 +2,12 @@
  * Unit tests for AuthProvider
  */
 
-import { sessions, users } from '@/interfaces';
+import { roles, sessions, users } from '@/interfaces';
 import HttpException from '@/lib/http-exception';
 import HttpStatus from '@/lib/http-status';
 import AuthProvider from '@/providers/auth.provider';
 import { LoginDto } from '@/types';
-import { mockUsers } from '@test/data/db-mock';
+import { mockPermissions, mockRoles, mockUsers } from '@test/data/db-mock';
 import bcrypt from 'bcrypt';
 
 // Mock bcrypt
@@ -26,6 +26,7 @@ describe('AuthProvider', () => {
 		await sessions.deleteMany({});
 		await sessions.disconnect();
 		await users.disconnect();
+		await roles.disconnect();
 	});
 
 	describe('login', () => {
@@ -122,6 +123,79 @@ describe('AuthProvider', () => {
 			const user = await AuthProvider.getUser(session.token);
 			expect(user).toBeDefined();
 			expect(user?._id.toString()).toBe(mockUsers[0]._id.toString());
+		});
+	});
+
+	describe('getPermissions', () => {
+		const sessionToken = 'test-token';
+
+		afterEach(async () => {
+			await sessions.deleteOne({ token: sessionToken });
+		});
+
+		it('should return the permissions if the user with no permissions but with role that has the permission', async () => {
+			const session = {
+				token: sessionToken,
+				user_id: mockUsers[0]._id,
+			};
+
+			await sessions.insertOne(session);
+
+			const user = await users.findById(mockUsers[0]._id);
+			expect(user).toBeDefined();
+			expect(user?.role_ids[0].toString()).toBe(mockRoles[0]._id.toString());
+			expect(user?.permissions.length).toBe(0);
+
+			const permissions = await AuthProvider.getPermissions(session.token, mockRoles[0].permissions[0].scope, mockRoles[0].permissions[0].action);
+			expect(permissions).toBeDefined();
+			expect(Object.keys(permissions).length).toBeGreaterThanOrEqual(1);
+		});
+
+		it('should return the permissions if the user with permissions and no role has the permission', async () => {
+			const session = {
+				token: sessionToken,
+				user_id: mockUsers[2]._id,
+			};
+
+			await sessions.insertOne(session);
+
+			const user = await users.findById(mockUsers[2]._id);
+			expect(user).toBeDefined();
+			expect(user?.role_ids.length).toBe(0);
+			expect(user?.permissions.length).toBeGreaterThan(0);
+
+			const permissions = await AuthProvider.getPermissions(session.token, mockPermissions[1].scope, mockPermissions[1].action);
+			expect(permissions).toBeDefined();
+			expect(Object.keys(permissions).length).toBeGreaterThanOrEqual(1);
+		});
+
+		it('should throw FORBIDDEN if the user does not have the permission', async () => {
+			const session = {
+				token: sessionToken,
+				user_id: mockUsers[2]._id,
+			};
+
+			await sessions.insertOne(session);
+
+			await expect(AuthProvider.getPermissions(session.token, mockPermissions[0].scope, mockPermissions[0].action)).rejects.toThrow(
+				new HttpException(HttpStatus.FORBIDDEN, 'User does not have permission'),
+			);
+		});
+
+		it('should return the merged permissions if the user has permissions and roles', async () => {
+			const session = {
+				token: sessionToken,
+				user_id: mockUsers[1]._id,
+			};
+
+			await sessions.insertOne(session);
+
+			const permissions = await AuthProvider.getPermissions(session.token, mockRoles[1].permissions[0].scope, mockRoles[1].permissions[0].action);
+
+			expect(permissions).toBeDefined();
+			expect(Object.keys(permissions).length).toBeGreaterThanOrEqual(1);
+			// TODO: Fix _id buffer issue
+			expect({ ...permissions, _id: undefined }).toEqual({ ...mockPermissions[4], _id: undefined });
 		});
 	});
 });

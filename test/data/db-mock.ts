@@ -18,7 +18,7 @@ export const mockPermissions: Permission<unknown>[] = [
 
 export const mockRoles: WithId<Role>[] = [
 	{ _id: new ObjectId('672e31fdfe34edeb0e94f595'), name: 'writer', permissions: mockPermissions.slice(0, 1) },
-	{ _id: new ObjectId('672e32054a4dc901df83dfdc'), name: 'reader', permissions: mockPermissions.slice(2, 3) },
+	{ _id: new ObjectId('672e32054a4dc901df83dfdc'), name: 'reader', permissions: mockPermissions.slice(3, 4) },
 ];
 
 export const mockUsers: WithId<User>[] = [
@@ -58,6 +58,29 @@ export const mockUsers: WithId<User>[] = [
 		],
 		phone: '0987654321',
 		role_ids: [new ObjectId('672e32054a4dc901df83dfdc')],
+		session_ids: [],
+		updated_at: new Date(),
+		verification_token_ids: [],
+	},
+	{
+		_id: new ObjectId('672e3c7efa72c301e0cca74c'),
+		avatar: '',
+		bio: '',
+		created_at: new Date(),
+		email: 'permission@example.com',
+		first_name: 'Permission',
+		last_name: 'User',
+		organization_ids: [
+
+			new ObjectId('672e3d807d2772b2a1a4bcbc'),
+			new ObjectId('672e3d7c75a11f15ba723c2f'),
+		],
+		password_hash: 'hashedPassword',
+		permissions: [
+			mockPermissions[1],
+		],
+		phone: '1234567890',
+		role_ids: [],
 		session_ids: [],
 		updated_at: new Date(),
 		verification_token_ids: [],
