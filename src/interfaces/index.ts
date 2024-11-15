@@ -1,4 +1,5 @@
 export * from './agencies.interface';
+export * from './alerts.interface';
 export * from './files.interface';
 export * from './hashed-shapes.interface';
 export * from './hashed-trips.interface';
