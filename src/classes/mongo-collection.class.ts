@@ -28,7 +28,6 @@ export abstract class MongoCollectionClass<T> {
 	 */
 	async connect(options?: MongoClientOptions) {
 		try {
-			console.log(`⤷ Connecting to ${this.getCollectionName()}...`);
 			this.mongoConnector = new MongoConnector(this.getDbUri(), options);
 			await this.mongoConnector.connect();
 			this.mongoCollection = await this.mongoConnector.getCollection<T>(
@@ -36,7 +35,6 @@ export abstract class MongoCollectionClass<T> {
 				this.getCollectionName(),
 			);
 			await createIndexFactory(this.mongoConnector.client.db('production'), this.getCollectionName());
-			console.log(`⤷ Connected to ${this.getCollectionName()}.`);
 		}
 		catch (error) {
 			throw new Error(`Error connecting to ${this.getCollectionName()}`, { cause: error });

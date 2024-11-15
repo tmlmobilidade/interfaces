@@ -8,6 +8,19 @@ export async function createAgencyIndexes(collection: Collection<unknown>) {
 	]);
 }
 
+export async function createAlertIndexes(collection: Collection<unknown>) {
+	return await collection.createIndexes([
+		{ background: true, key: { agency_ids: 1 } },
+		{ background: true, key: { line_ids: 1 } },
+		{ background: true, key: { municipality_ids: 1 } },
+		{ background: true, key: { route_ids: 1 } },
+		{ background: true, key: { stop_ids: 1 } },
+		{ background: true, key: { title: 1 } },
+		{ background: true, key: { active_period_end_date: -1, active_period_start_date: -1 } },
+		{ background: true, key: { publish_end_date: -1, publish_start_date: -1 } },
+	]);
+}
+
 export async function createHashedShapeIndexes(collection: Collection<unknown>) {
 	return await collection.createIndexes([
 		{ background: true, key: { code: 1 }, unique: true },
@@ -97,6 +110,8 @@ export async function createIndexFactory(database: Db, collectionName: string) {
 	switch (collectionName) {
 		case 'agencies':
 			return await createAgencyIndexes(collection);
+		case 'alerts':
+			return await createAlertIndexes(collection);
 		case 'hashed_shapes':
 			return await createHashedShapeIndexes(collection);
 		case 'hashed_trips':
