@@ -2,7 +2,7 @@ import { MongoConnector } from '@/connectors/mongo.connector';
 import { Db } from 'mongodb';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
-import { mockMunicipalities, mockOrganizations, mockPermissions, mockRoles, mockStops, mockUsers, mockZones } from './data/db-mock';
+import { mockAgencies, mockAlerts, mockMunicipalities, mockOrganizations, mockPermissions, mockRoles, mockStops, mockUsers, mockZones } from './data/db-mock';
 
 let mongoServer: MongoMemoryServer;
 let db: Db;
@@ -21,7 +21,7 @@ beforeAll(async () => {
 	process.env.TML_INTERFACES_AGENCIES = uri;
 	process.env.TML_INTERFACES_ZONES = uri;
 	process.env.TML_INTERFACES_RIDES = uri;
-
+	process.env.TML_INTERFACES_ALERTS = uri;
 	// Initialize MongoConnector
 	mongoConnector = new MongoConnector(uri);
 	await mongoConnector.connect();
@@ -54,6 +54,8 @@ export async function seedDatabase(db: Db) {
 		{ data: mockStops, name: 'stops' },
 		{ data: mockOrganizations, name: 'organizations' },
 		{ data: mockMunicipalities, name: 'municipalities' },
+		{ data: mockAgencies, name: 'agencies' },
+		{ data: mockAlerts, name: 'alerts' },
 	];
 
 	for (const collection of collections) {

@@ -1,4 +1,4 @@
-import { Organization, Permission, Role, Stop, User, Zone } from '@/types';
+import { Agency, Alert, Cause, createOperationalDate, Effect, Organization, Permission, PublishStatus, Role, Stop, User, Zone } from '@/types';
 import { Municipality } from '@/types/municipality';
 import { ObjectId, WithId } from 'mongodb';
 
@@ -307,5 +307,120 @@ export const mockMunicipalities: WithId<Municipality>[] = [
 		prefix: '04',
 		region: 'PT170',
 		updated_at: new Date('2024-01-04T11:36:36.879Z'),
+	},
+];
+
+export const mockAgencies: WithId<Agency>[] = [
+	{
+		_id: new ObjectId('67378cebad93f9b2668ec93c'),
+		code: '1',
+		created_at: new Date(),
+		email: 'agency1@example.com',
+		fare_url: '',
+		is_locked: false,
+		lang: 'pt',
+		name: 'Agency 1',
+		operation_start_date: '2024-01-01',
+		phone: '1234567890',
+		price_per_km: 0,
+		timezone: 'Europe/Lisbon',
+		total_vkm_per_year: 0,
+		updated_at: new Date(),
+		url: 'https://agency1.example.com',
+	},
+	{
+		_id: new ObjectId('67378cf97355b5132e6845c9'),
+		code: '2',
+		created_at: new Date(),
+		email: 'agency2@example.com',
+		fare_url: '',
+		is_locked: false,
+		lang: 'pt',
+		name: 'Agency 2',
+		operation_start_date: '2024-01-01',
+		phone: '1234567890',
+		price_per_km: 0,
+		timezone: 'Europe/Lisbon',
+		total_vkm_per_year: 0,
+		updated_at: new Date(),
+		url: 'https://agency2.example.com',
+	},
+];
+
+export const mockAlerts: WithId<Alert>[] = [
+	{
+		_id: new ObjectId('67378cff4e14105248b42db8'),
+		active_period_end_date: createOperationalDate('20240201'),
+		active_period_start_date: createOperationalDate('20240101'),
+		agency_ids: [
+			'67378cebad93f9b2668ec93c',
+		],
+		cause: Cause.ACCIDENT,
+		description: '',
+		effect: Effect.SIGNIFICANT_DELAYS,
+		image_url: '',
+		line_ids: [],
+		municipality_ids: [
+			'649b4cce0ac399a0115319e3',
+		],
+		publish_end_date: createOperationalDate('20240201'),
+		publish_start_date: createOperationalDate('20240101'),
+		publish_status: PublishStatus.PUBLISHED,
+		route_ids: [],
+		stop_ids: [
+			'6476b095424adb51586dffa7',
+		],
+		title: '',
+	},
+	{
+		_id: new ObjectId('67378d357a1a5250c0d2b1de'),
+		active_period_end_date: createOperationalDate('20240301'),
+		active_period_start_date: createOperationalDate('20240201'),
+		agency_ids: [
+			'67378cf97355b5132e6845c9',
+		],
+		cause: Cause.ACCIDENT,
+		description: '',
+		effect: Effect.SIGNIFICANT_DELAYS,
+		image_url: '',
+		line_ids: [],
+		municipality_ids: [
+			'6450539f8f71c3c98f1fbed0',
+		],
+		publish_end_date: createOperationalDate('20240301'),
+		publish_start_date: createOperationalDate('20240201'),
+		publish_status: PublishStatus.PUBLISHED,
+		route_ids: [],
+		stop_ids: [
+			'6476b094424adb51586dfcee',
+		],
+		title: '',
+	},
+	{
+		_id: new ObjectId('67378d430263d054f4684e3d'),
+		active_period_end_date: createOperationalDate('20240501'),
+		active_period_start_date: createOperationalDate('20240401'),
+		agency_ids: [
+			'67378cebad93f9b2668ec93c',
+			'67378cf97355b5132e6845c9',
+		],
+		cause: Cause.CONSTRUCTION,
+		description: '',
+		effect: Effect.DETOUR,
+		image_url: '',
+		line_ids: [],
+		municipality_ids: [
+			'649b4cce0ac399a0115319e3',
+			'6450539f8f71c3c98f1fbed0',
+		],
+		publish_end_date: createOperationalDate('20240501'),
+		publish_start_date: createOperationalDate('20240401'),
+		publish_status: PublishStatus.PUBLISHED,
+		route_ids: [],
+		stop_ids: [
+			'6476b095424adb51586dffa7',
+			'6476b094424adb51586dfcee',
+		],
+		title: '',
 	},
 ];

@@ -1,0 +1,189 @@
+import { alerts } from '@/interfaces/alerts.interface';
+import { createOperationalDate } from '@/types';
+import { Alert, Cause, Effect, PublishStatus } from '@/types';
+import { ObjectId, WithId } from 'mongodb';
+
+const newAlert: WithId<Alert> = {
+	_id: new ObjectId(),
+	active_period_end_date: createOperationalDate('20240331'),
+	active_period_start_date: createOperationalDate('20240101'),
+	agency_ids: ['agency_1'],
+	cause: Cause.UNKNOWN_CAUSE,
+	description: 'Test Alert',
+	effect: Effect.NO_SERVICE,
+	image_url: 'http://example.com/image.png',
+	line_ids: ['line_1'],
+	municipality_ids: ['municipality_1'],
+	publish_end_date: createOperationalDate('20241231'),
+	publish_start_date: createOperationalDate('20240101'),
+	publish_status: PublishStatus.PUBLISHED,
+	route_ids: ['route_1'],
+	stop_ids: ['stop_1'],
+	title: 'Test Alert Title',
+};
+
+describe('AlertsClass', () => {
+	afterAll(async () => {
+		await alerts.disconnect();
+	});
+
+	describe('insertOne', () => {
+		it('should insert a new alert', async () => {
+			const result = await alerts.insertOne(newAlert);
+			expect(result.insertedId).toBeDefined();
+
+			const insertedAlert = await alerts.findById(newAlert._id.toString());
+			expect(insertedAlert).toBeDefined();
+			expect(insertedAlert?.title).toBe(newAlert.title);
+		});
+
+		it('should throw an error if the alert already exists', async () => {
+			await expect(alerts.insertOne(newAlert)).rejects.toThrow();
+		});
+	});
+
+	describe('findByAgencyId', () => {
+		it('should find alerts by agency ID', async () => {
+			const result = await alerts.findByAgencyId(newAlert.agency_ids[0]);
+			expect(result).toBeDefined();
+			expect(result.length).toBeGreaterThan(0);
+			result.forEach((alert) => {
+				expect(alert.agency_ids).toContain(newAlert.agency_ids[0]);
+			});
+		});
+
+		it('should return an empty array if no alerts are found for the agency ID', async () => {
+			const result = await alerts.findByAgencyId('NON_EXISTENT_AGENCY_ID');
+			expect(result).toEqual([]);
+		});
+	});
+
+	describe('findByLineId', () => {
+		it('should find alerts by line ID', async () => {
+			const result = await alerts.findByLineId(newAlert.line_ids[0]);
+			expect(result).toBeDefined();
+			expect(result.length).toBeGreaterThan(0);
+			result.forEach((alert) => {
+				expect(alert.line_ids).toContain(newAlert.line_ids[0]);
+			});
+		});
+
+		it('should return an empty array if no alerts are found for the line ID', async () => {
+			const result = await alerts.findByLineId('NON_EXISTENT_LINE_ID');
+			expect(result).toEqual([]);
+		});
+	});
+
+	describe('findByMunicipalityId', () => {
+		it('should find alerts by municipality ID', async () => {
+			const result = await alerts.findByMunicipalityId(newAlert.municipality_ids[0]);
+			expect(result).toBeDefined();
+			expect(result.length).toBeGreaterThan(0);
+			result.forEach((alert) => {
+				expect(alert.municipality_ids).toContain(newAlert.municipality_ids[0]);
+			});
+		});
+
+		it('should return an empty array if no alerts are found for the municipality ID', async () => {
+			const result = await alerts.findByMunicipalityId('NON_EXISTENT_MUNICIPALITY_ID');
+			expect(result).toEqual([]);
+		});
+	});
+
+	describe('findByRouteId', () => {
+		it('should find alerts by route ID', async () => {
+			const result = await alerts.findByRouteId(newAlert.route_ids[0]);
+			expect(result).toBeDefined();
+			expect(result.length).toBeGreaterThan(0);
+			result.forEach((alert) => {
+				expect(alert.route_ids).toContain(newAlert.route_ids[0]);
+			});
+		});
+
+		it('should return an empty array if no alerts are found for the route ID', async () => {
+			const result = await alerts.findByRouteId('NON_EXISTENT_ROUTE_ID');
+			expect(result).toEqual([]);
+		});
+	});
+
+	describe('findByStopId', () => {
+		it('should find alerts by stop ID', async () => {
+			const result = await alerts.findByStopId(newAlert.stop_ids[0]);
+			expect(result).toBeDefined();
+			expect(result.length).toBeGreaterThan(0);
+			result.forEach((alert) => {
+				expect(alert.stop_ids).toContain(newAlert.stop_ids[0]);
+			});
+		});
+
+		it('should return an empty array if no alerts are found for the stop ID', async () => {
+			const result = await alerts.findByStopId('NON_EXISTENT_STOP_ID');
+			expect(result).toEqual([]);
+		});
+	});
+
+	describe('findByTitle', () => {
+		it('should find an alert by its title', async () => {
+			const alert = await alerts.findByTitle(newAlert.title);
+			expect(alert).toBeDefined();
+			expect(alert?.title).toBe(newAlert.title);
+		});
+
+		it('should return null if the alert is not found', async () => {
+			const alert = await alerts.findByTitle('NON_EXISTENT_TITLE');
+			expect(alert).toBeNull();
+		});
+	});
+
+	describe('updateById', () => {
+		it('should update an alert\'s description', async () => {
+			const updatedFields = { description: 'Updated Alert Description' };
+			const updateResult = await alerts.updateById(newAlert._id, updatedFields);
+			expect(updateResult.modifiedCount).toBe(1);
+
+			const updatedAlert = await alerts.findByTitle(newAlert.title);
+			expect(updatedAlert?.description).toBe(updatedFields.description);
+		});
+
+		it('should return modifiedCount as 0 if the alert does not exist', async () => {
+			const updateResult = await alerts.updateById(new ObjectId().toString(), { description: 'Should Not Update' });
+			expect(updateResult.modifiedCount).toBe(0);
+		});
+	});
+
+	describe('deleteOne', () => {
+		it('should delete an alert', async () => {
+			const result = await alerts.deleteOne({ _id: newAlert._id });
+			expect(result.deletedCount).toBe(1);
+
+			const deletedAlert = await alerts.findById(newAlert._id.toString());
+			expect(deletedAlert).toBeNull();
+		});
+
+		it('should return deletedCount as 0 if the alert does not exist', async () => {
+			const result = await alerts.deleteOne({ _id: new ObjectId() });
+			expect(result.deletedCount).toBe(0);
+		});
+	});
+
+	describe('deleteMany', () => {
+		const alertsToDelete: WithId<Alert>[] = [
+			{ ...newAlert, _id: new ObjectId(), title: 'Test Alert 2' },
+			{ ...newAlert, _id: new ObjectId(), title: 'Test Alert 3' },
+		];
+
+		beforeAll(async () => {
+			await alerts.insertMany(alertsToDelete);
+		});
+
+		it('should delete multiple alerts', async () => {
+			const result = await alerts.deleteMany({ title: { $in: alertsToDelete.map(alert => alert.title) } });
+			expect(result.deletedCount).toBe(alertsToDelete.length);
+		});
+
+		it('should return deletedCount as 0 if no alerts match the filter', async () => {
+			const result = await alerts.deleteMany({ title: 'NON_EXISTENT_TITLE' });
+			expect(result.deletedCount).toBe(0);
+		});
+	});
+});
