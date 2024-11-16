@@ -27,6 +27,7 @@
 		"build": "rimraf ./dist && tsc -p tsconfig.prod.json && tsc-alias",
 		"dev": "dotenv-run -- tsx src/stops/index.ts",
 		"docker:local": "docker compose -f docker/local/compose.local.yaml up -d",
+		"docker:local-down": "docker compose -f docker/local/compose.local.yaml down",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"test": "jest",
@@ -38,6 +39,11 @@
 			"import": "./dist/interfaces/index.js",
 			"require": "./dist/interfaces/index.js",
 			"types": "./dist/interfaces/index.d.ts"
+		},
+		"./lib": {
+			"import": "./dist/lib/index.js",
+			"require": "./dist/lib/index.js",
+			"types": "./dist/lib/index.d.ts"
 		},
 		"./providers": {
 			"import": "./dist/providers/index.js",
