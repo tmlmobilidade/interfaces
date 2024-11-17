@@ -147,4 +147,4 @@ class AuthProvider {
 	}
 }
 
-export default AuthProvider;
+export { AuthProvider };
