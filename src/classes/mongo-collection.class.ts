@@ -52,6 +52,16 @@ export abstract class MongoCollectionClass<T> {
 	}
 
 	/**
+	 * Deletes a single document by its ID.
+	 *
+	 * @param id - The ID of the document to delete
+	 * @returns A promise that resolves to the result of the delete operation
+	 */
+	async deleteById(id: ObjectId | string) {
+		return this.mongoCollection.deleteOne({ _id: id instanceof ObjectId ? id : new ObjectId(id) } as unknown as Filter<T>);
+	}
+
+	/**
 	 * Deletes multiple documents matching the filter criteria.
 	 *
 	 * @param filter - The filter criteria to match documents to delete
