@@ -5,7 +5,7 @@
 import { roles, sessions, users } from '@/interfaces';
 import HttpException from '@/lib/http-exception';
 import HttpStatus from '@/lib/http-status';
-import AuthProvider from '@/providers/auth.provider';
+import { AuthProvider } from '@/providers';
 import { LoginDto } from '@/types';
 import { mockPermissions, mockRoles, mockUsers } from '@test/data/db-mock';
 import bcrypt from 'bcrypt';
