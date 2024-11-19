@@ -1,10 +1,15 @@
 import { MongoConnector } from '@/connectors/mongo.connector';
+import { HttpException, HttpStatus } from '@/lib';
 import { createIndexFactory } from '@/lib/mongo-indexes';
-import { Collection, Filter, MongoClientOptions, ObjectId, OptionalUnlessRequiredId, Sort } from 'mongodb';
+import { createSchemaFactory } from '@/lib/schema.factory';
+import { Collection, Document, Filter, MongoClientOptions, ObjectId, OptionalUnlessRequiredId, Sort } from 'mongodb';
+import z from 'zod';
 
-export abstract class MongoCollectionClass<T> {
+export abstract class MongoCollectionClass<T extends Document> {
+	protected createSchema: null | z.ZodSchema = null;
 	protected mongoCollection: Collection<T>;
 	protected mongoConnector: MongoConnector;
+	protected updateSchema: null | z.ZodSchema = null;
 
 	// Abstract method for subclasses to provide the MongoDB collection name
 	protected abstract getCollectionName(): string;
@@ -30,11 +35,14 @@ export abstract class MongoCollectionClass<T> {
 		try {
 			this.mongoConnector = new MongoConnector(this.getDbUri(), options);
 			await this.mongoConnector.connect();
-			this.mongoCollection = await this.mongoConnector.getCollection<T>(
-				this.mongoConnector.client.db('production'),
-				this.getCollectionName(),
-			);
+			this.mongoCollection = this.mongoConnector.client.db('production').collection<T>(this.getCollectionName());
 			await createIndexFactory(this.mongoConnector.client.db('production'), this.getCollectionName());
+
+			const schemas = createSchemaFactory(this.getCollectionName());
+			if (schemas) {
+				this.createSchema = schemas[0];
+				this.updateSchema = schemas[1];
+			}
 		}
 		catch (error) {
 			throw new Error(`Error connecting to ${this.getCollectionName()}`, { cause: error });
@@ -108,7 +116,7 @@ export abstract class MongoCollectionClass<T> {
 	 * @returns A promise that resolves to an array of matching documents
 	 */
 	async findMany(filter?: Filter<T>, perPage?: number, page?: number, sort?: Sort) {
-		const query = this.mongoCollection.find(filter);
+		const query = this.mongoCollection.find(filter ?? {});
 		if (perPage) query.limit(perPage);
 		if (page && perPage) query.skip(perPage * (page - 1));
 		if (sort) query.sort(sort);
@@ -132,6 +140,17 @@ export abstract class MongoCollectionClass<T> {
 	 * @returns A promise that resolves to the result of the insert operation
 	 */
 	async insertMany(docs: OptionalUnlessRequiredId<T>[]) {
+		if (this.createSchema) {
+			for (const doc of docs) {
+				try {
+					this.createSchema.parse(doc);
+				}
+				catch (error) {
+					throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
+				}
+			}
+		}
+
 		return this.mongoCollection.insertMany(docs.map(doc => ({ ...doc, created_at: new Date(), updated_at: new Date() })));
 	}
 
@@ -142,6 +161,15 @@ export abstract class MongoCollectionClass<T> {
 	 * @returns A promise that resolves to the result of the insert operation
 	 */
 	async insertOne(doc: OptionalUnlessRequiredId<T>) {
+		if (this.createSchema) {
+			try {
+				this.createSchema.parse(doc);
+			}
+			catch (error) {
+				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
+			}
+		}
+
 		return this.mongoCollection.insertOne({ ...doc, created_at: new Date(), updated_at: new Date() });
 	}
 
@@ -153,6 +181,15 @@ export abstract class MongoCollectionClass<T> {
 	 * @returns A promise that resolves to the result of the update operation
 	 */
 	async updateById(id: ObjectId | string, updateFields: Partial<T>) {
+		if (this.updateSchema) {
+			try {
+				this.updateSchema.parse(updateFields);
+			}
+			catch (error) {
+				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
+			}
+		}
+
 		return this.mongoCollection.updateOne({ _id: id instanceof ObjectId ? id : new ObjectId(id) } as unknown as Filter<T>, { $set: { ...updateFields, updated_at: new Date() } });
 	}
 
@@ -164,6 +201,15 @@ export abstract class MongoCollectionClass<T> {
 	 * @returns A promise that resolves to the result of the update operation
 	 */
 	async updateMany(filter: Filter<T>, updateFields: Partial<T>) {
+		if (this.updateSchema) {
+			try {
+				this.updateSchema.parse(updateFields);
+			}
+			catch (error) {
+				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
+			}
+		}
+
 		return this.mongoCollection.updateMany(filter, { $set: { ...updateFields, updated_at: new Date() } });
 	}
 

@@ -24,7 +24,7 @@ class StopsClass extends MongoCollectionClass<Stop> {
 	}
 
 	protected getDbUri() {
-		return process.env.TML_INTERFACES_STOPS;
+		return process.env.TML_INTERFACES_STOPS ?? '';
 	}
 
 	/**
@@ -49,7 +49,7 @@ class StopsClass extends MongoCollectionClass<Stop> {
 	async findByMunicipalityCode(code: string, perPage?: number, page?: number, sort?: Sort) {
 		const query = this.mongoCollection.find({ municipality_code: code } as Filter<Stop>);
 		if (perPage) query.limit(perPage);
-		if (page) query.skip(perPage * (page - 1));
+		if (page && perPage) query.skip(perPage * (page - 1));
 		if (sort) query.sort(sort);
 		return query.toArray();
 	}

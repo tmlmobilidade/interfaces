@@ -1,12 +1,12 @@
 import { users } from '@/interfaces';
-import { User } from '@/types';
+import { Email, User } from '@/types';
 import { mockUsers } from '@test/data/db-mock';
-import { ObjectId, Sort, WithId } from 'mongodb';
+import { ObjectId, OptionalId, Sort, WithId } from 'mongodb';
 
 const newUser: WithId<User> = {
 	...mockUsers[0],
 	_id: new ObjectId(),
-	email: 'newuser@example.com',
+	email: 'newuser@example.com' as Email,
 };
 
 describe('UsersClass', () => {
@@ -56,7 +56,7 @@ describe('UsersClass', () => {
 			});
 
 			result.forEach((user) => {
-				expect(user.password_hash).toBeUndefined();
+				expect(user['password_hash']).toBeUndefined();
 			});
 		});
 
@@ -79,7 +79,7 @@ describe('UsersClass', () => {
 			});
 
 			result.forEach((user) => {
-				expect(user.password_hash).toBeUndefined();
+				expect(user['password_hash']).toBeUndefined();
 			});
 		});
 
@@ -99,12 +99,12 @@ describe('UsersClass', () => {
 			expect(result.length).toBeLessThanOrEqual(perPage);
 
 			result.forEach((user) => {
-				expect(user.password_hash).toBeUndefined();
+				expect(user['password_hash']).toBeUndefined();
 			});
 		});
 
 		it('should return an empty array if no users match the filter', async () => {
-			const filter = { email: 'nonexistent@example.com' };
+			const filter = { email: 'nonexistent@example.com' as Email };
 			const result = await users.findMany(filter);
 			expect(result).toEqual([]);
 		});
@@ -120,7 +120,7 @@ describe('UsersClass', () => {
 		});
 
 		it('should return null if no user matches the filter', async () => {
-			const filter = { email: 'nonexistent@example.com' };
+			const filter = { email: 'nonexistent@example.com' as Email };
 			const user = await users.findOne(filter);
 			expect(user).toBeNull();
 		});
@@ -156,7 +156,7 @@ describe('UsersClass', () => {
 			...user,
 			_id: new ObjectId(),
 			created_at: new Date(),
-			email: `new_${user.email}`,
+			email: `new_${user.email}` as Email,
 			updated_at: new Date(),
 		}));
 
@@ -178,7 +178,7 @@ describe('UsersClass', () => {
 	describe('updateOne', () => {
 		it('should update a user\'s email', async () => {
 			const userId = mockUsers[0]._id;
-			const updateFields = { email: 'updated_email@example.com' };
+			const updateFields = { email: 'updated_email@example.com' as Email };
 			const updateResult = await users.updateById(userId, updateFields);
 			expect(updateResult.modifiedCount).toBe(1);
 
@@ -190,7 +190,7 @@ describe('UsersClass', () => {
 
 		it('should return modifiedCount as 0 if the user does not exist', async () => {
 			const nonExistentId = new ObjectId().toString();
-			const updateFields = { email: 'nonexistent@example.com' };
+			const updateFields = { email: 'nonexistent@example.com' as Email };
 			const updateResult = await users.updateById(new ObjectId(nonExistentId), updateFields);
 			expect(updateResult.modifiedCount).toBe(0);
 		});
@@ -201,7 +201,7 @@ describe('UsersClass', () => {
 			...user,
 			_id: new ObjectId(),
 			created_at: new Date(),
-			email: `update_${user.email}`,
+			email: `update_${user.email}` as Email,
 			updated_at: new Date(),
 		}));
 
@@ -210,7 +210,7 @@ describe('UsersClass', () => {
 		});
 
 		it('should update multiple users\' emails', async () => {
-			const emails = usersToUpdate.map(user => user.email);
+			const emails = usersToUpdate.map(user => user.email as Email);
 			const updateFields = { first_name: 'updated_first_name' };
 			const updateResult = await users.updateMany({ email: { $in: emails } }, updateFields);
 			expect(updateResult.modifiedCount).toBe(usersToUpdate.length);
@@ -244,19 +244,18 @@ describe('UsersClass', () => {
 			email: `delete_${user.email}`,
 			updated_at: new Date(),
 		}));
-
 		beforeAll(async () => {
-			await users.insertMany(usersToDelete);
+			await users.insertMany(usersToDelete as OptionalId<User>[]);
 		});
 
 		it('should delete multiple users', async () => {
-			const emails = usersToDelete.map(user => user.email);
+			const emails = usersToDelete.map(user => user.email as Email);
 			const result = await users.deleteMany({ email: { $in: emails } });
 			expect(result.deletedCount).toBe(usersToDelete.length);
 		});
 
 		it('should return deletedCount as 0 if no users match the filter', async () => {
-			const result = await users.deleteMany({ email: 'nonexistent@example.com' });
+			const result = await users.deleteMany({ email: 'nonexistent@example.com' as Email });
 			expect(result.deletedCount).toBe(0);
 		});
 	});

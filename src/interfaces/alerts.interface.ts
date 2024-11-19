@@ -24,7 +24,7 @@ class AlertsClass extends MongoCollectionClass<Alert> {
 	}
 
 	protected getDbUri(): string {
-		return process.env.TML_INTERFACES_ALERTS;
+		return process.env.TML_INTERFACES_ALERTS ?? '';
 	}
 
 	async findByAgencyId(agency_id: string) {

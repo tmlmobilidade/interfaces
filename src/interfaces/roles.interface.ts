@@ -24,7 +24,7 @@ class RolesClass extends MongoCollectionClass<Role> {
 	}
 
 	protected getDbUri(): string {
-		return process.env.TML_INTERFACES_AUTH;
+		return process.env.TML_INTERFACES_AUTH ?? '';
 	}
 
 	/**

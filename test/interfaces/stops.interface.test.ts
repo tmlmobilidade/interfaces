@@ -142,11 +142,11 @@ describe('StopsClass', () => {
 			const insertedStop = await stops.findByCode(newStop.code);
 
 			expect(insertedStop).toBeDefined();
-			expect(insertedStop.created_at).toBeDefined();
-			expect(insertedStop.updated_at).toBeDefined();
+			expect(insertedStop?.created_at).toBeDefined();
+			expect(insertedStop?.updated_at).toBeDefined();
 
-			delete insertedStop.created_at;
-			delete insertedStop.updated_at;
+			delete insertedStop?.created_at;
+			delete insertedStop?.updated_at;
 
 			expect(insertedStop).toEqual(newStop);
 		});

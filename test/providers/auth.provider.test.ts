@@ -6,7 +6,7 @@ import { roles, sessions, users } from '@/interfaces';
 import HttpException from '@/lib/http-exception';
 import HttpStatus from '@/lib/http-status';
 import { AuthProvider } from '@/providers';
-import { LoginDto } from '@/types';
+import { Email, LoginDto } from '@/types';
 import { mockPermissions, mockRoles, mockUsers } from '@test/data/db-mock';
 import bcrypt from 'bcrypt';
 
@@ -67,7 +67,7 @@ describe('AuthProvider', () => {
 		it('should throw UNAUTHORIZED if user is not found', async () => {
 			// Arrange
 			const loginDto: LoginDto = {
-				email: 'nonexistent@example.com',
+				email: 'nonexistent@example.com' as Email,
 				password: validPassword,
 			};
 

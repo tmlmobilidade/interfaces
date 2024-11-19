@@ -10,9 +10,10 @@ export const PermissionSchema = z.object({
 });
 
 export const UserSchema = z.object({
+	_id: z.instanceof(ObjectId).optional(),
 	avatar: z.string().optional(),
 	bio: z.string().optional(),
-	created_at: z.date(),
+	created_at: z.date().optional(),
 	email: z.string().email(),
 	email_verified: z.date().optional(),
 	first_name: z.string(),
@@ -23,7 +24,7 @@ export const UserSchema = z.object({
 	phone: z.string(),
 	role_ids: z.array(z.instanceof(ObjectId)),
 	session_ids: z.array(z.instanceof(ObjectId)),
-	updated_at: z.date(),
+	updated_at: z.date().optional(),
 	verification_token_ids: z.array(z.instanceof(ObjectId)),
 }).strict();
 
@@ -36,20 +37,31 @@ export const LoginDtoSchema = z.object({
 }).strict();
 
 export const RoleSchema = z.object({
+	_id: z.instanceof(ObjectId).optional(),
+	created_at: z.date().optional(),
 	name: z.string(),
 	permissions: z.array(PermissionSchema),
-	scope: z.string(),
+	updated_at: z.date().optional(),
 }).strict();
 
+export const CreateRoleSchema = RoleSchema;
+export const UpdateRoleSchema = RoleSchema.partial();
+
 export const VerificationTokenSchema = z.object({
+	_id: z.instanceof(ObjectId).optional(),
+	created_at: z.date().optional(),
 	expires: z.date(),
 	token: z.string(),
+	updated_at: z.date().optional(),
 	user_id: z.instanceof(ObjectId),
 }).strict();
 
 export const SessionSchema = z.object({
+	_id: z.instanceof(ObjectId).optional(),
+	created_at: z.date().optional(),
 	expires_at: z.date().optional(),
 	token: z.string(),
+	updated_at: z.date().optional(),
 	user_id: z.instanceof(ObjectId),
 }).strict();
 

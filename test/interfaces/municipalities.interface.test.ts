@@ -10,7 +10,7 @@ const newMunicipality: Municipality = {
 	district: '',
 	fill_color: '',
 	fill_opacity: 0,
-	geojson: undefined,
+	geojson: { features: [], type: 'FeatureCollection' }, // Assuming a valid GeoJSON structure
 	is_locked: false,
 	name: 'New Municipality',
 	prefix: 'NM',

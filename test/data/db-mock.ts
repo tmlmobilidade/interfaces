@@ -1,4 +1,4 @@
-import { Agency, Alert, Cause, createOperationalDate, Effect, Organization, Permission, PublishStatus, Role, Stop, User, Zone } from '@/types';
+import { Agency, Alert, Cause, createOperationalDate, Effect, Email, Organization, Permission, PublishStatus, Role, Stop, User, Zone } from '@/types';
 import { Municipality } from '@/types/municipality';
 import { ObjectId, WithId } from 'mongodb';
 
@@ -25,7 +25,7 @@ export const mockUsers: WithId<User>[] = [
 	{
 		_id: new ObjectId('672e3c37ae64cf8f5992ecb7'),
 		created_at: new Date(),
-		email: 'writer@example.com',
+		email: 'writer@example.com' as Email,
 		first_name: 'Writer',
 		last_name: 'User',
 		organization_ids: [
@@ -44,7 +44,7 @@ export const mockUsers: WithId<User>[] = [
 		avatar: '',
 		bio: '',
 		created_at: new Date(),
-		email: 'reader@example.com',
+		email: 'reader@example.com' as Email,
 		first_name: 'Reader',
 		last_name: 'User',
 		organization_ids: [
@@ -67,7 +67,7 @@ export const mockUsers: WithId<User>[] = [
 		avatar: '',
 		bio: '',
 		created_at: new Date(),
-		email: 'permission@example.com',
+		email: 'permission@example.com' as Email,
 		first_name: 'Permission',
 		last_name: 'User',
 		organization_ids: [
@@ -320,7 +320,7 @@ export const mockAgencies: WithId<Agency>[] = [
 		is_locked: false,
 		lang: 'pt',
 		name: 'Agency 1',
-		operation_start_date: '2024-01-01',
+		operation_start_date: createOperationalDate('20240101'),
 		phone: '1234567890',
 		price_per_km: 0,
 		timezone: 'Europe/Lisbon',
@@ -337,7 +337,7 @@ export const mockAgencies: WithId<Agency>[] = [
 		is_locked: false,
 		lang: 'pt',
 		name: 'Agency 2',
-		operation_start_date: '2024-01-01',
+		operation_start_date: createOperationalDate('20240101'),
 		phone: '1234567890',
 		price_per_km: 0,
 		timezone: 'Europe/Lisbon',
@@ -355,9 +355,9 @@ export const mockAlerts: WithId<Alert>[] = [
 		agency_ids: [
 			'67378cebad93f9b2668ec93c',
 		],
-		cause: Cause.ACCIDENT,
+		cause: 'ACCIDENT',
 		description: '',
-		effect: Effect.SIGNIFICANT_DELAYS,
+		effect: 'SIGNIFICANT_DELAYS',
 		image_url: '',
 		line_ids: [],
 		municipality_ids: [
@@ -365,7 +365,7 @@ export const mockAlerts: WithId<Alert>[] = [
 		],
 		publish_end_date: createOperationalDate('20240201'),
 		publish_start_date: createOperationalDate('20240101'),
-		publish_status: PublishStatus.PUBLISHED,
+		publish_status: 'PUBLISHED',
 		route_ids: [],
 		stop_ids: [
 			'6476b095424adb51586dffa7',
@@ -379,9 +379,9 @@ export const mockAlerts: WithId<Alert>[] = [
 		agency_ids: [
 			'67378cf97355b5132e6845c9',
 		],
-		cause: Cause.ACCIDENT,
+		cause: 'ACCIDENT',
 		description: '',
-		effect: Effect.SIGNIFICANT_DELAYS,
+		effect: 'SIGNIFICANT_DELAYS',
 		image_url: '',
 		line_ids: [],
 		municipality_ids: [
@@ -389,7 +389,7 @@ export const mockAlerts: WithId<Alert>[] = [
 		],
 		publish_end_date: createOperationalDate('20240301'),
 		publish_start_date: createOperationalDate('20240201'),
-		publish_status: PublishStatus.PUBLISHED,
+		publish_status: 'PUBLISHED',
 		route_ids: [],
 		stop_ids: [
 			'6476b094424adb51586dfcee',
@@ -404,9 +404,9 @@ export const mockAlerts: WithId<Alert>[] = [
 			'67378cebad93f9b2668ec93c',
 			'67378cf97355b5132e6845c9',
 		],
-		cause: Cause.CONSTRUCTION,
+		cause: 'CONSTRUCTION',
 		description: '',
-		effect: Effect.DETOUR,
+		effect: 'DETOUR',
 		image_url: '',
 		line_ids: [],
 		municipality_ids: [
@@ -415,7 +415,7 @@ export const mockAlerts: WithId<Alert>[] = [
 		],
 		publish_end_date: createOperationalDate('20240501'),
 		publish_start_date: createOperationalDate('20240401'),
-		publish_status: PublishStatus.PUBLISHED,
+		publish_status: 'PUBLISHED',
 		route_ids: [],
 		stop_ids: [
 			'6476b095424adb51586dffa7',

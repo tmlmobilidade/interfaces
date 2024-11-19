@@ -24,7 +24,7 @@ class RidesClass extends MongoCollectionClass<Ride> {
 	}
 
 	protected getDbUri() {
-		return process.env.TML_INTERFACES_RIDES;
+		return process.env.TML_INTERFACES_RIDES ?? '';
 	}
 
 	/**

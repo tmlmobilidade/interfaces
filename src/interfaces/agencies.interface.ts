@@ -1,7 +1,8 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Agency } from '@/types';
+import { Agency, AgencySchema, UpdateAgencySchema } from '@/types';
 import { Filter } from 'mongodb';
+import z from 'zod';
 
 class AgenciesClass extends MongoCollectionClass<Agency> {
 	private static _instance: AgenciesClass;
@@ -23,8 +24,16 @@ class AgenciesClass extends MongoCollectionClass<Agency> {
 		return 'agencies';
 	}
 
+	protected getCreateSchema(): z.ZodSchema {
+		return AgencySchema;
+	}
+
 	protected getDbUri(): string {
-		return process.env.TML_INTERFACES_AGENCIES;
+		return process.env.TML_INTERFACES_AGENCIES ?? '';
+	}
+
+	protected getUpdateSchema(): z.ZodSchema {
+		return UpdateAgencySchema;
 	}
 
 	async findByCode(code: string) {

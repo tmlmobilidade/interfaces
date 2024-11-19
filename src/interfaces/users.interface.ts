@@ -24,12 +24,13 @@ class UsersClass extends MongoCollectionClass<User> {
 	}
 
 	protected getDbUri(): string {
-		return process.env.TML_INTERFACES_AUTH;
+		return process.env.TML_INTERFACES_AUTH ?? '';
 	}
 
 	private deletePasswordHash(user: WithId<User>) {
-		delete user.password_hash;
-		return user;
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { password_hash, ...userWithoutPassword } = user;
+		return userWithoutPassword;
 	}
 
 	/**
@@ -39,13 +40,13 @@ class UsersClass extends MongoCollectionClass<User> {
 	 * @param includePasswordHash - Whether to include the password hash in the result
 	 * @returns A promise that resolves to the matching user document or null if not found
 	 */
-	async findByEmail(email: string, includePasswordHash = false) {
+	async findByEmail(email: string, includePasswordHash = false): Promise<null | WithId<User>> {
 		const user = await this.mongoCollection.findOne({ email } as Filter<User>);
 		if (!user) {
 			return null;
 		}
 
-		return includePasswordHash ? user : this.deletePasswordHash(user);
+		return includePasswordHash ? user : this.deletePasswordHash(user) as WithId<User>;
 	}
 
 	/**
@@ -61,7 +62,7 @@ class UsersClass extends MongoCollectionClass<User> {
 			return null;
 		}
 
-		return includePasswordHash ? user : this.deletePasswordHash(user);
+		return includePasswordHash ? user : this.deletePasswordHash(user) as WithId<User>;
 	}
 
 	/**
@@ -97,12 +98,12 @@ class UsersClass extends MongoCollectionClass<User> {
 	 * @returns A promise that resolves to an array of matching documents
 	 */
 	async findMany(filter?: Filter<User>, perPage?: number, page?: number, sort?: Sort) {
-		const query = this.mongoCollection.find(filter);
+		const query = this.mongoCollection.find(filter ?? {});
 		if (perPage) query.limit(perPage);
 		if (page && perPage) query.skip(perPage * (page - 1));
 		if (sort) query.sort(sort);
 		const users = await query.toArray();
-		return users.map(user => this.deletePasswordHash(user));
+		return users.map(user => this.deletePasswordHash(user) as WithId<User>);
 	}
 
 	async findOne(filter: Filter<User>) {
@@ -111,7 +112,7 @@ class UsersClass extends MongoCollectionClass<User> {
 			return null;
 		}
 
-		return this.deletePasswordHash(user);
+		return this.deletePasswordHash(user) as WithId<User>;
 	}
 }
 

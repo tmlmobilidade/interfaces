@@ -1,8 +1,10 @@
 import type { GeoJSON } from 'geojson';
 
+import { ObjectId } from 'mongodb';
 import z from 'zod';
 
 export const ZoneSchema = z.object({
+	_id: z.instanceof(ObjectId).optional(),
 	border_color: z.string(),
 	border_opacity: z.number(),
 	border_width: z.number(),
@@ -15,6 +17,8 @@ export const ZoneSchema = z.object({
 	name: z.string(),
 	updated_at: z.date(),
 }).strict();
+
+export const UpdateZoneSchema = ZoneSchema.partial();
 
 export type Zone = { geojson: GeoJSON } & Omit<z.infer<typeof ZoneSchema>, 'geojson'>;
 export type CreateZoneDto = Zone;

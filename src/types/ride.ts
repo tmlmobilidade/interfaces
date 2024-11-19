@@ -96,6 +96,10 @@ export type RideAnalysis = z.infer<typeof RideAnalysisSchema>;
 export type CreateRideAnalysisDto = RideAnalysis;
 export type UpdateRideAnalysisDto = Partial<RideAnalysis>;
 
+export type Ride = z.infer<typeof RideSchema>;
+export type CreateRideDto = Ride;
+export type UpdateRideDto = Partial<Ride>;
+
 export type HashedShapePoint = z.infer<typeof HashedShapePointSchema>;
 export type CreateHashedShapePointDto = HashedShapePoint;
 export type UpdateHashedShapePointDto = Partial<HashedShapePoint>;

@@ -24,7 +24,7 @@ class ZonesClass extends MongoCollectionClass<Zone> {
 	}
 
 	protected getDbUri() {
-		return process.env.TML_INTERFACES_ZONES;
+		return process.env.TML_INTERFACES_ZONES ?? '';
 	}
 
 	/**

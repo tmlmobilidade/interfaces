@@ -24,7 +24,7 @@ class OrganizationsClass extends MongoCollectionClass<Organization> {
 	}
 
 	protected getDbUri() {
-		return process.env.TML_INTERFACES_ORGANIZATIONS;
+		return process.env.TML_INTERFACES_ORGANIZATIONS ?? '';
 	}
 
 	/**

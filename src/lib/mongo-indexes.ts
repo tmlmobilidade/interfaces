@@ -1,6 +1,6 @@
-import { Collection, Db } from 'mongodb';
+import { Collection, Db, Document } from 'mongodb';
 
-export async function createAgencyIndexes(collection: Collection<unknown>) {
+export async function createAgencyIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { name: 1 }, unique: true },
 		{ background: true, key: { code: 1 }, unique: true },
@@ -8,7 +8,7 @@ export async function createAgencyIndexes(collection: Collection<unknown>) {
 	]);
 }
 
-export async function createAlertIndexes(collection: Collection<unknown>) {
+export async function createAlertIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { agency_ids: 1 } },
 		{ background: true, key: { line_ids: 1 } },
@@ -21,14 +21,14 @@ export async function createAlertIndexes(collection: Collection<unknown>) {
 	]);
 }
 
-export async function createHashedShapeIndexes(collection: Collection<unknown>) {
+export async function createHashedShapeIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { code: 1 }, unique: true },
 		{ background: true, key: { agency_id: 1 } },
 	]);
 }
 
-export async function createHashedTripIndexes(collection: Collection<unknown>) {
+export async function createHashedTripIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { code: 1 }, unique: true },
 		{ background: true, key: { agency_id: 1 } },
@@ -36,7 +36,7 @@ export async function createHashedTripIndexes(collection: Collection<unknown>) {
 	]);
 }
 
-export async function createMunicipalityIndexes(collection: Collection<unknown>) {
+export async function createMunicipalityIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { code: 1 }, unique: true },
 		{ background: true, key: { name: 1 } },
@@ -44,13 +44,13 @@ export async function createMunicipalityIndexes(collection: Collection<unknown>)
 	]);
 }
 
-export async function createOrganizationIndexes(collection: Collection<unknown>) {
+export async function createOrganizationIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { name: 1 }, unique: true },
 	]);
 }
 
-export async function createRideIndexes(collection: Collection<unknown>) {
+export async function createRideIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { agency_id: 1 } },
 		{ background: true, key: { code: 1 }, unique: true },
@@ -59,13 +59,13 @@ export async function createRideIndexes(collection: Collection<unknown>) {
 	]);
 }
 
-export async function createRoleIndexes(collection: Collection<unknown>) {
+export async function createRoleIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { name: 1 }, unique: true },
 	]);
 }
 
-export async function createSessionIndexes(collection: Collection<unknown>) {
+export async function createSessionIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { user_id: 1 } },
 		{ background: true, key: { expires: 1 } },
@@ -73,7 +73,7 @@ export async function createSessionIndexes(collection: Collection<unknown>) {
 	]);
 }
 
-export async function createStopIndexes(collection: Collection<unknown>) {
+export async function createStopIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { code: 1 }, unique: true },
 		{ background: true, key: { agency_id: 1 } },
@@ -82,7 +82,7 @@ export async function createStopIndexes(collection: Collection<unknown>) {
 	]);
 }
 
-export async function createUserIndexes(collection: Collection<unknown>) {
+export async function createUserIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { email: 1 }, unique: true },
 		{ background: true, key: { 'profile.first_name': 1, 'profile.last_name': 1 } },
@@ -91,14 +91,14 @@ export async function createUserIndexes(collection: Collection<unknown>) {
 	]);
 }
 
-export async function createVerificationTokenIndexes(collection: Collection<unknown>) {
+export async function createVerificationTokenIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { expires: 1 } },
 		{ background: true, key: { token: 1 }, unique: true },
 	]);
 }
 
-export async function createZoneIndexes(collection: Collection<unknown>) {
+export async function createZoneIndexes(collection: Collection<Document>) {
 	return await collection.createIndexes([
 		{ background: true, key: { code: 1 }, unique: true },
 		{ background: true, key: { name: 1 } },

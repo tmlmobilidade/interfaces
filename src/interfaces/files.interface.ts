@@ -23,7 +23,7 @@ class FilesClass extends MongoCollectionClass<File> {
 	}
 
 	protected getDbUri() {
-		return process.env.TML_INTERFACES_FILES;
+		return process.env.TML_INTERFACES_FILES ?? '';
 	}
 
 	/**

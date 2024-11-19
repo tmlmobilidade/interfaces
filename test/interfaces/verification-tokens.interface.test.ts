@@ -6,7 +6,7 @@ const newToken: WithId<VerificationToken> = {
 	_id: new ObjectId(),
 	expires: new Date(Date.now() + 3600000), // 1 hour from now
 	token: 'test_verification_token',
-	user_id: new ObjectId().toString(),
+	user_id: new ObjectId(),
 };
 
 describe('VerificationTokensClass', () => {

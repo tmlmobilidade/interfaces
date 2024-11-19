@@ -1,6 +1,6 @@
 import { alerts } from '@/interfaces/alerts.interface';
 import { createOperationalDate } from '@/types';
-import { Alert, Cause, Effect, PublishStatus } from '@/types';
+import { Alert } from '@/types';
 import { ObjectId, WithId } from 'mongodb';
 
 const newAlert: WithId<Alert> = {
@@ -8,15 +8,15 @@ const newAlert: WithId<Alert> = {
 	active_period_end_date: createOperationalDate('20240331'),
 	active_period_start_date: createOperationalDate('20240101'),
 	agency_ids: ['agency_1'],
-	cause: Cause.UNKNOWN_CAUSE,
+	cause: 'UNKNOWN_CAUSE',
 	description: 'Test Alert',
-	effect: Effect.NO_SERVICE,
+	effect: 'NO_SERVICE',
 	image_url: 'http://example.com/image.png',
 	line_ids: ['line_1'],
 	municipality_ids: ['municipality_1'],
 	publish_end_date: createOperationalDate('20241231'),
 	publish_start_date: createOperationalDate('20240101'),
-	publish_status: PublishStatus.PUBLISHED,
+	publish_status: 'PUBLISHED',
 	route_ids: ['route_1'],
 	stop_ids: ['stop_1'],
 	title: 'Test Alert Title',

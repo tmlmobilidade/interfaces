@@ -21,7 +21,7 @@ export class SshTunnelConnector {
 	private options: SshTunnelConnectorOptions;
 	private retries = 0;
 
-	constructor(config: SshConfig, options?: SshTunnelConnectorOptions) {
+	constructor(config: SshConfig, options: SshTunnelConnectorOptions = {}) {
 		this.config = config;
 		this.options = options;
 	}
@@ -75,7 +75,7 @@ export class SshTunnelConnector {
 		catch (error) {
 			if (error.code === 'EADDRINUSE') {
 				console.log(`⤷ ERROR: Port "${this.config.serverOptions.port}" already in use. Retrying with a different port...`);
-				this.config.serverOptions.port++;
+				this.config.serverOptions.port = (this.config.serverOptions.port ?? 0) + 1;
 				return;
 			}
 

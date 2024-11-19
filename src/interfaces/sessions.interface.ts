@@ -23,7 +23,7 @@ class SessionsClass extends MongoCollectionClass<Session> {
 	}
 
 	protected getDbUri(): string {
-		return process.env.TML_INTERFACES_AUTH;
+		return process.env.TML_INTERFACES_AUTH ?? '';
 	}
 }
 

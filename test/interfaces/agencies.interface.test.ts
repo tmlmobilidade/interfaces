@@ -1,5 +1,5 @@
 import { agencies } from '@/interfaces/agencies.interface';
-import { Agency } from '@/types';
+import { Agency, createOperationalDate } from '@/types';
 
 const newAgency: Agency = {
 	code: 'NEW_AGENCY',
@@ -9,7 +9,7 @@ const newAgency: Agency = {
 	is_locked: false,
 	lang: 'en',
 	name: 'New Agency',
-	operation_start_date: '2024-01-01',
+	operation_start_date: createOperationalDate('20240101'),
 	phone: '1234567890',
 	price_per_km: 1.5,
 	timezone: 'UTC',

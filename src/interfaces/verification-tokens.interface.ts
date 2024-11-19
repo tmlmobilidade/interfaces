@@ -23,7 +23,7 @@ class VerificationTokensClass extends MongoCollectionClass<VerificationToken> {
 	}
 
 	protected getDbUri(): string {
-		return process.env.TML_INTERFACES_AUTH;
+		return process.env.TML_INTERFACES_AUTH ?? '';
 	}
 
 	/**

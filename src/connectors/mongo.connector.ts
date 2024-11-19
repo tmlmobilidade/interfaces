@@ -17,7 +17,7 @@ export class MongoConnector {
 	/**
 	 * Aggregates data from a collection.
 	 */
-	async aggregate<T>(collection: Collection<T>, pipeline: Document[]) {
+	async aggregate<T extends Document>(collection: Collection<T>, pipeline: Document[]) {
 		return collection.aggregate(pipeline).toArray();
 	}
 
@@ -64,14 +64,14 @@ export class MongoConnector {
      * @param collectionName - The name of the collection to retrieve.
      * @returns The collection instance.
      */
-	async getCollection<T>(db: Db, collectionName: string): Promise<Collection<T>> {
+	async getCollection<T extends Document>(db: Db, collectionName: string): Promise<Collection<T>> {
 		return db.collection<T>(collectionName);
 	}
 
 	/**
 	 * Watches a collection for changes.
 	 */
-	async watch<T>(collection: Collection<T>) {
+	async watch<T extends Document>(collection: Collection<T>) {
 		return collection.watch();
 	}
 
