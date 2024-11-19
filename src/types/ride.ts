@@ -1,73 +1,113 @@
-export interface RideAnalysis {
-	code: string
-	grade: string
-	message: null | string
-	reason: null | string
-	status: string
-	unit: null | string
-	value: null | number
-}
+import { z } from 'zod';
 
-export interface Ride {
-	agency_id: string
-	analysis: RideAnalysis[]
-	analysis_timestamp: null | string
-	archive_id: string
-	code: string
-	hashed_shape_code: string
-	hashed_trip_code: string
-	line_id: string
-	operational_day: string
-	parse_timestamp: {
-		$date: string
-	}
-	pattern_id: string
-	route_id: string
-	scheduled_start_time: string
-	service_id: string
-	status: string
-	trip_id: string
-	user_notes: string
-}
+export const RideAnalysisSchema = z.object({
+	code: z.string(),
+	grade: z.string(),
+	message: z.union([z.string().nullable(), z.null()]),
+	reason: z.union([z.string().nullable(), z.null()]),
+	status: z.string(),
+	unit: z.union([z.string().nullable(), z.null()]),
+	value: z.union([z.number().nullable(), z.null()]),
+}).strict();
 
-export interface HashedShapePoint {
-	shape_pt_lat: string
-	shape_pt_lon: string
-	shape_pt_sequence: number
-}
+export const CreateRideAnalysisSchema = RideAnalysisSchema;
+export const UpdateRideAnalysisSchema = RideAnalysisSchema.partial();
 
-export interface HashedShape {
-	agency_id: string
-	code: string
-	points: HashedShapePoint[]
-	shape_id: string
-}
+export const RideSchema = z.object({
+	agency_id: z.string(),
+	analysis: z.array(RideAnalysisSchema),
+	analysis_timestamp: z.union([z.string().nullable(), z.null()]),
+	archive_id: z.string(),
+	code: z.string(),
+	hashed_shape_code: z.string(),
+	hashed_trip_code: z.string(),
+	line_id: z.string(),
+	operational_day: z.string(),
+	parse_timestamp: z.object({
+		$date: z.string(),
+	}),
+	pattern_id: z.string(),
+	route_id: z.string(),
+	scheduled_start_time: z.string(),
+	service_id: z.string(),
+	status: z.string(),
+	trip_id: z.string(),
+	user_notes: z.string(),
+}).strict();
 
-interface HashedTripStop {
-	arrival_time: string
-	departure_time: string
-	drop_off_type: string
-	pickup_type: string
-	stop_id: string
-	stop_lat: string
-	stop_lon: string
-	stop_name: string
-	stop_sequence: number
-	timepoint: string
-}
+export const CreateRideSchema = RideSchema;
+export const UpdateRideSchema = RideSchema.partial();
 
-export interface HashedTrip {
-	agency_id: string
-	code: string
-	line_id: string
-	line_long_name: string
-	line_short_name: string
-	path: HashedTripStop[]
-	pattern_id: string
-	route_color: string
-	route_id: string
-	route_long_name: string
-	route_short_name: string
-	route_text_color: string
-	trip_headsign: string
-}
+export const HashedShapePointSchema = z.object({
+	shape_pt_lat: z.string(),
+	shape_pt_lon: z.string(),
+	shape_pt_sequence: z.number(),
+}).strict();
+
+export const CreateHashedShapePointSchema = HashedShapePointSchema;
+export const UpdateHashedShapePointSchema = HashedShapePointSchema.partial();
+
+export const HashedShapeSchema = z.object({
+	agency_id: z.string(),
+	code: z.string(),
+	points: z.array(HashedShapePointSchema),
+	shape_id: z.string(),
+}).strict();
+
+export const CreateHashedShapeSchema = HashedShapeSchema;
+export const UpdateHashedShapeSchema = HashedShapeSchema.partial();
+
+export const HashedTripStopSchema = z.object({
+	arrival_time: z.string(),
+	departure_time: z.string(),
+	drop_off_type: z.string(),
+	pickup_type: z.string(),
+	stop_id: z.string(),
+	stop_lat: z.string(),
+	stop_lon: z.string(),
+	stop_name: z.string(),
+	stop_sequence: z.number(),
+	timepoint: z.string(),
+}).strict();
+
+export const CreateHashedTripStopSchema = HashedTripStopSchema;
+export const UpdateHashedTripStopSchema = HashedTripStopSchema.partial();
+
+export const HashedTripSchema = z.object({
+	agency_id: z.string(),
+	code: z.string(),
+	line_id: z.string(),
+	line_long_name: z.string(),
+	line_short_name: z.string(),
+	path: z.array(HashedTripStopSchema),
+	pattern_id: z.string(),
+	route_color: z.string(),
+	route_id: z.string(),
+	route_long_name: z.string(),
+	route_short_name: z.string(),
+	route_text_color: z.string(),
+	trip_headsign: z.string(),
+}).strict();
+
+export const CreateHashedTripSchema = HashedTripSchema;
+export const UpdateHashedTripSchema = HashedTripSchema.partial();
+
+export type RideAnalysis = z.infer<typeof RideAnalysisSchema>;
+export type CreateRideAnalysisDto = RideAnalysis;
+export type UpdateRideAnalysisDto = Partial<RideAnalysis>;
+
+export type HashedShapePoint = z.infer<typeof HashedShapePointSchema>;
+export type CreateHashedShapePointDto = HashedShapePoint;
+export type UpdateHashedShapePointDto = Partial<HashedShapePoint>;
+
+export type HashedShape = z.infer<typeof HashedShapeSchema>;
+export type CreateHashedShapeDto = HashedShape;
+export type UpdateHashedShapeDto = Partial<HashedShape>;
+
+export type HashedTripStop = z.infer<typeof HashedTripStopSchema>;
+export type CreateHashedTripStopDto = HashedTripStop;
+export type UpdateHashedTripStopDto = Partial<HashedTripStop>;
+
+export type HashedTrip = z.infer<typeof HashedTripSchema>;
+export type CreateHashedTripDto = HashedTrip;
+export type UpdateHashedTripDto = Partial<HashedTrip>;

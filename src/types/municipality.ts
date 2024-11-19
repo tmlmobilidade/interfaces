@@ -1,18 +1,28 @@
 import { GeoJSON } from 'geojson';
+import z from 'zod';
 
-export interface Municipality {
-	border_color: string
-	border_opacity: number
-	border_width: number
-	code: string
-	created_at: Date
-	district: string
-	fill_color: string
-	fill_opacity: number
+export const MunicipalitySchema = z.object({
+	border_color: z.string(),
+	border_opacity: z.number(),
+	border_width: z.number(),
+	code: z.string(),
+	created_at: z.date(),
+	district: z.string(),
+	fill_color: z.string(),
+	fill_opacity: z.number(),
+	geojson: z.record(z.any()), // TODO: Validate GeoJSON
+	is_locked: z.boolean(),
+	name: z.string(),
+	prefix: z.string(),
+	region: z.string(),
+	updated_at: z.date(),
+}).strict();
+
+export const CreateMunicipalitySchema = MunicipalitySchema;
+export const UpdateMunicipalitySchema = MunicipalitySchema.partial();
+
+export interface Municipality extends z.infer<typeof MunicipalitySchema> {
 	geojson: GeoJSON
-	is_locked: boolean
-	name: string
-	prefix: string
-	region: string
-	updated_at: Date
 }
+export type CreateMunicipalityDto = Municipality;
+export type UpdateMunicipalityDto = Partial<Municipality>;

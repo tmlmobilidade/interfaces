@@ -1,17 +1,22 @@
 import { ObjectId } from 'mongodb';
+import z from 'zod';
 
-export interface Stop {
-	code: string
-	created_at: Date
-	latitude: number
-	locality: string
-	longitude: number
-	municipality: ObjectId
-	municipality_code: string
-	name: string
-	operational_status: string
-	short_name: string
-	tts_name: string
-	updated_at: Date
-	zones: ObjectId[]
-}
+export const StopSchema = z.object({
+	code: z.string(),
+	created_at: z.date(),
+	latitude: z.number(),
+	locality: z.string(),
+	longitude: z.number(),
+	municipality: z.instanceof(ObjectId),
+	municipality_code: z.string(),
+	name: z.string(),
+	operational_status: z.string(),
+	short_name: z.string(),
+	tts_name: z.string(),
+	updated_at: z.date(),
+	zones: z.array(z.instanceof(ObjectId)),
+}).strict();
+
+export type Stop = z.infer<typeof StopSchema>;
+export type CreateStopDto = Stop;
+export type UpdateStopDto = Partial<Stop>;
