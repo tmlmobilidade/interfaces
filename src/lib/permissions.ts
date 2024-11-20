@@ -119,16 +119,6 @@ const Permissions = Object.freeze({
 		},
 		scope: 'users',
 	},
-	verificationTokens: {
-		actions: {
-			create: 'create',
-			delete: 'delete',
-			list: 'list',
-			read: 'read',
-			update: 'update',
-		},
-		scope: 'verificationTokens',
-	},
 });
 
 export { Permissions };
