@@ -47,9 +47,9 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
       MONGO_INITDB_DATABASE: production
-    # volumes:
-    #   - ./data/alerts-hashed.dump:/dump/db.dump
-    #   - ./setup.sh:/docker-entrypoint-initdb.d/setup.sh
+    volumes:
+      - ./data/alerts.dump:/dump/db.dump
+      - ./setup.sh:/docker-entrypoint-initdb.d/setup.sh
 
   auth-db:
     image: mongo:latest
@@ -59,6 +59,6 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
       MONGO_INITDB_DATABASE: production
-    # volumes:
-    #   - ./data/users.dump:/dump/db.dump
-    #   - ./setup.sh:/docker-entrypoint-initdb.d/setup.sh
+    volumes:
+      - ./data/auth.dump:/dump/db.dump
+      - ./setup.sh:/docker-entrypoint-initdb.d/setup.sh
