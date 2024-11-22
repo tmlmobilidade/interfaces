@@ -2,7 +2,7 @@
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { VehicleEvent } from '@/types/vehicle-event';
+import { VehicleEvent } from '@/interfaces/vehicle-events/vehicle-event.type';
 import { Filter } from 'mongodb';
 
 /* * */

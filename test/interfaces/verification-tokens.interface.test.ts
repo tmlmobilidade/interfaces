@@ -1,4 +1,4 @@
-import { verificationTokens } from '@/interfaces/verification-tokens.interface';
+import { verificationTokens } from '@/interfaces';
 import { VerificationToken } from '@/types';
 import { ObjectId, WithId } from 'mongodb';
 

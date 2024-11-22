@@ -1,8 +1,8 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { ApexT3 } from '@/interfaces/apex-t3/apex-t3.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { ApexT3 } from '@/types/apex-t3';
 import { Filter } from 'mongodb';
 
 /* * */

@@ -1,5 +1,5 @@
-import { organizations } from '@/interfaces/organizations.interface';
-import { Organization } from '@/types/organization';
+import { organizations } from '@/interfaces';
+import { Organization } from '@/types';
 
 const newOrganization: Organization = {
 	code: 'ORG_1',

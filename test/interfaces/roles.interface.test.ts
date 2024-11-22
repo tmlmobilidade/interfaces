@@ -1,4 +1,4 @@
-import { roles } from '@/interfaces/roles.interface';
+import { roles } from '@/interfaces';
 import { Role } from '@/types';
 import { ObjectId, WithId } from 'mongodb';
 

@@ -1,5 +1,4 @@
-import { Agency, Alert, Cause, createOperationalDate, Effect, Email, Organization, Permission, PublishStatus, Role, Stop, User, Zone } from '@/types';
-import { Municipality } from '@/types/municipality';
+import { Agency, Alert, createOperationalDate, Email, Municipality, Organization, Permission, Role, Stop, User, Zone } from '@/types';
 import { ObjectId, WithId } from 'mongodb';
 
 export const mockPermissions: Permission<unknown>[] = [

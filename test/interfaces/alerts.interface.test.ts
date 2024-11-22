@@ -1,6 +1,5 @@
-import { alerts } from '@/interfaces/alerts.interface';
-import { createOperationalDate } from '@/types';
-import { Alert } from '@/types';
+import { alerts } from '@/interfaces';
+import { Alert, createOperationalDate } from '@/types';
 import { ObjectId, WithId } from 'mongodb';
 
 const newAlert: WithId<Alert> = {

@@ -1,4 +1,4 @@
-import { zones } from '@/interfaces/zones.interface';
+import { zones } from '@/interfaces';
 import { Zone } from '@/types';
 import { ObjectId, WithId } from 'mongodb';
 

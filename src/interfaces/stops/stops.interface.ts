@@ -1,6 +1,6 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Stop } from '@/types/stop';
+import { Stop } from '@/interfaces/stops/stop.type';
 import { Filter, Sort } from 'mongodb';
 
 class StopsClass extends MongoCollectionClass<Stop> {

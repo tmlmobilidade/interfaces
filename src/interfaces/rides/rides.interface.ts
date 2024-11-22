@@ -2,7 +2,7 @@
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Ride } from '@/types/ride';
+import { Ride } from '@/interfaces/rides/ride.type';
 import { Filter } from 'mongodb';
 
 /* * */

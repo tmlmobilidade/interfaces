@@ -1,4 +1,4 @@
-import { sessions } from '@/interfaces/sessions.interface';
+import { sessions } from '@/interfaces';
 import { Session } from '@/types';
 import { ObjectId, WithId } from 'mongodb';
 

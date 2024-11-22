@@ -1,13 +1,22 @@
+/* * */
+
+import { Email } from '@/types/common';
 import { ObjectId } from 'mongodb';
 import z from 'zod';
-
-import { Email } from './common';
 
 export const PermissionSchema = z.object({
 	action: z.string(),
 	resource: z.record(z.any()).optional(),
 	scope: z.string(),
 });
+
+export interface Permission<T> {
+	action: string
+	resource?: Partial<Record<keyof T, T[keyof T][]>>
+	scope: string
+}
+
+/* * */
 
 export const UserSchema = z.object({
 	_id: z.instanceof(ObjectId).optional(),
@@ -31,10 +40,20 @@ export const UserSchema = z.object({
 export const CreateUserSchema = UserSchema;
 export const UpdateUserSchema = UserSchema.partial();
 
+export type User = { email: Email } & Omit<z.infer<typeof UserSchema>, 'email'>;
+export type CreateUserDto = User;
+export type UpdateUserDto = Partial<User>;
+
+/* * */
+
 export const LoginDtoSchema = z.object({
 	email: z.string(),
 	password: z.string(),
 }).strict();
+
+export type LoginDto = { email: Email } & z.infer<typeof LoginDtoSchema>;
+
+/* * */
 
 export const RoleSchema = z.object({
 	_id: z.instanceof(ObjectId).optional(),
@@ -47,6 +66,13 @@ export const RoleSchema = z.object({
 export const CreateRoleSchema = RoleSchema;
 export const UpdateRoleSchema = RoleSchema.partial();
 
+export interface Role {
+	name: string
+	permissions: Permission<unknown>[]
+}
+
+/* * */
+
 export const VerificationTokenSchema = z.object({
 	_id: z.instanceof(ObjectId).optional(),
 	created_at: z.date().optional(),
@@ -55,6 +81,10 @@ export const VerificationTokenSchema = z.object({
 	updated_at: z.date().optional(),
 	user_id: z.instanceof(ObjectId),
 }).strict();
+
+export type VerificationToken = z.infer<typeof VerificationTokenSchema>;
+
+/* * */
 
 export const SessionSchema = z.object({
 	_id: z.instanceof(ObjectId).optional(),
@@ -65,21 +95,4 @@ export const SessionSchema = z.object({
 	user_id: z.instanceof(ObjectId),
 }).strict();
 
-export type User = { email: Email } & Omit<z.infer<typeof UserSchema>, 'email'>;
-export type CreateUserDto = User;
-export type UpdateUserDto = Partial<User>;
-
-export type LoginDto = { email: Email } & z.infer<typeof LoginDtoSchema>;
-export type VerificationToken = z.infer<typeof VerificationTokenSchema>;
 export type Session = z.infer<typeof SessionSchema>;
-
-export interface Role {
-	name: string
-	permissions: Permission<unknown>[]
-}
-
-export interface Permission<T> {
-	action: string
-	resource?: Partial<Record<keyof T, T[keyof T][]>>
-	scope: string
-}

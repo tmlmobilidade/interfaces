@@ -22,6 +22,13 @@ beforeAll(async () => {
 	process.env.TML_INTERFACES_ZONES = uri;
 	process.env.TML_INTERFACES_RIDES = uri;
 	process.env.TML_INTERFACES_ALERTS = uri;
+	process.env.TML_INTERFACES_HASHED_TRIPS = uri;
+	process.env.TML_INTERFACES_HASHED_SHAPES = uri;
+	process.env.TML_INTERFACES_VEHICLE_EVENTS = uri;
+	process.env.TML_INTERFACES_APEX_T3 = uri;
+	process.env.TML_INTERFACES_APEX_T11 = uri;
+	process.env.TML_INTERFACES_APEX_T19 = uri;
+	process.env.TML_INTERFACES_PLANS = uri;
 	// Initialize MongoConnector
 	mongoConnector = new MongoConnector(uri);
 	await mongoConnector.connect();

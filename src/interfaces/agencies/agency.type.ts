@@ -1,7 +1,10 @@
+/* * */
+
 import { createOperationalDate, OperationalDate } from '@/types/common';
 import z from 'zod';
 
-// Define the Agency schema using Zod
+/* * */
+
 export const AgencySchema = z.object({
 	code: z.string(),
 	created_at: z.date().optional(),
@@ -22,7 +25,8 @@ export const AgencySchema = z.object({
 export const CreateAgencySchema = AgencySchema;
 export const UpdateAgencySchema = AgencySchema.partial();
 
-// Define types based on the schema
+/* * */
+
 export interface Agency extends Omit<z.infer<typeof AgencySchema>, 'operation_start_date'> {
 	operation_start_date: OperationalDate
 }

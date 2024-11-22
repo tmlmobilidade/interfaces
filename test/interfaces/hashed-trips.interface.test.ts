@@ -1,5 +1,5 @@
-import { hashedTrips } from '@/interfaces/hashed-trips.interface';
-import { HashedTrip } from '@/types/ride';
+import { hashedTrips } from '@/interfaces';
+import { HashedTrip } from '@/types';
 
 const newHashedTrip: HashedTrip = {
 	agency_id: 'agency_1',

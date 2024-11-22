@@ -1,7 +1,6 @@
+import { createOperationalDate, OperationalDate } from '@/types/common';
 import { ObjectId } from 'mongodb';
 import z from 'zod';
-
-import { createOperationalDate, OperationalDate } from './common';
 
 // Define constants for enum values for better maintainability
 const CAUSE_VALUES = [

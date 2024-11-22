@@ -1,4 +1,4 @@
-import { agencies } from '@/interfaces/agencies.interface';
+import { agencies } from '@/interfaces/agencies/agencies.interface';
 import { Agency, createOperationalDate } from '@/types';
 
 const newAgency: Agency = {

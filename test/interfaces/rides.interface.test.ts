@@ -1,5 +1,5 @@
-import { rides } from '@/interfaces/rides.interface';
-import { Ride } from '@/types/ride';
+import { rides } from '@/interfaces';
+import { Ride } from '@/types';
 
 const newRide: Ride = {
 	agency_id: 'agency_1',

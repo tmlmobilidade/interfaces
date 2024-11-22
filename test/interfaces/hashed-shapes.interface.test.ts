@@ -1,5 +1,5 @@
-import { hashedShapes } from '@/interfaces/hashed-shapes.interface';
-import { HashedShape } from '@/types/ride';
+import { hashedShapes } from '@/interfaces';
+import { HashedShape } from '@/types';
 
 const newHashedShape: HashedShape = {
 	agency_id: 'agency_1',

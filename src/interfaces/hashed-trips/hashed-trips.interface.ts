@@ -2,33 +2,33 @@
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { HashedShape } from '@/types/hashed-shape';
+import { HashedTrip } from '@/interfaces/hashed-trips/hashed-trip.type';
 import { Filter } from 'mongodb';
 
 /* * */
 
-class HashedShapesClass extends MongoCollectionClass<HashedShape> {
-	private static _instance: HashedShapesClass;
+class HashedTripsClass extends MongoCollectionClass<HashedTrip> {
+	private static _instance: HashedTripsClass;
 
 	private constructor() {
 		super();
 	}
 
 	public static async getInstance() {
-		if (!HashedShapesClass._instance) {
-			const instance = new HashedShapesClass();
+		if (!HashedTripsClass._instance) {
+			const instance = new HashedTripsClass();
 			await instance.connect();
-			HashedShapesClass._instance = instance;
+			HashedTripsClass._instance = instance;
 		}
-		return HashedShapesClass._instance;
+		return HashedTripsClass._instance;
 	}
 
 	protected getCollectionName() {
-		return 'hashed_shapes';
+		return 'hashed_trips';
 	}
 
 	protected getDbUri() {
-		return process.env.TML_INTERFACES_HASHED_SHAPES ?? '';
+		return process.env.TML_INTERFACES_HASHED_TRIPS ?? '';
 	}
 
 	/**
@@ -38,7 +38,7 @@ class HashedShapesClass extends MongoCollectionClass<HashedShape> {
 	 * @returns A promise that resolves to the matching ride document or null if not found
 	 */
 	async findByCode(code: string) {
-		return this.mongoCollection.findOne({ code } as Filter<HashedShape>);
+		return this.mongoCollection.findOne({ code } as Filter<HashedTrip>);
 	}
 
 	/**
@@ -48,11 +48,11 @@ class HashedShapesClass extends MongoCollectionClass<HashedShape> {
 	 * @param updateFields - The fields to update in the stop document.
 	 * @returns A promise that resolves to the result of the update operation.
 	 */
-	async updateByCode(code: string, updateFields: Partial<HashedShape>) {
-		return this.mongoCollection.updateOne({ code } as Filter<HashedShape>, { $set: updateFields });
+	async updateByCode(code: string, updateFields: Partial<HashedTrip>) {
+		return this.mongoCollection.updateOne({ code } as Filter<HashedTrip>, { $set: updateFields });
 	}
 }
 
 /* * */
 
-export const hashedShapes = AsyncSingletonProxy(HashedShapesClass);
+export const hashedTrips = AsyncSingletonProxy(HashedTripsClass);

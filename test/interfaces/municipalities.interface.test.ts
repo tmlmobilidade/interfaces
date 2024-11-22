@@ -1,5 +1,5 @@
-import { municipalities } from '@/interfaces/municipalities.interface';
-import { Municipality } from '@/types/municipality';
+import { municipalities } from '@/interfaces';
+import { Municipality } from '@/types';
 
 const newMunicipality: Municipality = {
 	border_color: '',
