@@ -2,33 +2,33 @@
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { ApexT19 } from '@/types/apex-t19';
+import { Plan } from '@/types/plan';
 import { Filter } from 'mongodb';
 
 /* * */
 
-class ApexT19sClass extends MongoCollectionClass<ApexT19> {
-	private static _instance: ApexT19sClass;
+class PlansClass extends MongoCollectionClass<Plan> {
+	private static _instance: PlansClass;
 
 	private constructor() {
 		super();
 	}
 
 	public static async getInstance() {
-		if (!ApexT19sClass._instance) {
-			const instance = new ApexT19sClass();
+		if (!PlansClass._instance) {
+			const instance = new PlansClass();
 			await instance.connect();
-			ApexT19sClass._instance = instance;
+			PlansClass._instance = instance;
 		}
-		return ApexT19sClass._instance;
+		return PlansClass._instance;
 	}
 
 	protected getCollectionName() {
-		return 'apex_t19s';
+		return 'plans';
 	}
 
 	protected getDbUri() {
-		return process.env.TML_INTERFACES_APEX_T19S ?? '';
+		return process.env.TML_INTERFACES_PLANS ?? '';
 	}
 
 	/**
@@ -38,7 +38,7 @@ class ApexT19sClass extends MongoCollectionClass<ApexT19> {
 	 * @returns A promise that resolves to an array of matching apexLocation documents
 	 */
 	async findByAgencyId(id: string) {
-		return this.mongoCollection.find({ agency_id: id } as Filter<ApexT19>).toArray();
+		return this.mongoCollection.find({ agency_id: id } as Filter<Plan>).toArray();
 	}
 
 	/**
@@ -48,7 +48,7 @@ class ApexT19sClass extends MongoCollectionClass<ApexT19> {
 	 * @returns A promise that resolves to the matching apexLocation document or null if not found
 	 */
 	async findByCode(code: string) {
-		return this.mongoCollection.findOne({ code } as Filter<ApexT19>);
+		return this.mongoCollection.findOne({ code } as Filter<Plan>);
 	}
 
 	/**
@@ -58,11 +58,11 @@ class ApexT19sClass extends MongoCollectionClass<ApexT19> {
 	 * @param updateFields - The fields to update in the stop document.
 	 * @returns A promise that resolves to the result of the update operation.
 	 */
-	async updateByCode(code: string, updateFields: Partial<ApexT19>) {
-		return this.mongoCollection.updateOne({ code } as Filter<ApexT19>, { $set: updateFields });
+	async updateByCode(code: string, updateFields: Partial<Plan>) {
+		return this.mongoCollection.updateOne({ code } as Filter<Plan>, { $set: updateFields });
 	}
 }
 
 /* * */
 
-export const apexT19s = AsyncSingletonProxy(ApexT19sClass);
+export const plans = AsyncSingletonProxy(PlansClass);

@@ -28,7 +28,7 @@ class HashedTripsClass extends MongoCollectionClass<HashedTrip> {
 	}
 
 	protected getDbUri() {
-		return process.env.TML_INTERFACES_RIDES ?? '';
+		return process.env.TML_INTERFACES_HASHED_TRIPS ?? '';
 	}
 
 	/**

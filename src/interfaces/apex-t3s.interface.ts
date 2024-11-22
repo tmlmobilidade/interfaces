@@ -24,11 +24,11 @@ class ApexT3Class extends MongoCollectionClass<ApexT3> {
 	}
 
 	protected getCollectionName() {
-		return 'apex-3';
+		return 'apex_t3s';
 	}
 
 	protected getDbUri() {
-		return process.env.TML_INTERFACES_RIDES ?? '';
+		return process.env.TML_INTERFACES_APEX_T3S ?? '';
 	}
 
 	/**
@@ -65,4 +65,4 @@ class ApexT3Class extends MongoCollectionClass<ApexT3> {
 
 /* * */
 
-export const apexT3 = AsyncSingletonProxy(ApexT3Class);
+export const apexT3s = AsyncSingletonProxy(ApexT3Class);

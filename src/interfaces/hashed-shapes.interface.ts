@@ -28,7 +28,7 @@ class HashedShapesClass extends MongoCollectionClass<HashedShape> {
 	}
 
 	protected getDbUri() {
-		return process.env.TML_INTERFACES_RIDES ?? '';
+		return process.env.TML_INTERFACES_HASHED_SHAPES ?? '';
 	}
 
 	/**
