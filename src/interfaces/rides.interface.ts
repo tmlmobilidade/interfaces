@@ -1,7 +1,11 @@
+/* * */
+
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Ride } from '@/types/ride';
 import { Filter } from 'mongodb';
+
+/* * */
 
 class RidesClass extends MongoCollectionClass<Ride> {
 	private static _instance: RidesClass;
@@ -58,5 +62,7 @@ class RidesClass extends MongoCollectionClass<Ride> {
 		return this.mongoCollection.updateOne({ code } as Filter<Ride>, { $set: updateFields });
 	}
 }
+
+/* * */
 
 export const rides = AsyncSingletonProxy(RidesClass);

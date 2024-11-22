@@ -1,7 +1,11 @@
+/* * */
+
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { HashedTrip } from '@/types/ride';
+import { HashedTrip } from '@/types/hashed-trip';
 import { Filter } from 'mongodb';
+
+/* * */
 
 class HashedTripsClass extends MongoCollectionClass<HashedTrip> {
 	private static _instance: HashedTripsClass;
@@ -48,5 +52,7 @@ class HashedTripsClass extends MongoCollectionClass<HashedTrip> {
 		return this.mongoCollection.updateOne({ code } as Filter<HashedTrip>, { $set: updateFields });
 	}
 }
+
+/* * */
 
 export const hashedTrips = AsyncSingletonProxy(HashedTripsClass);

@@ -1,7 +1,12 @@
+/* * */
+
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { HashedShape } from '@/types/ride';
+import { HashedShape } from '@/types/hashed-shape';
 import { Filter } from 'mongodb';
+
+/* * */
+
 class HashedShapesClass extends MongoCollectionClass<HashedShape> {
 	private static _instance: HashedShapesClass;
 
@@ -47,5 +52,7 @@ class HashedShapesClass extends MongoCollectionClass<HashedShape> {
 		return this.mongoCollection.updateOne({ code } as Filter<HashedShape>, { $set: updateFields });
 	}
 }
+
+/* * */
 
 export const hashedShapes = AsyncSingletonProxy(HashedShapesClass);
