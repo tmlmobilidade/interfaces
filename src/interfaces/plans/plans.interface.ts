@@ -1,8 +1,8 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { AsyncSingletonProxy } from '@/lib/utils';
 import { Plan } from '@/interfaces/plans/plan.type';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
