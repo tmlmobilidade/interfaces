@@ -169,9 +169,12 @@ export abstract class MongoCollectionClass<T extends Document> {
 	 * @param doc - The document to insert
 	 * @returns A promise that resolves to the result of the insert operation
 	 */
-	async insertOne(doc: OptionalUnlessRequiredId<T>) {
-		if (this.createSchema) {
+	async insertOne(doc: OptionalUnlessRequiredId<T>, { unsafe = false }) {
+		if (!unsafe) {
 			try {
+				if (!this.createSchema) {
+					throw new Error('No schema defined for insert operation. This is either an internal interface error or you should pass unsafe=true to the insert operation.');
+				}
 				this.createSchema.parse(doc);
 			}
 			catch (error) {
