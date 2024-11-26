@@ -2,7 +2,8 @@ import { MongoConnector } from '@/connectors/mongo.connector';
 import { HttpException, HttpStatus } from '@/lib';
 import { createIndexFactory } from '@/lib/mongo-indexes';
 import { createSchemaFactory } from '@/lib/schema.factory';
-import { Collection, Document, Filter, MongoClientOptions, ObjectId, OptionalUnlessRequiredId, Sort } from 'mongodb';
+import { generateRandomString } from '@/lib/utils';
+import { Collection, Document, Filter, MongoClientOptions, OptionalUnlessRequiredId, Sort } from 'mongodb';
 import z from 'zod';
 
 export abstract class MongoCollectionClass<T extends Document> {
@@ -65,8 +66,8 @@ export abstract class MongoCollectionClass<T extends Document> {
 	 * @param id - The ID of the document to delete
 	 * @returns A promise that resolves to the result of the delete operation
 	 */
-	async deleteById(id: ObjectId | string) {
-		return this.mongoCollection.deleteOne({ _id: id instanceof ObjectId ? id : new ObjectId(id) } as unknown as Filter<T>);
+	async deleteById(id: string) {
+		return this.mongoCollection.deleteOne({ _id: id } as unknown as Filter<T>);
 	}
 
 	/**
@@ -102,8 +103,8 @@ export abstract class MongoCollectionClass<T extends Document> {
 	 * @param id - The ID of the document to find
 	 * @returns A promise that resolves to the matching document or null if not found
 	 */
-	async findById(id: ObjectId | string) {
-		return this.mongoCollection.findOne({ _id: id instanceof ObjectId ? id : new ObjectId(id) } as unknown as Filter<T>);
+	async findById(id: string) {
+		return this.mongoCollection.findOne({ _id: id } as unknown as Filter<T>);
 	}
 
 	/**
@@ -133,26 +134,26 @@ export abstract class MongoCollectionClass<T extends Document> {
 		return this.mongoCollection.findOne(filter);
 	}
 
-	/**
-	 * Inserts multiple documents into the collection.
-	 *
-	 * @param docs - Array of documents to insert
-	 * @returns A promise that resolves to the result of the insert operation
-	 */
-	async insertMany(docs: OptionalUnlessRequiredId<T>[]) {
-		if (this.createSchema) {
-			for (const doc of docs) {
-				try {
-					this.createSchema.parse(doc);
-				}
-				catch (error) {
-					throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
-				}
-			}
-		}
+	// /**
+	//  * Inserts multiple documents into the collection.
+	//  *
+	//  * @param docs - Array of documents to insert
+	//  * @returns A promise that resolves to the result of the insert operation
+	//  */
+	// async insertMany(docs: OptionalUnlessRequiredId<T>[]) {
+	// 	if (this.createSchema) {
+	// 		for (const doc of docs) {
+	// 			try {
+	// 				this.createSchema.parse(doc);
+	// 			}
+	// 			catch (error) {
+	// 				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
+	// 			}
+	// 		}
+	// 	}
 
-		return this.mongoCollection.insertMany(docs.map(doc => ({ ...doc, created_at: new Date(), updated_at: new Date() })));
-	}
+	// 	return this.mongoCollection.insertMany(docs.map(doc => ({ ...doc, created_at: new Date(), updated_at: new Date() })));
+	// }
 
 	/**
 	 * Inserts a single document into the collection.
@@ -170,7 +171,18 @@ export abstract class MongoCollectionClass<T extends Document> {
 			}
 		}
 
-		return this.mongoCollection.insertOne({ ...doc, created_at: new Date(), updated_at: new Date() });
+		const newDocument = {
+			...doc,
+			_id: doc._id || generateRandomString({ length: 6 }),
+			created_at: doc.created_at || new Date(),
+			updated_at: doc.updated_at || new Date(),
+		};
+
+		while (await this.findById(newDocument._id)) {
+			newDocument._id = generateRandomString({ length: 5 });
+		}
+
+		return this.mongoCollection.insertOne(newDocument);
 	}
 
 	/**
@@ -180,7 +192,7 @@ export abstract class MongoCollectionClass<T extends Document> {
 	 * @param updateFields - The fields to update in the document
 	 * @returns A promise that resolves to the result of the update operation
 	 */
-	async updateById(id: ObjectId | string, updateFields: Partial<T>) {
+	async updateById(id: string, updateFields: Partial<T>) {
 		if (this.updateSchema) {
 			try {
 				this.updateSchema.parse(updateFields);
@@ -190,28 +202,28 @@ export abstract class MongoCollectionClass<T extends Document> {
 			}
 		}
 
-		return this.mongoCollection.updateOne({ _id: id instanceof ObjectId ? id : new ObjectId(id) } as unknown as Filter<T>, { $set: { ...updateFields, updated_at: new Date() } });
+		return this.mongoCollection.updateOne({ _id: id } as unknown as Filter<T>, { $set: { ...updateFields, updated_at: new Date() } });
 	}
 
-	/**
-	 * Updates multiple documents matching the filter criteria.
-	 *
-	 * @param filter - The filter criteria to match documents to update
-	 * @param updateFields - The fields to update in the documents
-	 * @returns A promise that resolves to the result of the update operation
-	 */
-	async updateMany(filter: Filter<T>, updateFields: Partial<T>) {
-		if (this.updateSchema) {
-			try {
-				this.updateSchema.parse(updateFields);
-			}
-			catch (error) {
-				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
-			}
-		}
+	// /**
+	//  * Updates multiple documents matching the filter criteria.
+	//  *
+	//  * @param filter - The filter criteria to match documents to update
+	//  * @param updateFields - The fields to update in the documents
+	//  * @returns A promise that resolves to the result of the update operation
+	//  */
+	// async updateMany(filter: Filter<T>, updateFields: Partial<T>) {
+	// 	if (this.updateSchema) {
+	// 		try {
+	// 			this.updateSchema.parse(updateFields);
+	// 		}
+	// 		catch (error) {
+	// 			throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
+	// 		}
+	// 	}
 
-		return this.mongoCollection.updateMany(filter, { $set: { ...updateFields, updated_at: new Date() } });
-	}
+	// 	return this.mongoCollection.updateMany(filter, { $set: { ...updateFields, updated_at: new Date() } });
+	// }
 
 	/**
 	 * Updates a single document matching the filter criteria.
