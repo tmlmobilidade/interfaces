@@ -170,6 +170,17 @@ export abstract class MongoCollectionClass<T extends Document> {
 	 * @returns A promise that resolves to the result of the insert operation
 	 */
 	async insertOne(doc: OptionalUnlessRequiredId<T>, { unsafe = false } = {}) {
+		const newDocument = {
+			...doc,
+			_id: doc._id || generateRandomString({ length: 6 }),
+			created_at: doc.created_at || new Date(),
+			updated_at: doc.updated_at || new Date(),
+		};
+
+		while (await this.findById(newDocument._id)) {
+			newDocument._id = generateRandomString({ length: 5 });
+		}
+
 		if (!unsafe) {
 			try {
 				if (!this.createSchema) {
@@ -180,17 +191,6 @@ export abstract class MongoCollectionClass<T extends Document> {
 			catch (error) {
 				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
 			}
-		}
-
-		const newDocument = {
-			...doc,
-			_id: doc._id || generateRandomString({ length: 6 }),
-			created_at: doc.created_at || new Date(),
-			updated_at: doc.updated_at || new Date(),
-		};
-
-		while (await this.findById(newDocument._id)) {
-			newDocument._id = generateRandomString({ length: 5 });
 		}
 
 		return this.mongoCollection.insertOne(newDocument);
