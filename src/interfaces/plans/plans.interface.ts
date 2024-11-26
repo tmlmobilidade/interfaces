@@ -27,8 +27,8 @@ class PlansClass extends MongoCollectionClass<Plan> {
 		return 'plans';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_PLANS ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_PLANS';
 	}
 
 	/**

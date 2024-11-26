@@ -15,8 +15,8 @@ export abstract class MongoCollectionClass<T extends Document> {
 	// Abstract method for subclasses to provide the MongoDB collection name
 	protected abstract getCollectionName(): string;
 
-	// Abstract method for subclasses to provide the MongoDB database URI
-	protected abstract getDbUri(): string;
+	// Abstract method for subclasses to provide the environment variable name
+	protected abstract getEnvName(): string;
 
 	/**
 	 * Gets all documents in the collection.
@@ -33,8 +33,16 @@ export abstract class MongoCollectionClass<T extends Document> {
 	 * @throws {Error} If connection fails
 	 */
 	async connect(options?: MongoClientOptions) {
+		//
+
+		const dbUri = process.env[this.getEnvName()];
+
+		if (!dbUri) {
+			throw new Error(`Missing ${this.getEnvName()} environment variable`);
+		}
+
 		try {
-			this.mongoConnector = new MongoConnector(this.getDbUri(), options);
+			this.mongoConnector = new MongoConnector(dbUri, options);
 			await this.mongoConnector.connect();
 			this.mongoCollection = this.mongoConnector.client.db('production').collection<T>(this.getCollectionName());
 			await createIndexFactory(this.mongoConnector.client.db('production'), this.getCollectionName());
