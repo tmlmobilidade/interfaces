@@ -32,30 +32,30 @@ class PlansClass extends MongoCollectionClass<Plan> {
 	}
 
 	/**
-	 * Finds apexLocation documents by agency ID.
+	 * Finds Plan documents by agency ID.
 	 *
 	 * @param id - The agency ID to search for
-	 * @returns A promise that resolves to an array of matching apexLocation documents
+	 * @returns A promise that resolves to an array of matching documents
 	 */
 	async findByAgencyId(id: string) {
 		return this.mongoCollection.find({ agency_id: id } as Filter<Plan>).toArray();
 	}
 
 	/**
-	 * Finds a apexLocation document by its code.
+	 * Finds a Plan document by its code.
 	 *
-	 * @param code - The code of the apexLocation to find
-	 * @returns A promise that resolves to the matching apexLocation document or null if not found
+	 * @param code - The code of the document to find
+	 * @returns A promise that resolves to the matching document or null if not found
 	 */
 	async findByCode(code: string) {
 		return this.mongoCollection.findOne({ code } as Filter<Plan>);
 	}
 
 	/**
-	 * Updates a stop document by its code.
+	 * Updates a Plan document by its code.
 	 *
-	 * @param code - The code of the stop to update.
-	 * @param updateFields - The fields to update in the stop document.
+	 * @param code - The code of the document to update.
+	 * @param updateFields - The fields to update in the document.
 	 * @returns A promise that resolves to the result of the update operation.
 	 */
 	async updateByCode(code: string, updateFields: Partial<Plan>) {
