@@ -8,15 +8,15 @@ import { z } from 'zod';
 export const PlanSchema = z.object({
 	_id: z.string(),
 	agency_id: z.string(),
-	created_at: z.string(),
-	gtfs_operation: z.string(),
-	gtfs_reference: z.string(),
-	is_locked: z.string(),
+	created_at: z.date(),
+	is_locked: z.boolean(),
+	operation_file: z.string(),
 	parsed_dates: z.array(z.string().transform(createOperationalDate).brand('OperationalDate')),
+	reference_file: z.string(),
 	status: z.string(),
-	updated_at: z.string(),
-	valid_from: z.string(),
-	valid_until: z.string(),
+	updated_at: z.date(),
+	valid_from: z.string().transform(createOperationalDate).brand('OperationalDate'),
+	valid_until: z.string().transform(createOperationalDate).brand('OperationalDate'),
 }).strict();
 
 export const CreatePlanSchema = PlanSchema;

@@ -202,6 +202,8 @@ export abstract class MongoCollectionClass<T extends Document> {
 			}
 		}
 
+		delete updateFields._id;
+
 		return this.mongoCollection.updateOne({ _id: { $eq: id } } as unknown as Filter<T>, { $set: { ...updateFields, updated_at: new Date() } });
 	}
 
