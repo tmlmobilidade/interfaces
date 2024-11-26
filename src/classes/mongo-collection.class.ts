@@ -67,7 +67,7 @@ export abstract class MongoCollectionClass<T extends Document> {
 	 * @returns A promise that resolves to the result of the delete operation
 	 */
 	async deleteById(id: string) {
-		return this.mongoCollection.deleteOne({ _id: id } as unknown as Filter<T>);
+		return this.mongoCollection.deleteOne({ _id: { $eq: id } } as unknown as Filter<T>);
 	}
 
 	/**
@@ -104,7 +104,7 @@ export abstract class MongoCollectionClass<T extends Document> {
 	 * @returns A promise that resolves to the matching document or null if not found
 	 */
 	async findById(id: string) {
-		return this.mongoCollection.findOne({ _id: id } as unknown as Filter<T>);
+		return this.mongoCollection.findOne({ _id: { $eq: id } } as unknown as Filter<T>);
 	}
 
 	/**
@@ -202,7 +202,7 @@ export abstract class MongoCollectionClass<T extends Document> {
 			}
 		}
 
-		return this.mongoCollection.updateOne({ _id: id } as unknown as Filter<T>, { $set: { ...updateFields, updated_at: new Date() } });
+		return this.mongoCollection.updateOne({ _id: { $eq: id } } as unknown as Filter<T>, { $set: { ...updateFields, updated_at: new Date() } });
 	}
 
 	// /**
