@@ -22,8 +22,8 @@ class FilesClass extends MongoCollectionClass<File> {
 		return 'files';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_FILES ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_FILES';
 	}
 
 	/**

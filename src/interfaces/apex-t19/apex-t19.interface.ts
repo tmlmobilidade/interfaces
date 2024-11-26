@@ -27,8 +27,8 @@ class ApexT19sClass extends MongoCollectionClass<ApexT19> {
 		return 'apex_t19s';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_APEX_T19S ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_APEX_T19';
 	}
 
 	/**

@@ -23,8 +23,8 @@ class OrganizationsClass extends MongoCollectionClass<Organization> {
 		return 'organizations';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_ORGANIZATIONS ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_ORGANIZATIONS';
 	}
 
 	/**

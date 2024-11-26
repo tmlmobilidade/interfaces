@@ -18,12 +18,12 @@ class SessionsClass extends MongoCollectionClass<Session> {
 		return SessionsClass._instance;
 	}
 
-	protected getCollectionName(): string {
+	protected getCollectionName() {
 		return 'sessions';
 	}
 
-	protected getDbUri(): string {
-		return process.env.TML_INTERFACES_AUTH ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_AUTH';
 	}
 }
 

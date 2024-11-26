@@ -27,8 +27,8 @@ class ApexT11sClass extends MongoCollectionClass<ApexT11> {
 		return 'apex_t11s';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_APEX_T11S ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_APEX_T11';
 	}
 
 	/**

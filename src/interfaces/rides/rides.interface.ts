@@ -1,8 +1,8 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { AsyncSingletonProxy } from '@/lib/utils';
 import { Ride } from '@/interfaces/rides/ride.type';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
@@ -27,8 +27,8 @@ class RidesClass extends MongoCollectionClass<Ride> {
 		return 'rides';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_RIDES ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_RIDES';
 	}
 
 	/**

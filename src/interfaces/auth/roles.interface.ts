@@ -19,12 +19,12 @@ class RolesClass extends MongoCollectionClass<Role> {
 		return RolesClass._instance;
 	}
 
-	protected getCollectionName(): string {
+	protected getCollectionName() {
 		return 'roles';
 	}
 
-	protected getDbUri(): string {
-		return process.env.TML_INTERFACES_AUTH ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_AUTH';
 	}
 
 	/**

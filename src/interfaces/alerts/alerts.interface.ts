@@ -19,12 +19,12 @@ class AlertsClass extends MongoCollectionClass<Alert> {
 		return AlertsClass._instance;
 	}
 
-	protected getCollectionName(): string {
+	protected getCollectionName() {
 		return 'alerts';
 	}
 
-	protected getDbUri(): string {
-		return process.env.TML_INTERFACES_ALERTS ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_ALERTS';
 	}
 
 	async findByAgencyId(agency_id: string) {

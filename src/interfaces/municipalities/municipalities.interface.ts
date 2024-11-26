@@ -23,8 +23,8 @@ class MunicipalitiesClass extends MongoCollectionClass<Municipality> {
 		return 'municipalities';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_MUNICIPALITIES ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_MUNICIPALITIES';
 	}
 
 	/**

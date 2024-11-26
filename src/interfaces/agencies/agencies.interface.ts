@@ -20,7 +20,7 @@ class AgenciesClass extends MongoCollectionClass<Agency> {
 		return AgenciesClass._instance;
 	}
 
-	protected getCollectionName(): string {
+	protected getCollectionName() {
 		return 'agencies';
 	}
 
@@ -28,8 +28,8 @@ class AgenciesClass extends MongoCollectionClass<Agency> {
 		return AgencySchema;
 	}
 
-	protected getDbUri(): string {
-		return process.env.TML_INTERFACES_AGENCIES ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_AGENCIES';
 	}
 
 	protected getUpdateSchema(): z.ZodSchema {

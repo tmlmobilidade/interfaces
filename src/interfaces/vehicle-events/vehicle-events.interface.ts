@@ -1,8 +1,8 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { AsyncSingletonProxy } from '@/lib/utils';
 import { VehicleEvent } from '@/interfaces/vehicle-events/vehicle-event.type';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
@@ -27,8 +27,8 @@ class VehicleEventsClass extends MongoCollectionClass<VehicleEvent> {
 		return 'vehicle_events';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_VEHICLE_EVENTS ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_VEHICLE_EVENTS';
 	}
 
 	/**

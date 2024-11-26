@@ -27,8 +27,8 @@ class ApexT3Class extends MongoCollectionClass<ApexT3> {
 		return 'apex_t3s';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_APEX_T3S ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_APEX_T3';
 	}
 
 	/**

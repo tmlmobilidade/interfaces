@@ -19,12 +19,12 @@ class UsersClass extends MongoCollectionClass<User> {
 		return UsersClass._instance;
 	}
 
-	protected getCollectionName(): string {
+	protected getCollectionName() {
 		return 'users';
 	}
 
-	protected getDbUri(): string {
-		return process.env.TML_INTERFACES_AUTH ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_AUTH';
 	}
 
 	private deletePasswordHash(user: WithId<User>) {

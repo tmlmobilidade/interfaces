@@ -1,6 +1,6 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { AsyncSingletonProxy } from '@/lib/utils';
 import { Stop } from '@/interfaces/stops/stop.type';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter, Sort } from 'mongodb';
 
 class StopsClass extends MongoCollectionClass<Stop> {
@@ -23,8 +23,8 @@ class StopsClass extends MongoCollectionClass<Stop> {
 		return 'stops';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_STOPS ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_STOPS';
 	}
 
 	/**

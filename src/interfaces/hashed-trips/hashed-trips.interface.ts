@@ -1,8 +1,8 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { AsyncSingletonProxy } from '@/lib/utils';
 import { HashedTrip } from '@/interfaces/hashed-trips/hashed-trip.type';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
@@ -27,8 +27,8 @@ class HashedTripsClass extends MongoCollectionClass<HashedTrip> {
 		return 'hashed_trips';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_HASHED_TRIPS ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_HASHED_TRIPS';
 	}
 
 	/**

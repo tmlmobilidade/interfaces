@@ -1,8 +1,8 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { AsyncSingletonProxy } from '@/lib/utils';
 import { HashedShape } from '@/interfaces/hashed-shapes/hashed-shape.type';
+import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
@@ -27,8 +27,8 @@ class HashedShapesClass extends MongoCollectionClass<HashedShape> {
 		return 'hashed_shapes';
 	}
 
-	protected getDbUri() {
-		return process.env.TML_INTERFACES_HASHED_SHAPES ?? '';
+	protected getEnvName() {
+		return 'TML_INTERFACES_HASHED_SHAPES';
 	}
 
 	/**
