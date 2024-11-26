@@ -186,7 +186,7 @@ export abstract class MongoCollectionClass<T extends Document> {
 				if (!this.createSchema) {
 					throw new Error('No schema defined for insert operation. This is either an internal interface error or you should pass unsafe=true to the insert operation.');
 				}
-				this.createSchema.parse(doc);
+				this.createSchema.parse(newDocument);
 			}
 			catch (error) {
 				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
