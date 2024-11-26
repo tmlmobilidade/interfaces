@@ -169,7 +169,7 @@ export abstract class MongoCollectionClass<T extends Document> {
 	 * @param doc - The document to insert
 	 * @returns A promise that resolves to the result of the insert operation
 	 */
-	async insertOne(doc: OptionalUnlessRequiredId<T>, { unsafe = false }) {
+	async insertOne(doc: OptionalUnlessRequiredId<T>, { unsafe = false } = {}) {
 		if (!unsafe) {
 			try {
 				if (!this.createSchema) {
