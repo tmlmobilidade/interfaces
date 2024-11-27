@@ -1,25 +1,25 @@
-import { ObjectId } from 'mongodb';
 import z from 'zod';
 
 export const StopSchema = z.object({
-	_id: z.instanceof(ObjectId).optional(),
+	_id: z.string(),
 	code: z.string(),
-	created_at: z.date().optional(),
+	created_at: z.date(),
 	latitude: z.number(),
 	locality: z.string(),
 	longitude: z.number(),
-	municipality: z.instanceof(ObjectId),
+	municipality: z.string(),
 	municipality_code: z.string(),
 	name: z.string(),
 	operational_status: z.string(),
 	short_name: z.string(),
 	tts_name: z.string(),
-	updated_at: z.date().optional(),
-	zones: z.array(z.instanceof(ObjectId)),
+	updated_at: z.date(),
+	zones: z.array(z.string()),
 }).strict();
 
-export const UpdateStopSchema = StopSchema.partial();
+export const CreateStopSchema = StopSchema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateStopSchema = CreateStopSchema.partial();
 
 export type Stop = z.infer<typeof StopSchema>;
-export type CreateStopDto = Stop;
-export type UpdateStopDto = Partial<Stop>;
+export type CreateStopDto = z.infer<typeof CreateStopSchema>;
+export type UpdateStopDto = Partial<CreateStopDto>;

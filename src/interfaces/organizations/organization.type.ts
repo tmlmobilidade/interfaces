@@ -1,13 +1,14 @@
+import { DocumentSchema } from '@/types';
 import z from 'zod';
 
-export const OrganizationSchema = z.object({
+export const OrganizationSchema = DocumentSchema.extend({
 	code: z.string(),
 	name: z.string(),
 }).strict();
 
-export const CreateOrganizationSchema = OrganizationSchema;
-export const UpdateOrganizationSchema = OrganizationSchema.partial();
+export const CreateOrganizationSchema = OrganizationSchema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateOrganizationSchema = CreateOrganizationSchema.partial();
 
 export type Organization = z.infer<typeof OrganizationSchema>;
-export type CreateOrganizationDto = Organization;
-export type UpdateOrganizationDto = Partial<Organization>;
+export type CreateOrganizationDto = z.infer<typeof CreateOrganizationSchema>;
+export type UpdateOrganizationDto = Partial<CreateOrganizationDto>;

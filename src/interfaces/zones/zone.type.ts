@@ -1,10 +1,9 @@
 import type { GeoJSON } from 'geojson';
 
-import { ObjectId } from 'mongodb';
+import { DocumentSchema } from '@/types';
 import z from 'zod';
 
-export const ZoneSchema = z.object({
-	_id: z.instanceof(ObjectId).optional(),
+export const ZoneSchema = DocumentSchema.extend({
 	border_color: z.string(),
 	border_opacity: z.number(),
 	border_width: z.number(),
@@ -15,11 +14,11 @@ export const ZoneSchema = z.object({
 	geojson: z.record(z.any()), // TODO: Validate GeoJSON
 	is_locked: z.boolean(),
 	name: z.string(),
-	updated_at: z.date(),
 }).strict();
 
-export const UpdateZoneSchema = ZoneSchema.partial();
+export const CreateZoneSchema = ZoneSchema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateZoneSchema = CreateZoneSchema.partial();
 
 export type Zone = { geojson: GeoJSON } & Omit<z.infer<typeof ZoneSchema>, 'geojson'>;
-export type CreateZoneDto = Zone;
-export type UpdateZoneDto = Partial<Zone>;
+export type CreateZoneDto = { geojson: GeoJSON } & Omit<z.infer<typeof CreateZoneSchema>, 'geojson'>;
+export type UpdateZoneDto = Partial<CreateZoneDto>;

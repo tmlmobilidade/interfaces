@@ -1,13 +1,13 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { Ride } from '@/interfaces/rides/ride.type';
+import { CreateRideDto, Ride, UpdateRideDto } from '@/interfaces/rides/ride.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
 
-class RidesClass extends MongoCollectionClass<Ride> {
+class RidesClass extends MongoCollectionClass<Ride, CreateRideDto, UpdateRideDto> {
 	private static _instance: RidesClass;
 
 	private constructor() {

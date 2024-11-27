@@ -1,9 +1,9 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Role } from '@/types';
+import { CreateRoleDto, Role, UpdateRoleDto } from '@/types';
 import { Filter } from 'mongodb';
 
-class RolesClass extends MongoCollectionClass<Role> {
+class RolesClass extends MongoCollectionClass<Role, CreateRoleDto, UpdateRoleDto> {
 	private static _instance: RolesClass;
 
 	private constructor() {

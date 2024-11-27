@@ -1,12 +1,11 @@
 /* * */
 
-import { createOperationalDate } from '@/types/common';
+import { createOperationalDate, DocumentSchema } from '@/types/common';
 import { z } from 'zod';
 
 /* * */
 
-export const ApexT19Schema = z.object({
-	_id: z.string(),
+export const ApexT19Schema = DocumentSchema.extend({
 	agency_id: z.string(),
 	apex_version: z.string(),
 	card_serial_number: z.string(),
@@ -26,8 +25,8 @@ export const ApexT19Schema = z.object({
 	vehicle_id: z.string(),
 }).strict();
 
-export const CreateApexT19Schema = ApexT19Schema;
-export const UpdateApexT19Schema = ApexT19Schema.partial();
+export const CreateApexT19Schema = ApexT19Schema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateApexT19Schema = CreateApexT19Schema.partial();
 
 /**
  * APEX T19 are APEX trasactions of type 19 that are generated everytime the

@@ -1,10 +1,10 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Agency, AgencySchema, UpdateAgencySchema } from '@/types';
+import { Agency, AgencySchema, CreateAgencyDto, UpdateAgencyDto, UpdateAgencySchema } from '@/types';
 import { Filter } from 'mongodb';
 import z from 'zod';
 
-class AgenciesClass extends MongoCollectionClass<Agency> {
+class AgenciesClass extends MongoCollectionClass<Agency, CreateAgencyDto, UpdateAgencyDto> {
 	private static _instance: AgenciesClass;
 
 	private constructor() {

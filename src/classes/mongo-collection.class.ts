@@ -6,7 +6,7 @@ import { generateRandomString } from '@/lib/utils';
 import { Collection, Document, Filter, MongoClientOptions, OptionalUnlessRequiredId, Sort } from 'mongodb';
 import z from 'zod';
 
-export abstract class MongoCollectionClass<T extends Document> {
+export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate> {
 	protected createSchema: null | z.ZodSchema = null;
 	protected mongoCollection: Collection<T>;
 	protected mongoConnector: MongoConnector;
@@ -169,13 +169,13 @@ export abstract class MongoCollectionClass<T extends Document> {
 	 * @param doc - The document to insert
 	 * @returns A promise that resolves to the result of the insert operation
 	 */
-	async insertOne(doc: OptionalUnlessRequiredId<T>, { unsafe = false } = {}) {
+	async insertOne(doc: { _id?: string, created_at?: Date, updated_at?: Date } & TCreate, { unsafe = false } = {}) {
 		const newDocument = {
 			...doc,
-			_id: doc._id || generateRandomString({ length: 6 }),
+			_id: doc._id || generateRandomString({ length: 5 }),
 			created_at: doc.created_at || new Date(),
 			updated_at: doc.updated_at || new Date(),
-		};
+		} as unknown as OptionalUnlessRequiredId<T>;
 
 		while (await this.findById(newDocument._id)) {
 			newDocument._id = generateRandomString({ length: 5 });
@@ -203,7 +203,7 @@ export abstract class MongoCollectionClass<T extends Document> {
 	 * @param updateFields - The fields to update in the document
 	 * @returns A promise that resolves to the result of the update operation
 	 */
-	async updateById(id: string, updateFields: Partial<T>) {
+	async updateById(id: string, updateFields: TUpdate) {
 		if (this.updateSchema) {
 			try {
 				this.updateSchema.parse(updateFields);
@@ -213,9 +213,10 @@ export abstract class MongoCollectionClass<T extends Document> {
 			}
 		}
 
-		delete updateFields._id;
-
-		return this.mongoCollection.updateOne({ _id: { $eq: id } } as unknown as Filter<T>, { $set: { ...updateFields, updated_at: new Date() } });
+		return this.mongoCollection.updateOne(
+			{ _id: { $eq: id } } as unknown as Filter<T>,
+			{ $set: { ...updateFields, updated_at: new Date() } } as unknown as Partial<T>,
+		);
 	}
 
 	// /**

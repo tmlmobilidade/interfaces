@@ -1,13 +1,13 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { ApexT3 } from '@/interfaces/apex-t3/apex-t3.type';
+import { ApexT3, CreateApexT3Dto, UpdateApexT3Dto } from '@/interfaces/apex-t3/apex-t3.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
 
-class ApexT3Class extends MongoCollectionClass<ApexT3> {
+class ApexT3Class extends MongoCollectionClass<ApexT3, CreateApexT3Dto, UpdateApexT3Dto> {
 	private static _instance: ApexT3Class;
 
 	private constructor() {

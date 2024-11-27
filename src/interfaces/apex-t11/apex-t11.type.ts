@@ -1,12 +1,11 @@
 /* * */
 
-import { createOperationalDate } from '@/types/common';
+import { createOperationalDate, DocumentSchema, OperationalDate } from '@/types/common';
 import { z } from 'zod';
 
 /* * */
 
-export const ApexT11Schema = z.object({
-	_id: z.string(),
+export const ApexT11Schema = DocumentSchema.extend({
 	agency_id: z.string(),
 	apex_version: z.string(),
 	card_serial_number: z.string(),
@@ -26,8 +25,8 @@ export const ApexT11Schema = z.object({
 	vehicle_id: z.string(),
 }).strict();
 
-export const CreateApexT11Schema = ApexT11Schema;
-export const UpdateApexT11Schema = ApexT11Schema.partial();
+export const CreateApexT11Schema = ApexT11Schema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateApexT11Schema = CreateApexT11Schema.partial();
 
 /**
  * APEX T11 are APEX trasactions of type 11 that are generated when a card holder touches a validator
@@ -36,8 +35,12 @@ export const UpdateApexT11Schema = ApexT11Schema.partial();
  * or not, and with which conditions. A validation also contains information about the card holder's card, the vehicle,
  * the validator machine, the route, and the time and location of the validation.
  */
-export type ApexT11 = z.infer<typeof ApexT11Schema>;
+export interface ApexT11 extends Omit<z.infer<typeof ApexT11Schema>, 'operational_day'> {
+	operational_day: OperationalDate
+}
 
-export type CreateApexT11Dto = ApexT11;
+export interface CreateApexT11Dto extends Omit<z.infer<typeof CreateApexT11Schema>, 'operational_day'> {
+	operational_day: OperationalDate
+}
 
-export type UpdateApexT11Dto = Partial<ApexT11>;
+export type UpdateApexT11Dto = Partial<CreateApexT11Dto>;

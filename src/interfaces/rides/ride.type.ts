@@ -1,5 +1,6 @@
 /* * */
 
+import { DocumentSchema } from '@/types';
 import { z } from 'zod';
 
 /* * */
@@ -23,7 +24,7 @@ export type UpdateRideAnalysisDto = Partial<RideAnalysis>;
 
 /* * */
 
-export const RideSchema = z.object({
+export const RideSchema = DocumentSchema.extend({
 	agency_id: z.string(),
 	analysis: z.array(RideAnalysisSchema),
 	analysis_timestamp: z.union([z.string().nullable(), z.null()]),
@@ -45,8 +46,8 @@ export const RideSchema = z.object({
 	user_notes: z.string(),
 }).strict();
 
-export const CreateRideSchema = RideSchema;
-export const UpdateRideSchema = RideSchema.partial();
+export const CreateRideSchema = RideSchema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateRideSchema = CreateRideSchema.partial();
 
 export type Ride = z.infer<typeof RideSchema>;
 export type CreateRideDto = Ride;

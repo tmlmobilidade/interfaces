@@ -2,7 +2,7 @@ import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { File } from '@/types';
 
-class FilesClass extends MongoCollectionClass<File> {
+class FilesClass extends MongoCollectionClass<File, unknown, unknown> {
 	private static _instance: FilesClass;
 
 	private constructor() {

@@ -1,5 +1,6 @@
 /* * */
 
+import { DocumentSchema } from '@/types';
 import { z } from 'zod';
 
 /* * */
@@ -26,7 +27,7 @@ export type UpdateHashedTripWaypointDto = Partial<HashedTripWaypoint>;
 
 /* * */
 
-export const HashedTripSchema = z.object({
+export const HashedTripSchema = DocumentSchema.extend({
 	agency_id: z.string(),
 	code: z.string(),
 	line_id: z.string(),
@@ -40,11 +41,12 @@ export const HashedTripSchema = z.object({
 	route_short_name: z.string(),
 	route_text_color: z.string(),
 	trip_headsign: z.string(),
+	updated_at: z.date(),
 }).strict();
 
-export const CreateHashedTripSchema = HashedTripSchema;
-export const UpdateHashedTripSchema = HashedTripSchema.partial();
+export const CreateHashedTripSchema = HashedTripSchema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateHashedTripSchema = CreateHashedTripSchema.partial();
 
 export type HashedTrip = z.infer<typeof HashedTripSchema>;
-export type CreateHashedTripDto = HashedTrip;
-export type UpdateHashedTripDto = Partial<HashedTrip>;
+export type CreateHashedTripDto = z.infer<typeof CreateHashedTripSchema>;
+export type UpdateHashedTripDto = Partial<CreateHashedTripDto>;

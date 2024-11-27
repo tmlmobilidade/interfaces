@@ -1,12 +1,12 @@
+import { DocumentSchema } from '@/types';
 import { GeoJSON } from 'geojson';
 import z from 'zod';
 
-export const MunicipalitySchema = z.object({
+export const MunicipalitySchema = DocumentSchema.extend({
 	border_color: z.string(),
 	border_opacity: z.number(),
 	border_width: z.number(),
 	code: z.string(),
-	created_at: z.date(),
 	district: z.string(),
 	fill_color: z.string(),
 	fill_opacity: z.number(),
@@ -18,11 +18,11 @@ export const MunicipalitySchema = z.object({
 	updated_at: z.date(),
 }).strict();
 
-export const CreateMunicipalitySchema = MunicipalitySchema;
-export const UpdateMunicipalitySchema = MunicipalitySchema.partial();
+export const CreateMunicipalitySchema = MunicipalitySchema.omit({ _id: true });
+export const UpdateMunicipalitySchema = CreateMunicipalitySchema.partial();
 
 export interface Municipality extends z.infer<typeof MunicipalitySchema> {
 	geojson: GeoJSON
 }
-export type CreateMunicipalityDto = Municipality;
-export type UpdateMunicipalityDto = Partial<Municipality>;
+export type CreateMunicipalityDto = z.infer<typeof CreateMunicipalitySchema>;
+export type UpdateMunicipalityDto = Partial<CreateMunicipalityDto>;

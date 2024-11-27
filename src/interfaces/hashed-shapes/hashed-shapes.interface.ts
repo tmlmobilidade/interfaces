@@ -1,13 +1,13 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { HashedShape } from '@/interfaces/hashed-shapes/hashed-shape.type';
+import { CreateHashedShapeDto, HashedShape, UpdateHashedShapeDto } from '@/interfaces/hashed-shapes/hashed-shape.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
 
-class HashedShapesClass extends MongoCollectionClass<HashedShape> {
+class HashedShapesClass extends MongoCollectionClass<HashedShape, CreateHashedShapeDto, UpdateHashedShapeDto> {
 	private static _instance: HashedShapesClass;
 
 	private constructor() {

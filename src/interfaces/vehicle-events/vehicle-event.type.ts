@@ -1,12 +1,11 @@
 /* * */
 
-import { createOperationalDate } from '@/types/common';
+import { createOperationalDate, DocumentSchema, OperationalDate } from '@/types/common';
 import { z } from 'zod';
 
 /* * */
 
-export const VehicleEventSchema = z.object({
-	_id: z.string(),
+export const VehicleEventSchema = DocumentSchema.extend({
 	agency_id: z.string(),
 	data: z.string(),
 	line_id: z.string(),
@@ -17,12 +16,17 @@ export const VehicleEventSchema = z.object({
 	route_id: z.string(),
 	stop_id: z.string(),
 	trip_id: z.string(),
+	updated_at: z.date(),
 	vehicle_id: z.string(),
 	vehicle_timestamp: z.number(),
 }).strict();
 
-export const CreateVehicleEventSchema = VehicleEventSchema;
-export const UpdateVehicleEventSchema = VehicleEventSchema.partial();
+export const CreateVehicleEventSchema = VehicleEventSchema.omit({ _id: true, created_at: true, updated_at: true }).extend({
+	_id: z.string().optional(),
+	created_at: z.date().optional(),
+	updated_at: z.date().optional(),
+});
+export const UpdateVehicleEventSchema = CreateVehicleEventSchema.partial().omit({ _id: true, created_at: true, updated_at: true });
 
 /**
  * Vehicle Events are produced by the vehicle's on-board computer on a regular schedule
@@ -31,8 +35,7 @@ export const UpdateVehicleEventSchema = VehicleEventSchema.partial();
  * These events are based on the GTFS-RT specification but extended with additional fields
  * specific to TML's needs.
  */
-export type VehicleEvent = z.infer<typeof VehicleEventSchema>;
+export type VehicleEvent = { operational_day: OperationalDate } & Omit<z.infer<typeof VehicleEventSchema>, 'operational_day'>;
 
-export type CreateVehicleEventDto = VehicleEvent;
-
-export type UpdateVehicleEventDto = Partial<VehicleEvent>;
+export type CreateVehicleEventDto = { operational_day: OperationalDate } & Omit<z.infer<typeof CreateVehicleEventSchema>, 'operational_day'>;
+export type UpdateVehicleEventDto = Partial<CreateVehicleEventDto>;

@@ -1,9 +1,9 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { User } from '@/types';
+import { CreateUserDto, UpdateUserDto, User } from '@/types';
 import { Filter, ObjectId, Sort, WithId } from 'mongodb';
 
-class UsersClass extends MongoCollectionClass<User> {
+class UsersClass extends MongoCollectionClass<User, CreateUserDto, UpdateUserDto> {
 	private static _instance: UsersClass;
 
 	private constructor() {

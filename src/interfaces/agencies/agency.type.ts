@@ -1,13 +1,12 @@
 /* * */
 
-import { createOperationalDate, OperationalDate } from '@/types/common';
+import { createOperationalDate, DocumentSchema, OperationalDate } from '@/types/common';
 import z from 'zod';
 
 /* * */
 
-export const AgencySchema = z.object({
+export const AgencySchema = DocumentSchema.extend({
 	code: z.string(),
-	created_at: z.date().optional(),
 	email: z.string().email(),
 	fare_url: z.string().url(),
 	is_locked: z.boolean(),
@@ -22,13 +21,15 @@ export const AgencySchema = z.object({
 	url: z.string().url(),
 }).strict();
 
-export const CreateAgencySchema = AgencySchema;
-export const UpdateAgencySchema = AgencySchema.partial();
+export const CreateAgencySchema = AgencySchema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateAgencySchema = CreateAgencySchema.partial();
 
 /* * */
 
 export interface Agency extends Omit<z.infer<typeof AgencySchema>, 'operation_start_date'> {
 	operation_start_date: OperationalDate
 }
-export type CreateAgencyDto = Agency;
-export type UpdateAgencyDto = Partial<Agency>;
+export interface CreateAgencyDto extends Omit<z.infer<typeof CreateAgencySchema>, 'operation_start_date'> {
+	operation_start_date: OperationalDate
+}
+export type UpdateAgencyDto = Partial<CreateAgencyDto>;

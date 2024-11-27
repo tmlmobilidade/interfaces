@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import z from 'zod';
 
 export type Email = {
 	__brand: 'Email'
@@ -19,3 +20,9 @@ export function createOperationalDate(date: string): OperationalDate {
 	if (!parsedDate.isValid) throw new Error(`Invalid date format '${date}', expected format: yyyyMMdd`);
 	return parsedDate.toFormat('yyyyMMdd') as OperationalDate;
 }
+
+export const DocumentSchema = z.object({
+	_id: z.string(),
+	created_at: z.date(),
+	updated_at: z.date(),
+});

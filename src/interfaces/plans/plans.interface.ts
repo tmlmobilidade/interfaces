@@ -1,13 +1,13 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { Plan } from '@/interfaces/plans/plan.type';
+import { CreatePlanDto, Plan, UpdatePlanDto } from '@/interfaces/plans/plan.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
 
-class PlansClass extends MongoCollectionClass<Plan> {
+class PlansClass extends MongoCollectionClass<Plan, CreatePlanDto, UpdatePlanDto> {
 	private static _instance: PlansClass;
 
 	private constructor() {

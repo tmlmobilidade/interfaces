@@ -1,13 +1,13 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { VehicleEvent } from '@/interfaces/vehicle-events/vehicle-event.type';
+import { CreateVehicleEventDto, UpdateVehicleEventDto, VehicleEvent } from '@/interfaces/vehicle-events/vehicle-event.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
 
-class VehicleEventsClass extends MongoCollectionClass<VehicleEvent> {
+class VehicleEventsClass extends MongoCollectionClass<VehicleEvent, CreateVehicleEventDto, UpdateVehicleEventDto> {
 	private static _instance: VehicleEventsClass;
 
 	private constructor() {

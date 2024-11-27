@@ -1,9 +1,9 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Alert } from '@/types';
+import { Alert, CreateAlertDto, UpdateAlertDto } from '@/types';
 import { Filter } from 'mongodb';
 
-class AlertsClass extends MongoCollectionClass<Alert> {
+class AlertsClass extends MongoCollectionClass<Alert, CreateAlertDto, UpdateAlertDto> {
 	private static _instance: AlertsClass;
 
 	private constructor() {

@@ -1,13 +1,13 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { ApexT19 } from '@/interfaces/apex-t19/apex-t19.type';
+import { ApexT19, CreateApexT19Dto, UpdateApexT19Dto } from '@/interfaces/apex-t19/apex-t19.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
 
-class ApexT19sClass extends MongoCollectionClass<ApexT19> {
+class ApexT19sClass extends MongoCollectionClass<ApexT19, CreateApexT19Dto, UpdateApexT19Dto> {
 	private static _instance: ApexT19sClass;
 
 	private constructor() {

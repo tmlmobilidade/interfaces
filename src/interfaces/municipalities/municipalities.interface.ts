@@ -1,9 +1,9 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Municipality } from '@/types';
+import { CreateMunicipalityDto, Municipality, UpdateMunicipalityDto } from '@/types';
 import { Filter } from 'mongodb';
 
-class MunicipalitiesClass extends MongoCollectionClass<Municipality> {
+class MunicipalitiesClass extends MongoCollectionClass<Municipality, CreateMunicipalityDto, UpdateMunicipalityDto> {
 	private static _instance: MunicipalitiesClass;
 
 	private constructor() {

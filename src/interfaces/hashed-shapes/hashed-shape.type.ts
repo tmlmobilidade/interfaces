@@ -1,5 +1,6 @@
 /* * */
 
+import { DocumentSchema } from '@/types';
 import { z } from 'zod';
 
 /* * */
@@ -11,7 +12,7 @@ export const HashedShapePointSchema = z.object({
 }).strict();
 
 export const CreateHashedShapePointSchema = HashedShapePointSchema;
-export const UpdateHashedShapePointSchema = HashedShapePointSchema.partial();
+export const UpdateHashedShapePointSchema = CreateHashedShapePointSchema.partial();
 
 export type HashedShapePoint = z.infer<typeof HashedShapePointSchema>;
 export type CreateHashedShapePointDto = HashedShapePoint;
@@ -19,16 +20,16 @@ export type UpdateHashedShapePointDto = Partial<HashedShapePoint>;
 
 /* * */
 
-export const HashedShapeSchema = z.object({
+export const HashedShapeSchema = DocumentSchema.extend({
 	agency_id: z.string(),
 	code: z.string(),
 	points: z.array(HashedShapePointSchema),
 	shape_id: z.string(),
 }).strict();
 
-export const CreateHashedShapeSchema = HashedShapeSchema;
-export const UpdateHashedShapeSchema = HashedShapeSchema.partial();
+export const CreateHashedShapeSchema = HashedShapeSchema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateHashedShapeSchema = CreateHashedShapeSchema.partial();
 
 export type HashedShape = z.infer<typeof HashedShapeSchema>;
-export type CreateHashedShapeDto = HashedShape;
-export type UpdateHashedShapeDto = Partial<HashedShape>;
+export type CreateHashedShapeDto = z.infer<typeof CreateHashedShapeSchema>;
+export type UpdateHashedShapeDto = Partial<CreateHashedShapeDto>;

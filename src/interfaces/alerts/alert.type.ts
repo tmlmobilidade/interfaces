@@ -1,5 +1,4 @@
-import { createOperationalDate, OperationalDate } from '@/types/common';
-import { ObjectId } from 'mongodb';
+import { createOperationalDate, DocumentSchema, OperationalDate } from '@/types/common';
 import z from 'zod';
 
 // Define constants for enum values for better maintainability
@@ -45,13 +44,11 @@ export const effectSchema = z.enum(EFFECT_VALUES);
 export const publishStatusSchema = z.enum(PUBLISH_STATUS_VALUES);
 
 // Define the Alert schema
-export const AlertSchema = z.object({
-	_id: z.instanceof(ObjectId).optional(),
+export const AlertSchema = DocumentSchema.extend({
 	active_period_end_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	active_period_start_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	agency_ids: z.array(z.string()),
 	cause: causeSchema,
-	created_at: z.date().optional(),
 	description: z.string(),
 	effect: effectSchema,
 	image_url: z.string(),
@@ -65,8 +62,9 @@ export const AlertSchema = z.object({
 	title: z.string(),
 	updated_at: z.date().optional(),
 }).strict();
-export const CreateAlertSchema = AlertSchema;
-export const UpdateAlertSchema = AlertSchema.partial();
+
+export const CreateAlertSchema = AlertSchema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateAlertSchema = CreateAlertSchema.partial();
 
 // Define types based on schemas
 export type Cause = z.infer<typeof causeSchema>;
@@ -94,5 +92,24 @@ export interface Alert
 	publish_status: PublishStatus
 }
 
-export type CreateAlertDto = Alert;
-export type UpdateAlertDto = Partial<Alert>;
+export interface CreateAlertDto
+	extends Omit<
+		z.infer<typeof CreateAlertSchema>,
+		'active_period_end_date'
+		| 'active_period_start_date'
+		| 'cause'
+		| 'effect'
+		| 'publish_end_date'
+		| 'publish_start_date'
+		| 'publish_status'
+	> {
+	active_period_end_date: OperationalDate
+	active_period_start_date: OperationalDate
+	cause: Cause
+	effect: Effect
+	publish_end_date: OperationalDate
+	publish_start_date: OperationalDate
+	publish_status: PublishStatus
+}
+
+export type UpdateAlertDto = Partial<CreateAlertDto>;

@@ -1,12 +1,11 @@
 /* * */
 
-import { createOperationalDate } from '@/types/common';
+import { createOperationalDate, DocumentSchema, OperationalDate } from '@/types/common';
 import { z } from 'zod';
 
 /* * */
 
-export const ApexT3Schema = z.object({
-	_id: z.string(),
+export const ApexT3Schema = DocumentSchema.extend({
 	agency_id: z.string(),
 	apex_version: z.string(),
 	card_serial_number: z.string(),
@@ -26,16 +25,20 @@ export const ApexT3Schema = z.object({
 	vehicle_id: z.string(),
 }).strict();
 
-export const CreateApexT3Schema = ApexT3Schema;
-export const UpdateApexT3Schema = ApexT3Schema.partial();
+export const CreateApexT3Schema = ApexT3Schema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateApexT3Schema = CreateApexT3Schema.partial();
 
 /**
  * APEX T3 are APEX trasactions of type 3 that are generated when a ticket is sold
  * in a vehicle, store or mobile app, and immediately loaded onto a transit card.
  * As such, these transactions represent sales of loadable products, such as tickets or passes.
  */
-export type ApexT3 = z.infer<typeof ApexT3Schema>;
+export interface ApexT3 extends Omit<z.infer<typeof ApexT3Schema>, 'operational_day'> {
+	operational_day: OperationalDate
+}
 
-export type CreateApexT3Dto = ApexT3;
+export interface CreateApexT3Dto extends Omit<z.infer<typeof CreateApexT3Schema>, 'operational_day'> {
+	operational_day: OperationalDate
+}
 
-export type UpdateApexT3Dto = Partial<ApexT3>;
+export type UpdateApexT3Dto = Partial<CreateApexT3Dto>;

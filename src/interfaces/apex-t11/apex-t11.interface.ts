@@ -1,13 +1,13 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { ApexT11 } from '@/interfaces/apex-t11/apex-t11.type';
+import { ApexT11, CreateApexT11Dto, UpdateApexT11Dto } from '@/interfaces/apex-t11/apex-t11.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter } from 'mongodb';
 
 /* * */
 
-class ApexT11sClass extends MongoCollectionClass<ApexT11> {
+class ApexT11sClass extends MongoCollectionClass<ApexT11, CreateApexT11Dto, UpdateApexT11Dto> {
 	private static _instance: ApexT11sClass;
 
 	private constructor() {

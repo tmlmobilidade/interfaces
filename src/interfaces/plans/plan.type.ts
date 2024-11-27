@@ -1,31 +1,36 @@
 /* * */
 
-import { createOperationalDate } from '@/types/common';
+import { createOperationalDate, DocumentSchema, OperationalDate } from '@/types/common';
 import { z } from 'zod';
 
 /* * */
 
-export const PlanSchema = z.object({
-	_id: z.string(),
+export const PlanSchema = DocumentSchema.extend({
 	agency_id: z.string(),
-	created_at: z.date(),
 	is_locked: z.boolean(),
 	operation_file: z.string().nullable(),
 	parsed_dates: z.array(z.string().transform(createOperationalDate).brand('OperationalDate')),
 	reference_file: z.string().nullable(),
 	status: z.string(),
-	updated_at: z.date(),
 	valid_from: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	valid_until: z.string().transform(createOperationalDate).brand('OperationalDate'),
 }).strict();
 
-export const CreatePlanSchema = PlanSchema;
-export const UpdatePlanSchema = PlanSchema.partial();
+export const CreatePlanSchema = PlanSchema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdatePlanSchema = CreatePlanSchema.partial();
 
 /* * */
 
-export type Plan = z.infer<typeof PlanSchema>;
+export interface Plan extends Omit<z.infer<typeof PlanSchema>, 'parsed_dates' | 'valid_from' | 'valid_until'> {
+	parsed_dates: OperationalDate[]
+	valid_from: OperationalDate
+	valid_until: OperationalDate
+}
 
-export type CreatePlanDto = Plan;
+export interface CreatePlanDto extends Omit<z.infer<typeof CreatePlanSchema>, 'parsed_dates' | 'valid_from' | 'valid_until'> {
+	parsed_dates: OperationalDate[]
+	valid_from: OperationalDate
+	valid_until: OperationalDate
+}
 
-export type UpdatePlanDto = Partial<Plan>;
+export type UpdatePlanDto = Partial<CreatePlanDto>;

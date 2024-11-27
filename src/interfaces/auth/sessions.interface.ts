@@ -1,8 +1,8 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Session } from '@/types';
+import { CreateSessionDto, Session, UpdateSessionDto } from '@/types';
 
-class SessionsClass extends MongoCollectionClass<Session> {
+class SessionsClass extends MongoCollectionClass<Session, CreateSessionDto, UpdateSessionDto> {
 	private static _instance: SessionsClass;
 
 	private constructor() {

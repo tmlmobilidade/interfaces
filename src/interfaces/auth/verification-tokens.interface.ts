@@ -1,8 +1,8 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { VerificationToken } from '@/types';
+import { CreateVerificationTokenDto, UpdateVerificationTokenDto, VerificationToken } from '@/types';
 
-class VerificationTokensClass extends MongoCollectionClass<VerificationToken> {
+class VerificationTokensClass extends MongoCollectionClass<VerificationToken, CreateVerificationTokenDto, UpdateVerificationTokenDto> {
 	private static _instance: VerificationTokensClass;
 
 	private constructor() {

@@ -1,9 +1,9 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { Stop } from '@/interfaces/stops/stop.type';
+import { CreateStopDto, Stop, UpdateStopDto } from '@/interfaces/stops/stop.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter, Sort } from 'mongodb';
 
-class StopsClass extends MongoCollectionClass<Stop> {
+class StopsClass extends MongoCollectionClass<Stop, CreateStopDto, UpdateStopDto> {
 	private static _instance: StopsClass;
 
 	private constructor() {
