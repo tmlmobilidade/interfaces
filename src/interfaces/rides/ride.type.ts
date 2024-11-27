@@ -50,5 +50,5 @@ export const CreateRideSchema = RideSchema.omit({ _id: true, created_at: true, u
 export const UpdateRideSchema = CreateRideSchema.partial();
 
 export type Ride = z.infer<typeof RideSchema>;
-export type CreateRideDto = Ride;
-export type UpdateRideDto = Partial<Ride>;
+export type CreateRideDto = z.infer<typeof CreateRideSchema>;
+export type UpdateRideDto = Partial<CreateRideDto>;
