@@ -10,6 +10,7 @@ export const HashedTripWaypointSchema = z.object({
 	departure_time: z.string(),
 	drop_off_type: z.string(),
 	pickup_type: z.string(),
+	shape_dist_traveled: z.number(),
 	stop_id: z.string(),
 	stop_lat: z.string(),
 	stop_lon: z.string(),

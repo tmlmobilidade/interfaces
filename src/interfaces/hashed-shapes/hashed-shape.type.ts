@@ -6,6 +6,7 @@ import { z } from 'zod';
 /* * */
 
 export const HashedShapePointSchema = z.object({
+	shape_dist_traveled: z.number(),
 	shape_pt_lat: z.string(),
 	shape_pt_lon: z.string(),
 	shape_pt_sequence: z.number(),
