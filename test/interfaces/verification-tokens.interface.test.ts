@@ -63,7 +63,9 @@ describe('VerificationTokensClass', () => {
 		];
 
 		beforeAll(async () => {
-			await verificationTokens.insertMany(tokensToDelete);
+			for (const token of tokensToDelete) {
+				await verificationTokens.insertOne(token);
+			}
 		});
 
 		it('should delete multiple verification tokens', async () => {

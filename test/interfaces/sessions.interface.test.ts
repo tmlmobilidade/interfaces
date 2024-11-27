@@ -62,7 +62,9 @@ describe('SessionsClass', () => {
 		];
 
 		beforeAll(async () => {
-			await sessions.insertMany(sessionsToDelete);
+			for (const session of sessionsToDelete) {
+				await sessions.insertOne(session);
+			}
 		});
 
 		it('should delete multiple sessions', async () => {

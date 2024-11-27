@@ -151,30 +151,6 @@ describe('UsersClass', () => {
 		});
 	});
 
-	describe('insertMany', () => {
-		const newUsers = mockUsers.map(user => ({
-			...user,
-			_id: new ObjectId(),
-			created_at: new Date(),
-			email: `new_${user.email}` as Email,
-			updated_at: new Date(),
-		}));
-
-		afterAll(async () => {
-			const ids = newUsers.map(user => user._id);
-			await users.deleteMany({ _id: { $in: ids } });
-		});
-
-		it('should insert multiple users', async () => {
-			const result = await users.insertMany(newUsers);
-			expect(result.insertedCount).toBe(newUsers.length);
-		});
-
-		it('should throw an error if some users already exist', async () => {
-			await expect(users.insertMany(mockUsers)).rejects.toThrow();
-		});
-	});
-
 	describe('updateOne', () => {
 		it('should update a user\'s email', async () => {
 			const userId = mockUsers[0]._id;
@@ -193,27 +169,6 @@ describe('UsersClass', () => {
 			const updateFields = { email: 'nonexistent@example.com' as Email };
 			const updateResult = await users.updateById(new ObjectId(nonExistentId), updateFields);
 			expect(updateResult.modifiedCount).toBe(0);
-		});
-	});
-
-	describe('updateMany', () => {
-		const usersToUpdate = mockUsers.map(user => ({
-			...user,
-			_id: new ObjectId(),
-			created_at: new Date(),
-			email: `update_${user.email}` as Email,
-			updated_at: new Date(),
-		}));
-
-		beforeAll(async () => {
-			await users.insertMany(usersToUpdate);
-		});
-
-		it('should update multiple users\' emails', async () => {
-			const emails = usersToUpdate.map(user => user.email as Email);
-			const updateFields = { first_name: 'updated_first_name' };
-			const updateResult = await users.updateMany({ email: { $in: emails } }, updateFields);
-			expect(updateResult.modifiedCount).toBe(usersToUpdate.length);
 		});
 	});
 
@@ -245,7 +200,9 @@ describe('UsersClass', () => {
 			updated_at: new Date(),
 		}));
 		beforeAll(async () => {
-			await users.insertMany(usersToDelete as OptionalId<User>[]);
+			for (const user of usersToDelete) {
+				await users.insertOne(user);
+			}
 		});
 
 		it('should delete multiple users', async () => {

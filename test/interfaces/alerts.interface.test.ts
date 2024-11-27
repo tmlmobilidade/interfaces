@@ -172,7 +172,9 @@ describe('AlertsClass', () => {
 		];
 
 		beforeAll(async () => {
-			await alerts.insertMany(alertsToDelete);
+			for (const alert of alertsToDelete) {
+				await alerts.insertOne(alert);
+			}
 		});
 
 		it('should delete multiple alerts', async () => {

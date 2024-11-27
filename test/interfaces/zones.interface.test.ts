@@ -94,7 +94,9 @@ describe('ZonesClass', () => {
 		];
 
 		beforeAll(async () => {
-			await zones.insertMany(zonesToDelete);
+			for (const zone of zonesToDelete) {
+				await zones.insertOne(zone);
+			}
 		});
 
 		it('should delete multiple zones', async () => {

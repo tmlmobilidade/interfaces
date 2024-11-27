@@ -66,6 +66,8 @@ export async function seedDatabase(db: Db) {
 	];
 
 	for (const collection of collections) {
-		await db.collection(collection.name).insertMany(collection.data);
+		for (const item of collection.data) {
+			await db.collection(collection.name).insertOne(item);
+		}
 	}
 }

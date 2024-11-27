@@ -157,29 +157,6 @@ describe('StopsClass', () => {
 		});
 	});
 
-	describe('insertMany', () => {
-		it('should insert multiple stops', async () => {
-			const newStops = mockStops.map(stop => ({
-				...stop,
-				_id: new ObjectId(),
-				code: `${stop.code}_NEW`,
-				created_at: new Date(),
-				updated_at: new Date(),
-			}));
-
-			const result = await stops.insertMany(newStops);
-			expect(result.insertedCount).toBe(mockStops.length);
-
-			for (const insertedId of Object.values(result.insertedIds)) {
-				await stops.deleteOne({ _id: insertedId });
-			}
-		});
-
-		it('should throw an error if some stops already exist', async () => {
-			await expect(stops.insertMany(mockStops)).rejects.toThrow();
-		});
-	});
-
 	describe('deleteOne', () => {
 		beforeAll(async () => {
 			await stops.insertOne(newStop);

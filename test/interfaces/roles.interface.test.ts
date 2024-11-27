@@ -90,7 +90,9 @@ describe('RolesClass', () => {
 		];
 
 		beforeAll(async () => {
-			await roles.insertMany(rolesToDelete);
+			for (const role of rolesToDelete) {
+				await roles.insertOne(role);
+			}
 		});
 
 		it('should delete multiple roles', async () => {
