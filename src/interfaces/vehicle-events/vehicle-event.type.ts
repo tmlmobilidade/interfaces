@@ -16,13 +16,11 @@ export const VehicleEventSchema = DocumentSchema.extend({
 	route_id: z.string(),
 	stop_id: z.string(),
 	trip_id: z.string(),
-	updated_at: z.date(),
 	vehicle_id: z.string(),
 	vehicle_timestamp: z.number(),
 }).strict();
 
 export const CreateVehicleEventSchema = VehicleEventSchema.partial({
-	_id: true,
 	created_at: true,
 	updated_at: true,
 });

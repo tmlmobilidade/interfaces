@@ -42,7 +42,7 @@ export const HashedTripSchema = DocumentSchema.extend({
 	trip_headsign: z.string(),
 }).strict();
 
-export const CreateHashedTripSchema = HashedTripSchema.omit({ _id: true, created_at: true, updated_at: true });
+export const CreateHashedTripSchema = HashedTripSchema.omit({ created_at: true, updated_at: true });
 
 export const UpdateHashedTripSchema = CreateHashedTripSchema.partial();
 
