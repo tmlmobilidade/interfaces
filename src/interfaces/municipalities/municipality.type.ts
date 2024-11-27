@@ -15,10 +15,9 @@ export const MunicipalitySchema = DocumentSchema.extend({
 	name: z.string(),
 	prefix: z.string(),
 	region: z.string(),
-	updated_at: z.date(),
 }).strict();
 
-export const CreateMunicipalitySchema = MunicipalitySchema.omit({ _id: true });
+export const CreateMunicipalitySchema = MunicipalitySchema.omit({ _id: true, created_at: true, updated_at: true });
 export const UpdateMunicipalitySchema = CreateMunicipalitySchema.partial();
 
 export interface Municipality extends z.infer<typeof MunicipalitySchema> {
