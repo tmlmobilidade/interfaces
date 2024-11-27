@@ -1,4 +1,4 @@
-import { DocumentSchema } from '@/types';
+import { DocumentSchema } from '@/types/common';
 import { GeoJSON } from 'geojson';
 import z from 'zod';
 

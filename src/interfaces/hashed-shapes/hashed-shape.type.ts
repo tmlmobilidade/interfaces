@@ -1,6 +1,6 @@
 /* * */
 
-import { DocumentSchema } from '@/types';
+import { DocumentSchema } from '@/types/common';
 import { z } from 'zod';
 
 /* * */
