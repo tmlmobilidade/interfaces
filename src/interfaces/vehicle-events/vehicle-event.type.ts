@@ -21,10 +21,10 @@ export const VehicleEventSchema = DocumentSchema.extend({
 	vehicle_timestamp: z.number(),
 }).strict();
 
-export const CreateVehicleEventSchema = VehicleEventSchema.omit({ _id: true, created_at: true, updated_at: true }).extend({
-	_id: z.string().optional(),
-	created_at: z.date().optional(),
-	updated_at: z.date().optional(),
+export const CreateVehicleEventSchema = VehicleEventSchema.partial({
+	_id: true,
+	created_at: true,
+	updated_at: true,
 });
 export const UpdateVehicleEventSchema = CreateVehicleEventSchema.partial().omit({ _id: true, created_at: true, updated_at: true });
 
