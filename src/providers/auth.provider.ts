@@ -1,7 +1,7 @@
 import { roles, sessions, users } from '@/interfaces';
 import HttpException from '@/lib/http-exception';
 import HttpStatus from '@/lib/http-status';
-import { generateRandomToken } from '@/lib/utils';
+import { generateRandomString, generateRandomToken } from '@/lib/utils';
 import { LoginDto, Permission, Session } from '@/types';
 import bcrypt from 'bcrypt';
 import { mergekit } from 'mergekit';
@@ -81,7 +81,7 @@ class AuthProvider {
 	 *   - UNAUTHORIZED if user not found or password is incorrect
 	 *   - INTERNAL_SERVER_ERROR if login fails
 	 */
-	static async login(dto: LoginDto) {
+	static async login(dto: LoginDto): Promise<Session> {
 		// TODO: Implement caching with redis
 
 		const user = await users.findByEmail(dto.email, true);
@@ -97,8 +97,11 @@ class AuthProvider {
 		}
 
 		const session: Session = {
+			_id: generateRandomString(),
+			created_at: new Date(),
 			token: generateRandomToken(),
-			user_id: user._id,
+			updated_at: new Date(),
+			user_id: user._id.toString(),
 		};
 
 		const result = await sessions.insertOne(session);

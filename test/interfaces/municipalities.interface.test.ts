@@ -1,12 +1,11 @@
 import { municipalities } from '@/interfaces';
-import { Municipality } from '@/types';
+import { CreateMunicipalityDto } from '@/types';
 
-const newMunicipality: Municipality = {
+const newMunicipality: CreateMunicipalityDto = {
 	border_color: '',
 	border_opacity: 0,
 	border_width: 0,
 	code: 'NEW_MUNICIPALITY',
-	created_at: new Date(),
 	district: '',
 	fill_color: '',
 	fill_opacity: 0,
@@ -15,7 +14,6 @@ const newMunicipality: Municipality = {
 	name: 'New Municipality',
 	prefix: 'NM',
 	region: '',
-	updated_at: new Date(),
 };
 
 describe('MunicipalitiesClass', () => {

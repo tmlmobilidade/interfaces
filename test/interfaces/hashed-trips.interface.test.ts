@@ -1,9 +1,8 @@
 import { hashedTrips } from '@/interfaces';
-import { HashedTrip } from '@/types';
+import { CreateHashedTripDto } from '@/types';
 
-const newHashedTrip: HashedTrip = {
+const newHashedTrip: CreateHashedTripDto = {
 	agency_id: 'agency_1',
-	code: 'HASHED_TRIP_1',
 	line_id: 'line_1',
 	line_long_name: 'Long Line Name',
 	line_short_name: 'Short Line Name',
@@ -30,6 +29,8 @@ const newHashedTrip: HashedTrip = {
 	trip_headsign: 'Trip Head Sign',
 };
 
+let hashedTripId: string;
+
 describe('HashedTripsClass', () => {
 	afterAll(async () => {
 		await hashedTrips.disconnect();
@@ -39,10 +40,11 @@ describe('HashedTripsClass', () => {
 		it('should insert a new hashed trip', async () => {
 			const result = await hashedTrips.insertOne(newHashedTrip);
 			expect(result.insertedId).toBeDefined();
+			hashedTripId = result.insertedId.toString();
 
-			const insertedTrip = await hashedTrips.findByCode(newHashedTrip.code);
+			const insertedTrip = await hashedTrips.findById(hashedTripId);
 			expect(insertedTrip).toBeDefined();
-			expect(insertedTrip?.code).toBe(newHashedTrip.code);
+			expect(insertedTrip?.agency_id).toBe(newHashedTrip.agency_id);
 		});
 
 		it('should throw an error if the hashed trip already exists', async () => {
@@ -52,12 +54,12 @@ describe('HashedTripsClass', () => {
 
 	describe('findByCode', () => {
 		it('should find a hashed trip by its code', async () => {
-			const trip = await hashedTrips.findByCode(newHashedTrip.code);
-			expect(trip?.code).toBe(newHashedTrip.code);
+			const trip = await hashedTrips.findById(hashedTripId);
+			expect(trip?.agency_id).toBe(newHashedTrip.agency_id);
 		});
 
 		it('should return null if the hashed trip is not found', async () => {
-			const trip = await hashedTrips.findByCode('NON_EXISTENT_CODE');
+			const trip = await hashedTrips.findById('NON_EXISTENT_CODE');
 			expect(trip).toBeNull();
 		});
 	});
@@ -65,15 +67,15 @@ describe('HashedTripsClass', () => {
 	describe('updateByCode', () => {
 		it('should update a hashed trip', async () => {
 			const updatedFields = { line_long_name: 'Updated Long Line Name' };
-			const updateResult = await hashedTrips.updateByCode(newHashedTrip.code, updatedFields);
+			const updateResult = await hashedTrips.updateById(hashedTripId, updatedFields);
 			expect(updateResult.modifiedCount).toBe(1);
 
-			const updatedTrip = await hashedTrips.findByCode(newHashedTrip.code);
+			const updatedTrip = await hashedTrips.findById(hashedTripId);
 			expect(updatedTrip?.line_long_name).toBe('Updated Long Line Name');
 		});
 
 		it('should return null if the hashed trip is not found', async () => {
-			const updateResult = await hashedTrips.updateByCode('NON_EXISTENT_CODE', { line_long_name: 'Updated Long Line Name' });
+			const updateResult = await hashedTrips.updateById('NON_EXISTENT_CODE', { line_long_name: 'Updated Long Line Name' });
 			expect(updateResult.modifiedCount).toBe(0);
 		});
 	});

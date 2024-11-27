@@ -1,7 +1,7 @@
 import { organizations } from '@/interfaces';
-import { Organization } from '@/types';
+import { CreateOrganizationDto } from '@/types';
 
-const newOrganization: Organization = {
+const newOrganization: CreateOrganizationDto = {
 	code: 'ORG_1',
 	name: 'Organization test',
 };

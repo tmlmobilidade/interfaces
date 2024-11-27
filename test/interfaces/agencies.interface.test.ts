@@ -1,9 +1,8 @@
 import { agencies } from '@/interfaces/agencies/agencies.interface';
-import { Agency, createOperationalDate } from '@/types';
+import { CreateAgencyDto, createOperationalDate } from '@/types';
 
-const newAgency: Agency = {
+const newAgency: CreateAgencyDto = {
 	code: 'NEW_AGENCY',
-	created_at: new Date(),
 	email: 'newagency@example.com',
 	fare_url: 'http://example.com/fare',
 	is_locked: false,
@@ -14,7 +13,6 @@ const newAgency: Agency = {
 	price_per_km: 1.5,
 	timezone: 'UTC',
 	total_vkm_per_year: 10000,
-	updated_at: new Date(),
 	url: 'http://example.com',
 };
 
@@ -27,7 +25,6 @@ describe('AgenciesClass', () => {
 		it('should insert a new agency', async () => {
 			const result = await agencies.insertOne(newAgency);
 			expect(result.insertedId).toBeDefined();
-
 			const insertedAgency = await agencies.findByCode(newAgency.code);
 			expect(insertedAgency).toBeDefined();
 			expect(insertedAgency?.name).toBe(newAgency.name);

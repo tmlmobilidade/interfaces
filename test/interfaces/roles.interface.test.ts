@@ -1,12 +1,12 @@
 import { roles } from '@/interfaces';
-import { Role } from '@/types';
-import { ObjectId, WithId } from 'mongodb';
+import { CreateRoleDto } from '@/types';
 
-const newRole: WithId<Role> = {
-	_id: new ObjectId(),
+const newRole: CreateRoleDto = {
 	name: 'Admin',
 	permissions: [],
 };
+
+let insertedRoleId: string;
 
 describe('RolesClass', () => {
 	afterAll(async () => {
@@ -18,7 +18,9 @@ describe('RolesClass', () => {
 			const result = await roles.insertOne(newRole);
 			expect(result.insertedId).toBeDefined();
 
-			const insertedRole = await roles.findById(result.insertedId.toString());
+			insertedRoleId = result.insertedId.toString();
+
+			const insertedRole = await roles.findById(insertedRoleId);
 			expect(insertedRole).toBeDefined();
 			expect(insertedRole?.name).toBe(newRole.name);
 		});
@@ -30,12 +32,12 @@ describe('RolesClass', () => {
 
 	describe('findById', () => {
 		it('should find a role by its ID', async () => {
-			const role = await roles.findById(newRole._id.toString());
-			expect(role?._id.toString()).toBe(newRole._id.toString());
+			const role = await roles.findById(insertedRoleId);
+			expect(role?._id.toString()).toBe(insertedRoleId);
 		});
 
 		it('should return null if the role is not found', async () => {
-			const role = await roles.findById(new ObjectId().toString());
+			const role = await roles.findById('NON_EXISTENT_ID');
 			expect(role).toBeNull();
 		});
 	});
@@ -55,38 +57,38 @@ describe('RolesClass', () => {
 	describe('updateById', () => {
 		it('should update a role\'s name', async () => {
 			const updatedFields = { name: 'Super Admin' };
-			const updateResult = await roles.updateById(newRole._id, updatedFields);
+			const updateResult = await roles.updateById(insertedRoleId, updatedFields);
 			expect(updateResult.modifiedCount).toBe(1);
 
-			const updatedRole = await roles.findById(newRole._id.toString());
+			const updatedRole = await roles.findById(insertedRoleId);
 			expect(updatedRole?.name).toBe(updatedFields.name);
 		});
 
 		it('should return modifiedCount as 0 if the role does not exist', async () => {
-			const updateResult = await roles.updateById(new ObjectId(), { name: 'Should Not Update' });
+			const updateResult = await roles.updateById('NON_EXISTENT_ID', { name: 'Should Not Update' });
 			expect(updateResult.modifiedCount).toBe(0);
 		});
 	});
 
 	describe('deleteOne', () => {
 		it('should delete a role', async () => {
-			const result = await roles.deleteOne({ _id: newRole._id });
+			const result = await roles.deleteOne({ _id: insertedRoleId });
 			expect(result.deletedCount).toBe(1);
 
-			const deletedRole = await roles.findById(newRole._id.toString());
+			const deletedRole = await roles.findById(insertedRoleId);
 			expect(deletedRole).toBeNull();
 		});
 
 		it('should return deletedCount as 0 if the role does not exist', async () => {
-			const result = await roles.deleteOne({ _id: new ObjectId() });
+			const result = await roles.deleteOne({ _id: 'NON_EXISTENT_ID' });
 			expect(result.deletedCount).toBe(0);
 		});
 	});
 
 	describe('deleteMany', () => {
-		const rolesToDelete: WithId<Role>[] = [
-			{ _id: new ObjectId(), name: 'Test Role 1', permissions: [] },
-			{ _id: new ObjectId(), name: 'Test Role 2', permissions: [] },
+		const rolesToDelete: CreateRoleDto[] = [
+			{ name: 'Test Role 1', permissions: [] },
+			{ name: 'Test Role 2', permissions: [] },
 		];
 
 		beforeAll(async () => {

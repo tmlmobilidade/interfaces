@@ -1,25 +1,24 @@
 import { rides } from '@/interfaces';
-import { Ride } from '@/types';
+import { createOperationalDate, CreateRideDto } from '@/types';
 
-const newRide: Ride = {
+const newRide: CreateRideDto = {
 	agency_id: 'agency_1',
 	analysis: [],
-	analysis_timestamp: null,
-	archive_id: 'archive_1',
-	code: 'RIDE_1',
-	hashed_shape_code: 'HASHED_SHAPE_1',
-	hashed_trip_code: 'HASHED_TRIP_1',
+	extension: 1,
+	hashed_shape_id: 'HASHED_SHAPE_1',
+	hashed_trip_id: 'HASHED_TRIP_1',
 	line_id: 'line_1',
-	operational_day: '2023-01-01',
-	parse_timestamp: { $date: new Date().toISOString() },
+	operational_day: createOperationalDate('20240101'),
 	pattern_id: 'pattern_1',
+	plan_id: 'plan_1',
 	route_id: 'route_1',
 	scheduled_start_time: '10:00:00',
 	service_id: 'service_1',
-	status: 'active',
+	status: 'complete',
 	trip_id: 'trip_1',
-	user_notes: 'Test ride',
 };
+
+let rideId: string;
 
 describe('RidesClass', () => {
 	afterAll(async () => {
@@ -30,10 +29,11 @@ describe('RidesClass', () => {
 		it('should insert a new ride', async () => {
 			const result = await rides.insertOne(newRide);
 			expect(result.insertedId).toBeDefined();
+			rideId = result.insertedId.toString();
 
-			const insertedRide = await rides.findByCode(newRide.code);
+			const insertedRide = await rides.findById(rideId);
 			expect(insertedRide).toBeDefined();
-			expect(insertedRide?.code).toBe(newRide.code);
+			expect(insertedRide?.agency_id).toBe(newRide.agency_id);
 		});
 
 		it('should throw an error if the ride already exists', async () => {
@@ -43,28 +43,27 @@ describe('RidesClass', () => {
 
 	describe('findByCode', () => {
 		it('should find a ride by its code', async () => {
-			const ride = await rides.findByCode(newRide.code);
-			expect(ride?.code).toBe(newRide.code);
+			const ride = await rides.findById(rideId);
+			expect(ride?.agency_id).toBe(newRide.agency_id);
 		});
 
 		it('should return null if the ride is not found', async () => {
-			const ride = await rides.findByCode('NON_EXISTENT_CODE');
+			const ride = await rides.findById('NON_EXISTENT_CODE');
 			expect(ride).toBeNull();
 		});
 	});
 
 	describe('updateByCode', () => {
 		it('should update a ride', async () => {
-			const updatedFields = { status: 'inactive' };
-			const updateResult = await rides.updateByCode(newRide.code, updatedFields);
+			const updateResult = await rides.updateById(rideId, { status: 'complete' });
 			expect(updateResult.modifiedCount).toBe(1);
 
-			const updatedRide = await rides.findByCode(newRide.code);
-			expect(updatedRide?.status).toBe(updatedFields.status);
+			const updatedRide = await rides.findById(rideId);
+			expect(updatedRide?.status).toBe('complete');
 		});
 
 		it('should return modifiedCount as 0 if the ride does not exist', async () => {
-			const updateResult = await rides.updateByCode('NON_EXISTENT_CODE', { status: 'should_not_update' });
+			const updateResult = await rides.updateById('NON_EXISTENT_CODE', { status: 'complete' });
 			expect(updateResult.modifiedCount).toBe(0);
 		});
 	});

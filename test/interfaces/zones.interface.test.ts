@@ -1,20 +1,16 @@
 import { zones } from '@/interfaces';
-import { Zone } from '@/types';
-import { ObjectId, WithId } from 'mongodb';
+import { CreateZoneDto } from '@/types';
 
-const newZone: WithId<Zone> = {
-	_id: new ObjectId(),
+const newZone: CreateZoneDto = {
 	border_color: '#000000',
 	border_opacity: 1,
 	border_width: 1,
 	code: 'ZONE_1',
-	created_at: new Date(),
 	fill_color: '#000000',
 	fill_opacity: 1,
 	geojson: { features: [], type: 'FeatureCollection' },
 	is_locked: false,
 	name: 'Zone 1',
-	updated_at: new Date(),
 };
 
 describe('ZonesClass', () => {
@@ -88,9 +84,9 @@ describe('ZonesClass', () => {
 	});
 
 	describe('deleteMany', () => {
-		const zonesToDelete: WithId<Zone>[] = [
-			{ ...newZone, _id: new ObjectId(), code: 'ZONE_2' },
-			{ ...newZone, _id: new ObjectId(), code: 'ZONE_3' },
+		const zonesToDelete: CreateZoneDto[] = [
+			{ ...newZone, code: 'ZONE_2' },
+			{ ...newZone, code: 'ZONE_3' },
 		];
 
 		beforeAll(async () => {

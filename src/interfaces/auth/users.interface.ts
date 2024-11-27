@@ -1,7 +1,9 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateUserDto, UpdateUserDto, User } from '@/types';
-import { Filter, ObjectId, Sort, WithId } from 'mongodb';
+import { Filter, Sort, WithId } from 'mongodb';
+
+type NewType = string;
 
 class UsersClass extends MongoCollectionClass<User, CreateUserDto, UpdateUserDto> {
 	private static _instance: UsersClass;
@@ -56,8 +58,8 @@ class UsersClass extends MongoCollectionClass<User, CreateUserDto, UpdateUserDto
 	 * @param includePasswordHash - Whether to include the password hash in the result
 	 * @returns A promise that resolves to the matching document or null if not found
 	 */
-	async findById(id: ObjectId | string, includePasswordHash = false) {
-		const user = await this.mongoCollection.findOne({ _id: id instanceof ObjectId ? id : new ObjectId(id) } as unknown as Filter<User>);
+	async findById(id: string, includePasswordHash = false) {
+		const user = await this.mongoCollection.findOne({ _id: id } as unknown as Filter<User>);
 		if (!user) {
 			return null;
 		}
@@ -72,8 +74,8 @@ class UsersClass extends MongoCollectionClass<User, CreateUserDto, UpdateUserDto
 	 * @param includePasswordHash - Whether to include the password hash in the result
 	 * @returns A promise that resolves to the matching user documents or null if not found
 	 */
-	async findByOrganization(id: ObjectId | string, includePasswordHash = false) {
-		const users = await this.mongoCollection.find({ organization_ids: { $in: [id instanceof ObjectId ? id : new ObjectId(id)] } } as unknown as Filter<User>).toArray();
+	async findByOrganization(id: NewType, includePasswordHash = false) {
+		const users = await this.mongoCollection.find({ organization_ids: { $in: [id] } } as unknown as Filter<User>).toArray();
 		return includePasswordHash ? users : users.map(user => this.deletePasswordHash(user));
 	}
 
@@ -84,7 +86,7 @@ class UsersClass extends MongoCollectionClass<User, CreateUserDto, UpdateUserDto
 	 * @returns A promise that resolves to the matching user document or null if not found
 	 */
 	async findByRole(role: string, includePasswordHash = false) {
-		const users = await this.mongoCollection.find({ role_ids: { $in: [new ObjectId(role)] } } as unknown as Filter<User>).toArray();
+		const users = await this.mongoCollection.find({ role_ids: { $in: [role] } } as unknown as Filter<User>).toArray();
 		return includePasswordHash ? users : users.map(user => this.deletePasswordHash(user));
 	}
 

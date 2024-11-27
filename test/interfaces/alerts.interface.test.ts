@@ -1,9 +1,7 @@
 import { alerts } from '@/interfaces';
-import { Alert, createOperationalDate } from '@/types';
-import { ObjectId, WithId } from 'mongodb';
+import { CreateAlertDto, createOperationalDate } from '@/types';
 
-const newAlert: WithId<Alert> = {
-	_id: new ObjectId(),
+const newAlert: CreateAlertDto = {
 	active_period_end_date: createOperationalDate('20240331'),
 	active_period_start_date: createOperationalDate('20240101'),
 	agency_ids: ['agency_1'],
@@ -21,6 +19,8 @@ const newAlert: WithId<Alert> = {
 	title: 'Test Alert Title',
 };
 
+let insertedAlertId: string;
+
 describe('AlertsClass', () => {
 	afterAll(async () => {
 		await alerts.disconnect();
@@ -30,14 +30,19 @@ describe('AlertsClass', () => {
 		it('should insert a new alert', async () => {
 			const result = await alerts.insertOne(newAlert);
 			expect(result.insertedId).toBeDefined();
+			insertedAlertId = result.insertedId.toString();
 
-			const insertedAlert = await alerts.findById(newAlert._id.toString());
+			const insertedAlert = await alerts.findById(insertedAlertId);
 			expect(insertedAlert).toBeDefined();
 			expect(insertedAlert?.title).toBe(newAlert.title);
 		});
 
-		it('should throw an error if the alert already exists', async () => {
-			await expect(alerts.insertOne(newAlert)).rejects.toThrow();
+		it('should create a new alert with a predefined _id', async () => {
+			const predefinedId = 'predefined_id';
+			const result = await alerts.insertOne({ ...newAlert, _id: predefinedId });
+
+			expect(result.insertedId).toBeDefined();
+			expect(result.insertedId.toString()).toEqual(predefinedId);
 		});
 	});
 
@@ -137,7 +142,7 @@ describe('AlertsClass', () => {
 	describe('updateById', () => {
 		it('should update an alert\'s description', async () => {
 			const updatedFields = { description: 'Updated Alert Description' };
-			const updateResult = await alerts.updateById(newAlert._id, updatedFields);
+			const updateResult = await alerts.updateById(insertedAlertId, updatedFields);
 			expect(updateResult.modifiedCount).toBe(1);
 
 			const updatedAlert = await alerts.findByTitle(newAlert.title);
@@ -145,30 +150,30 @@ describe('AlertsClass', () => {
 		});
 
 		it('should return modifiedCount as 0 if the alert does not exist', async () => {
-			const updateResult = await alerts.updateById(new ObjectId().toString(), { description: 'Should Not Update' });
+			const updateResult = await alerts.updateById('NON_EXISTENT_ID', { description: 'Should Not Update' });
 			expect(updateResult.modifiedCount).toBe(0);
 		});
 	});
 
 	describe('deleteOne', () => {
 		it('should delete an alert', async () => {
-			const result = await alerts.deleteOne({ _id: newAlert._id });
+			const result = await alerts.deleteOne({ _id: insertedAlertId });
 			expect(result.deletedCount).toBe(1);
 
-			const deletedAlert = await alerts.findById(newAlert._id.toString());
+			const deletedAlert = await alerts.findById(insertedAlertId);
 			expect(deletedAlert).toBeNull();
 		});
 
 		it('should return deletedCount as 0 if the alert does not exist', async () => {
-			const result = await alerts.deleteOne({ _id: new ObjectId() });
+			const result = await alerts.deleteOne({ _id: 'NON_EXISTENT_ID' });
 			expect(result.deletedCount).toBe(0);
 		});
 	});
 
 	describe('deleteMany', () => {
-		const alertsToDelete: WithId<Alert>[] = [
-			{ ...newAlert, _id: new ObjectId(), title: 'Test Alert 2' },
-			{ ...newAlert, _id: new ObjectId(), title: 'Test Alert 3' },
+		const alertsToDelete: CreateAlertDto[] = [
+			{ ...newAlert, title: 'Test Alert 2' },
+			{ ...newAlert, title: 'Test Alert 3' },
 		];
 
 		beforeAll(async () => {

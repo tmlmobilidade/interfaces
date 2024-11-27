@@ -1,13 +1,14 @@
 import { stops } from '@/interfaces';
-import { Stop } from '@/types';
+import { CreateStopDto } from '@/types';
 import { mockMunicipalities, mockStops } from '@test/data/db-mock';
-import { ObjectId, Sort, WithId } from 'mongodb';
+import { Sort } from 'mongodb';
 
-const newStop: WithId<Stop> = {
+const newStop: CreateStopDto = {
 	...mockStops[0],
-	_id: new ObjectId(),
 	code: 'NEW_CODE',
 };
+
+let insertedStopId: string;
 
 describe('StopsClass', () => {
 	afterAll(async () => {
@@ -129,26 +130,30 @@ describe('StopsClass', () => {
 
 	describe('insertOne', () => {
 		afterAll(async () => {
-			await stops.deleteOne({ _id: newStop._id });
+			await stops.deleteOne({ _id: insertedStopId });
 		});
 
 		it('should insert a stop', async () => {
-			delete newStop.created_at;
-			delete newStop.updated_at;
-
 			const result = await stops.insertOne(newStop);
 			expect(result.insertedId).toBeDefined();
 
 			const insertedStop = await stops.findByCode(newStop.code);
 
 			expect(insertedStop).toBeDefined();
-			expect(insertedStop?.created_at).toBeDefined();
-			expect(insertedStop?.updated_at).toBeDefined();
 
-			delete insertedStop?.created_at;
-			delete insertedStop?.updated_at;
+			// compare all properties except created_at, updated_at and Id
+			if (insertedStop) {
+				insertedStopId = insertedStop._id;
 
-			expect(insertedStop).toEqual(newStop);
+				const { _id, created_at, updated_at, ...rest } = insertedStop;
+				expect(created_at).toBeDefined();
+				expect(updated_at).toBeDefined();
+				expect(_id).toBeDefined();
+				expect(rest).toEqual(newStop);
+			}
+			else {
+				fail('Inserted stop is undefined');
+			}
 		});
 
 		it('should throw an error if the stop already exists', async () => {
@@ -159,11 +164,12 @@ describe('StopsClass', () => {
 
 	describe('deleteOne', () => {
 		beforeAll(async () => {
-			await stops.insertOne(newStop);
+			const result = await stops.insertOne(newStop);
+			insertedStopId = result.insertedId.toString();
 		});
 
 		it('should delete a stop', async () => {
-			const result = await stops.deleteOne({ _id: newStop._id });
+			const result = await stops.deleteOne({ _id: insertedStopId });
 			expect(result.deletedCount).toBe(1);
 
 			const count = await stops.count();
@@ -171,7 +177,7 @@ describe('StopsClass', () => {
 		});
 
 		it('it should return deletedCount as 0 if the stop does not exist', async () => {
-			const result = await stops.deleteOne({ _id: new ObjectId() });
+			const result = await stops.deleteOne({ _id: 'NON_EXISTENT_ID' });
 			expect(result.deletedCount).toBe(0);
 		});
 	});

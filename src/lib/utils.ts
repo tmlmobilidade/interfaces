@@ -32,7 +32,12 @@ export function generateRandomToken() {
  * @param type - The type of characters to include in the string.
  * @returns A random string of the specified length.
  */
-export function generateRandomString({ length = 6, type = 'alphanumeric' }): string {
+interface GenerateRandomStringOptions {
+	length?: number
+	type?: 'alphanumeric' | 'numeric'
+}
+
+export function generateRandomString({ length = 6, type = 'alphanumeric' }: GenerateRandomStringOptions = {}): string {
 	//
 
 	const numericSet = '0123456789';

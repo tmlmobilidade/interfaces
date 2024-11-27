@@ -1,13 +1,15 @@
 import { users } from '@/interfaces';
-import { Email, User } from '@/types';
+import { generateRandomString } from '@/lib/utils';
+import { CreateUserDto, Email } from '@/types';
 import { mockUsers } from '@test/data/db-mock';
-import { ObjectId, OptionalId, Sort, WithId } from 'mongodb';
+import { Sort } from 'mongodb';
 
-const newUser: WithId<User> = {
+const newUser: CreateUserDto = {
 	...mockUsers[0],
-	_id: new ObjectId(),
 	email: 'newuser@example.com' as Email,
 };
+
+let insertedUserId: string;
 
 describe('UsersClass', () => {
 	afterAll(async () => {
@@ -30,14 +32,16 @@ describe('UsersClass', () => {
 
 	describe('findById', () => {
 		it('should find a user by their ID', async () => {
-			const user = await users.findById(mockUsers[0]._id.toString());
-			expect(user?._id.toString()).toBe(mockUsers[0]._id.toString());
+			const id = (await users.findMany())[0]._id;
+
+			const user = await users.findById(id);
+			expect(user?._id).toEqual(id);
 
 			expect(user?.password_hash).toBeUndefined();
 		});
 
 		it('should return null if the ID does not exist', async () => {
-			const user = await users.findById(new ObjectId().toString());
+			const user = await users.findById('NON_EXISTENT_ID');
 			expect(user).toBeNull();
 		});
 	});
@@ -61,7 +65,7 @@ describe('UsersClass', () => {
 		});
 
 		it('should return an empty array if no users are found for the organization code', async () => {
-			const organizationCode = new ObjectId();
+			const organizationCode = generateRandomString({ length: 10 });
 			const result = await users.findByOrganization(organizationCode);
 			expect(result).toEqual([]);
 		});
@@ -69,7 +73,7 @@ describe('UsersClass', () => {
 
 	describe('findByRole', () => {
 		it('should find users by their role ID', async () => {
-			const roleId = mockUsers[0].role_ids[0].toString();
+			const roleId = mockUsers[0].role_ids[0];
 			const result = await users.findByRole(roleId);
 
 			expect(result).toBeDefined();
@@ -84,7 +88,7 @@ describe('UsersClass', () => {
 		});
 
 		it('should return an empty array if no users have the specified role', async () => {
-			const roleId = new ObjectId().toString();
+			const roleId = generateRandomString({ length: 10 });
 			const result = await users.findByRole(roleId);
 			expect(result).toEqual([]);
 		});
@@ -128,20 +132,17 @@ describe('UsersClass', () => {
 
 	describe('insertOne', () => {
 		afterAll(async () => {
-			await users.deleteOne({ _id: newUser._id });
+			await users.deleteOne({ _id: insertedUserId });
 		});
 
 		it('should insert a new user', async () => {
-			delete newUser.created_at;
-			delete newUser.updated_at;
-
 			const result = await users.insertOne(newUser);
+			insertedUserId = result.insertedId.toString();
 			expect(result.insertedId).toBeDefined();
 
-			const insertedUser = await users.findById(newUser._id.toString());
+			const insertedUser = await users.findById(insertedUserId);
 			expect(insertedUser).toBeDefined();
 			expect(insertedUser?.email).toBe(newUser.email);
-
 			expect(insertedUser?.password_hash).toBeUndefined();
 		});
 
@@ -152,22 +153,25 @@ describe('UsersClass', () => {
 	});
 
 	describe('updateOne', () => {
+		beforeAll(async () => {
+			const result = await users.insertOne(newUser);
+			insertedUserId = result.insertedId.toString();
+		});
+
 		it('should update a user\'s email', async () => {
-			const userId = mockUsers[0]._id;
 			const updateFields = { email: 'updated_email@example.com' as Email };
-			const updateResult = await users.updateById(userId, updateFields);
+			const updateResult = await users.updateById(insertedUserId, updateFields);
 			expect(updateResult.modifiedCount).toBe(1);
 
-			const updatedUser = await users.findById(userId);
+			const updatedUser = await users.findById(insertedUserId);
 			expect(updatedUser?.email).toBe(updateFields.email);
 
-			await users.updateById(userId, { email: mockUsers[0].email });
+			await users.updateById(insertedUserId, { email: `updated_${mockUsers[0].email}` as Email });
 		});
 
 		it('should return modifiedCount as 0 if the user does not exist', async () => {
-			const nonExistentId = new ObjectId().toString();
 			const updateFields = { email: 'nonexistent@example.com' as Email };
-			const updateResult = await users.updateById(new ObjectId(nonExistentId), updateFields);
+			const updateResult = await users.updateById('NON_EXISTENT_ID', updateFields);
 			expect(updateResult.modifiedCount).toBe(0);
 		});
 	});
@@ -178,15 +182,15 @@ describe('UsersClass', () => {
 		});
 
 		it('should delete a user', async () => {
-			const result = await users.deleteOne({ _id: newUser._id });
+			const result = await users.deleteOne({ _id: insertedUserId });
 			expect(result.deletedCount).toBe(1);
 
-			const deletedUser = await users.findById(newUser._id.toString());
+			const deletedUser = await users.findById(insertedUserId);
 			expect(deletedUser).toBeNull();
 		});
 
 		it('should return deletedCount as 0 if the user does not exist', async () => {
-			const result = await users.deleteOne({ _id: new ObjectId() });
+			const result = await users.deleteOne({ _id: 'NON_EXISTENT_ID' });
 			expect(result.deletedCount).toBe(0);
 		});
 	});
@@ -194,11 +198,9 @@ describe('UsersClass', () => {
 	describe('deleteMany', () => {
 		const usersToDelete = mockUsers.map(user => ({
 			...user,
-			_id: new ObjectId(),
-			created_at: new Date(),
-			email: `delete_${user.email}`,
-			updated_at: new Date(),
+			email: `delete_${user.email}` as Email,
 		}));
+
 		beforeAll(async () => {
 			for (const user of usersToDelete) {
 				await users.insertOne(user);

@@ -1,11 +1,13 @@
 import { sessions } from '@/interfaces';
-import { Session } from '@/types';
-import { ObjectId, WithId } from 'mongodb';
+import { generateRandomString } from '@/lib/utils';
+import { CreateSessionDto } from '@/types';
 
-const newSession: WithId<Session> = {
-	_id: new ObjectId(),
+let insertedSessionId: string;
+const userId = generateRandomString({ length: 10 });
+
+const newSession: CreateSessionDto = {
 	token: 'test_token',
-	user_id: new ObjectId(),
+	user_id: userId,
 };
 
 describe('SessionsClass', () => {
@@ -18,7 +20,9 @@ describe('SessionsClass', () => {
 			const result = await sessions.insertOne(newSession);
 			expect(result.insertedId).toBeDefined();
 
-			const insertedSession = await sessions.findById(result.insertedId.toString());
+			insertedSessionId = result.insertedId.toString();
+
+			const insertedSession = await sessions.findById(insertedSessionId);
 			expect(insertedSession).toBeDefined();
 			expect(insertedSession?.token).toBe(newSession.token);
 		});
@@ -30,35 +34,35 @@ describe('SessionsClass', () => {
 
 	describe('findById', () => {
 		it('should find a session by its ID', async () => {
-			const session = await sessions.findById(newSession._id.toString());
-			expect(session?._id.toString()).toBe(newSession._id.toString());
+			const session = await sessions.findById(insertedSessionId);
+			expect(session?.user_id).toBe(userId);
 		});
 
 		it('should return null if the session is not found', async () => {
-			const session = await sessions.findById(new ObjectId().toString());
+			const session = await sessions.findById('NON_EXISTENT_ID');
 			expect(session).toBeNull();
 		});
 	});
 
 	describe('deleteOne', () => {
 		it('should delete a session', async () => {
-			const result = await sessions.deleteOne({ _id: newSession._id });
+			const result = await sessions.deleteOne({ _id: insertedSessionId });
 			expect(result.deletedCount).toBe(1);
 
-			const deletedSession = await sessions.findById(newSession._id.toString());
+			const deletedSession = await sessions.findById(insertedSessionId);
 			expect(deletedSession).toBeNull();
 		});
 
 		it('should return deletedCount as 0 if the session does not exist', async () => {
-			const result = await sessions.deleteOne({ _id: new ObjectId() });
+			const result = await sessions.deleteOne({ _id: 'NON_EXISTENT_ID' });
 			expect(result.deletedCount).toBe(0);
 		});
 	});
 
 	describe('deleteMany', () => {
-		const sessionsToDelete = [
-			{ _id: new ObjectId(), created_at: new Date(), token: 'token_1', updated_at: new Date(), user_id: new ObjectId() },
-			{ _id: new ObjectId(), created_at: new Date(), token: 'token_2', updated_at: new Date(), user_id: new ObjectId() },
+		const sessionsToDelete: CreateSessionDto[] = [
+			{ token: 'token_1', user_id: userId },
+			{ token: 'token_2', user_id: userId },
 		];
 
 		beforeAll(async () => {
