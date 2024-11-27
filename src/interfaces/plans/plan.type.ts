@@ -7,16 +7,18 @@ import { z } from 'zod';
 
 export const PlanSchema = DocumentSchema.extend({
 	agency_id: z.string(),
+	is_active: z.boolean(),
 	is_locked: z.boolean(),
 	operation_file: z.string().nullable(),
 	parsed_dates: z.array(z.string().transform(createOperationalDate).brand('OperationalDate')),
 	reference_file: z.string().nullable(),
-	status: z.string(),
+	status: z.enum(['pending', 'processing', 'complete', 'error']),
 	valid_from: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	valid_until: z.string().transform(createOperationalDate).brand('OperationalDate'),
 }).strict();
 
 export const CreatePlanSchema = PlanSchema.omit({ _id: true, created_at: true, updated_at: true });
+
 export const UpdatePlanSchema = CreatePlanSchema.partial();
 
 /* * */

@@ -32,34 +32,63 @@ class RidesClass extends MongoCollectionClass<Ride, CreateRideDto, UpdateRideDto
 	}
 
 	/**
-	 * Finds ride documents by agency ID.
+	 * Finds ride documents by Agency ID.
 	 *
-	 * @param id - The agency ID to search for
+	 * @param agencyId - The Agency ID to search for
 	 * @returns A promise that resolves to an array of matching ride documents
 	 */
-	async findByAgencyId(id: string) {
-		return this.mongoCollection.find({ agency_id: id } as Filter<Ride>).toArray();
+	async findByAgencyId(agencyId: string) {
+		return this.mongoCollection.find({ agency_id: agencyId } as Filter<Ride>).toArray();
 	}
 
 	/**
-	 * Finds a ride document by its code.
+	 * Finds ride documents by Line ID.
 	 *
-	 * @param code - The code of the ride to find
-	 * @returns A promise that resolves to the matching ride document or null if not found
+	 * @param lineId - The Line ID to search for
+	 * @returns A promise that resolves to an array of matching ride documents
 	 */
-	async findByCode(code: string) {
-		return this.mongoCollection.findOne({ code } as Filter<Ride>);
+	async findByLineId(lineId: string) {
+		return this.mongoCollection.find({ line_id: lineId } as Filter<Ride>).toArray();
 	}
 
 	/**
-	 * Updates a stop document by its code.
+	 * Finds ride documents by Pattern ID.
 	 *
-	 * @param code - The code of the stop to update.
-	 * @param updateFields - The fields to update in the stop document.
-	 * @returns A promise that resolves to the result of the update operation.
+	 * @param patternId - The Pattern ID to search for
+	 * @returns A promise that resolves to an array of matching ride documents
 	 */
-	async updateByCode(code: string, updateFields: Partial<Ride>) {
-		return this.mongoCollection.updateOne({ code } as Filter<Ride>, { $set: updateFields });
+	async findByPatternId(patternId: string) {
+		return this.mongoCollection.find({ pattern_id: patternId } as Filter<Ride>).toArray();
+	}
+
+	/**
+	 * Finds ride documents by Plan ID.
+	 *
+	 * @param planId - The Plan ID to search for
+	 * @returns A promise that resolves to an array of matching ride documents
+	 */
+	async findByPlanId(planId: string) {
+		return this.mongoCollection.find({ plan_id: planId } as Filter<Ride>).toArray();
+	}
+
+	/**
+	 * Finds ride documents by Route ID.
+	 *
+	 * @param routeId - The Route ID to search for
+	 * @returns A promise that resolves to an array of matching ride documents
+	 */
+	async findByRouteId(routeId: string) {
+		return this.mongoCollection.find({ route_id: routeId } as Filter<Ride>).toArray();
+	}
+
+	/**
+	 * Finds ride documents by Trip ID.
+	 *
+	 * @param tripId - The Trip ID to search for
+	 * @returns A promise that resolves to an array of matching ride documents
+	 */
+	async findByTripId(tripId: string) {
+		return this.mongoCollection.find({ trip_id: tripId } as Filter<Ride>).toArray();
 	}
 }
 

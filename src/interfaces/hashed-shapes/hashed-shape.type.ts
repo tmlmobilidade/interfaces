@@ -15,16 +15,14 @@ export const CreateHashedShapePointSchema = HashedShapePointSchema;
 export const UpdateHashedShapePointSchema = CreateHashedShapePointSchema.partial();
 
 export type HashedShapePoint = z.infer<typeof HashedShapePointSchema>;
-export type CreateHashedShapePointDto = HashedShapePoint;
-export type UpdateHashedShapePointDto = Partial<HashedShapePoint>;
+export type CreateHashedShapePointDto = z.infer<typeof CreateHashedShapePointSchema>;
+export type UpdateHashedShapePointDto = Partial<CreateHashedShapePointDto>;
 
 /* * */
 
 export const HashedShapeSchema = DocumentSchema.extend({
 	agency_id: z.string(),
-	code: z.string(),
 	points: z.array(HashedShapePointSchema),
-	shape_id: z.string(),
 }).strict();
 
 export const CreateHashedShapeSchema = HashedShapeSchema.omit({ _id: true, created_at: true, updated_at: true });
