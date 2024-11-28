@@ -1,7 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Agency, AgencySchema, CreateAgencyDto, UpdateAgencyDto, UpdateAgencySchema } from '@/types';
-import { Filter } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
 import z from 'zod';
 
 class AgenciesClass extends MongoCollectionClass<Agency, CreateAgencyDto, UpdateAgencyDto> {
@@ -20,7 +20,15 @@ class AgenciesClass extends MongoCollectionClass<Agency, CreateAgencyDto, Update
 		return AgenciesClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { name: 1 }, unique: true },
+			{ background: true, key: { code: 1 }, unique: true },
+			{ background: true, key: { email: 1 }, unique: true },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'agencies';
 	}
 
@@ -28,7 +36,7 @@ class AgenciesClass extends MongoCollectionClass<Agency, CreateAgencyDto, Update
 		return AgencySchema;
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_AGENCIES';
 	}
 

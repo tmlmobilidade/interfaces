@@ -1,7 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { CreateStopDto, Stop, UpdateStopDto } from '@/interfaces/stops/stop.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Filter, Sort } from 'mongodb';
+import { Filter, IndexDescription, Sort } from 'mongodb';
 
 class StopsClass extends MongoCollectionClass<Stop, CreateStopDto, UpdateStopDto> {
 	private static _instance: StopsClass;
@@ -19,11 +19,20 @@ class StopsClass extends MongoCollectionClass<Stop, CreateStopDto, UpdateStopDto
 		return StopsClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { code: 1 }, unique: true },
+			{ background: true, key: { agency_id: 1 } },
+			{ background: true, key: { municipality_id: 1 } },
+			{ background: true, key: { name: 1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'stops';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_STOPS';
 	}
 

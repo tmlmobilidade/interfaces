@@ -1,6 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { File } from '@/types';
+import { IndexDescription } from 'mongodb';
 
 class FilesClass extends MongoCollectionClass<File, unknown, unknown> {
 	private static _instance: FilesClass;
@@ -18,11 +19,15 @@ class FilesClass extends MongoCollectionClass<File, unknown, unknown> {
 		return FilesClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [];
+	}
+
+	protected getCollectionName(): string {
 		return 'files';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_FILES';
 	}
 

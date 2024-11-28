@@ -3,7 +3,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { CreateVehicleEventDto, UpdateVehicleEventDto, VehicleEvent } from '@/interfaces/vehicle-events/vehicle-event.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Filter } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
 
 /* * */
 
@@ -23,11 +23,15 @@ class VehicleEventsClass extends MongoCollectionClass<VehicleEvent, CreateVehicl
 		return VehicleEventsClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [];
+	}
+
+	protected getCollectionName(): string {
 		return 'vehicle_events';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_VEHICLE_EVENTS';
 	}
 

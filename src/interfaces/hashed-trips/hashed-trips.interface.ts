@@ -3,6 +3,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { CreateHashedTripDto, HashedTrip, UpdateHashedTripDto } from '@/interfaces/hashed-trips/hashed-trip.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
+import { IndexDescription } from 'mongodb';
 
 /* * */
 
@@ -22,11 +23,19 @@ class HashedTripsClass extends MongoCollectionClass<HashedTrip, CreateHashedTrip
 		return HashedTripsClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { code: 1 }, unique: true },
+			{ background: true, key: { agency_id: 1 } },
+			{ background: true, key: { line_id: 1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'hashed_trips';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_HASHED_TRIPS';
 	}
 }

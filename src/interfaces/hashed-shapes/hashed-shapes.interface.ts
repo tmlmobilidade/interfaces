@@ -3,6 +3,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { CreateHashedShapeDto, HashedShape, UpdateHashedShapeDto } from '@/interfaces/hashed-shapes/hashed-shape.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
+import { IndexDescription } from 'mongodb';
 
 /* * */
 
@@ -22,11 +23,18 @@ class HashedShapesClass extends MongoCollectionClass<HashedShape, CreateHashedSh
 		return HashedShapesClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { code: 1 }, unique: true },
+			{ background: true, key: { agency_id: 1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'hashed_shapes';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_HASHED_SHAPES';
 	}
 }

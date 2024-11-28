@@ -1,7 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateOrganizationDto, Organization, UpdateOrganizationDto } from '@/types';
-import { Filter } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
 
 class OrganizationsClass extends MongoCollectionClass<Organization, CreateOrganizationDto, UpdateOrganizationDto> {
 	private static _instance: OrganizationsClass;
@@ -19,11 +19,17 @@ class OrganizationsClass extends MongoCollectionClass<Organization, CreateOrgani
 		return OrganizationsClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { name: 1 }, unique: true },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'organizations';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_ORGANIZATIONS';
 	}
 

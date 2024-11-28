@@ -1,7 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateMunicipalityDto, Municipality, UpdateMunicipalityDto } from '@/types';
-import { Filter } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
 
 class MunicipalitiesClass extends MongoCollectionClass<Municipality, CreateMunicipalityDto, UpdateMunicipalityDto> {
 	private static _instance: MunicipalitiesClass;
@@ -19,11 +19,19 @@ class MunicipalitiesClass extends MongoCollectionClass<Municipality, CreateMunic
 		return MunicipalitiesClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { code: 1 }, unique: true },
+			{ background: true, key: { name: 1 } },
+			{ background: true, key: { prefix: 1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'municipalities';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_MUNICIPALITIES';
 	}
 

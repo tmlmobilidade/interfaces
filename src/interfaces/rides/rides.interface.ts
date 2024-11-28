@@ -3,7 +3,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { CreateRideDto, Ride, UpdateRideDto } from '@/interfaces/rides/ride.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Filter } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
 
 /* * */
 
@@ -23,11 +23,20 @@ class RidesClass extends MongoCollectionClass<Ride, CreateRideDto, UpdateRideDto
 		return RidesClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { agency_id: 1 } },
+			{ background: true, key: { code: 1 }, unique: true },
+			{ background: true, key: { line_id: 1 } },
+			{ background: true, key: { operational_day: -1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'rides';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_RIDES';
 	}
 

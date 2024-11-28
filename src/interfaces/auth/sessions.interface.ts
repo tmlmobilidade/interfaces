@@ -1,6 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateSessionDto, Session, UpdateSessionDto } from '@/types';
+import { IndexDescription } from 'mongodb';
 
 class SessionsClass extends MongoCollectionClass<Session, CreateSessionDto, UpdateSessionDto> {
 	private static _instance: SessionsClass;
@@ -18,11 +19,19 @@ class SessionsClass extends MongoCollectionClass<Session, CreateSessionDto, Upda
 		return SessionsClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { user_id: 1 } },
+			{ background: true, key: { expires: 1 } },
+			{ background: true, key: { token: 1 }, unique: true },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'sessions';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_AUTH';
 	}
 }

@@ -1,9 +1,8 @@
 import { MongoConnector } from '@/connectors/mongo.connector';
 import { HttpException, HttpStatus } from '@/lib';
-import { createIndexFactory } from '@/lib/mongo-indexes';
 import { createSchemaFactory } from '@/lib/schema.factory';
 import { generateRandomString } from '@/lib/utils';
-import { Collection, Document, Filter, MongoClientOptions, OptionalUnlessRequiredId, Sort } from 'mongodb';
+import { Collection, Document, Filter, IndexDescription, MongoClientOptions, OptionalUnlessRequiredId, Sort } from 'mongodb';
 import z from 'zod';
 
 export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate> {
@@ -11,6 +10,9 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	protected mongoCollection: Collection<T>;
 	protected mongoConnector: MongoConnector;
 	protected updateSchema: null | z.ZodSchema = null;
+
+	// Abstract method for subclasses to provide the MongoDB collection indexes
+	protected abstract getCollectionIndexes(): IndexDescription[];
 
 	// Abstract method for subclasses to provide the MongoDB collection name
 	protected abstract getCollectionName(): string;
@@ -45,7 +47,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 			this.mongoConnector = new MongoConnector(dbUri, options);
 			await this.mongoConnector.connect();
 			this.mongoCollection = this.mongoConnector.client.db('production').collection<T>(this.getCollectionName());
-			await createIndexFactory(this.mongoConnector.client.db('production'), this.getCollectionName());
+			await this.mongoCollection.createIndexes(this.getCollectionIndexes());
 
 			const schemas = createSchemaFactory(this.getCollectionName());
 			if (schemas) {

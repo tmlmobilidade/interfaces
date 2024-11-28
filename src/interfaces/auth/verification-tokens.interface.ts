@@ -1,6 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateVerificationTokenDto, UpdateVerificationTokenDto, VerificationToken } from '@/types';
+import { IndexDescription } from 'mongodb';
 
 class VerificationTokensClass extends MongoCollectionClass<VerificationToken, CreateVerificationTokenDto, UpdateVerificationTokenDto> {
 	private static _instance: VerificationTokensClass;
@@ -18,11 +19,18 @@ class VerificationTokensClass extends MongoCollectionClass<VerificationToken, Cr
 		return VerificationTokensClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { expires: 1 } },
+			{ background: true, key: { token: 1 }, unique: true },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'verification_tokens';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_AUTH';
 	}
 

@@ -3,7 +3,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { ApexT19, CreateApexT19Dto, UpdateApexT19Dto } from '@/interfaces/apex-t19/apex-t19.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Filter } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
 
 /* * */
 
@@ -23,11 +23,15 @@ class ApexT19sClass extends MongoCollectionClass<ApexT19, CreateApexT19Dto, Upda
 		return ApexT19sClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [];
+	}
+
+	protected getCollectionName(): string {
 		return 'apex_t19s';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_APEX_T19';
 	}
 

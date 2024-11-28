@@ -1,7 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateRoleDto, Role, UpdateRoleDto } from '@/types';
-import { Filter } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
 
 class RolesClass extends MongoCollectionClass<Role, CreateRoleDto, UpdateRoleDto> {
 	private static _instance: RolesClass;
@@ -19,11 +19,17 @@ class RolesClass extends MongoCollectionClass<Role, CreateRoleDto, UpdateRoleDto
 		return RolesClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { name: 1 }, unique: true },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'roles';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_AUTH';
 	}
 

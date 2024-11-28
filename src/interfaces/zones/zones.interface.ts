@@ -1,7 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateZoneDto, UpdateZoneDto, Zone } from '@/types';
-import { Collection, Filter } from 'mongodb';
+import { Collection, Filter, IndexDescription } from 'mongodb';
 
 class ZonesClass extends MongoCollectionClass<Zone, CreateZoneDto, UpdateZoneDto> {
 	private static _instance: ZonesClass;
@@ -19,11 +19,18 @@ class ZonesClass extends MongoCollectionClass<Zone, CreateZoneDto, UpdateZoneDto
 		return ZonesClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { code: 1 }, unique: true },
+			{ background: true, key: { name: 1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'zones';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_ZONES';
 	}
 

@@ -3,7 +3,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { CreatePlanDto, Plan, UpdatePlanDto } from '@/interfaces/plans/plan.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Filter } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
 
 /* * */
 
@@ -23,11 +23,15 @@ class PlansClass extends MongoCollectionClass<Plan, CreatePlanDto, UpdatePlanDto
 		return PlansClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [];
+	}
+
+	protected getCollectionName(): string {
 		return 'plans';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_PLANS';
 	}
 

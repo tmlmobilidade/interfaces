@@ -3,7 +3,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { ApexT11, CreateApexT11Dto, UpdateApexT11Dto } from '@/interfaces/apex-t11/apex-t11.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Filter } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
 
 /* * */
 
@@ -23,11 +23,15 @@ class ApexT11sClass extends MongoCollectionClass<ApexT11, CreateApexT11Dto, Upda
 		return ApexT11sClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [];
+	}
+
+	protected getCollectionName(): string {
 		return 'apex_t11s';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_APEX_T11';
 	}
 

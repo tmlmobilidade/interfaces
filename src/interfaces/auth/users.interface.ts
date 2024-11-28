@@ -1,7 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateUserDto, UpdateUserDto, User } from '@/types';
-import { Filter, Sort, WithId } from 'mongodb';
+import { Filter, IndexDescription, Sort, WithId } from 'mongodb';
 
 type NewType = string;
 
@@ -21,11 +21,20 @@ class UsersClass extends MongoCollectionClass<User, CreateUserDto, UpdateUserDto
 		return UsersClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { email: 1 }, unique: true },
+			{ background: true, key: { 'profile.first_name': 1, 'profile.last_name': 1 } },
+			{ background: true, key: { session_ids: 1 } },
+			{ background: true, key: { role_ids: 1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'users';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_AUTH';
 	}
 

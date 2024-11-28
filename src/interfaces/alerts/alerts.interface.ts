@@ -1,7 +1,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Alert, CreateAlertDto, UpdateAlertDto } from '@/types';
-import { Filter } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
 
 class AlertsClass extends MongoCollectionClass<Alert, CreateAlertDto, UpdateAlertDto> {
 	private static _instance: AlertsClass;
@@ -19,11 +19,24 @@ class AlertsClass extends MongoCollectionClass<Alert, CreateAlertDto, UpdateAler
 		return AlertsClass._instance;
 	}
 
-	protected getCollectionName() {
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { agency_ids: 1 } },
+			{ background: true, key: { line_ids: 1 } },
+			{ background: true, key: { municipality_ids: 1 } },
+			{ background: true, key: { route_ids: 1 } },
+			{ background: true, key: { stop_ids: 1 } },
+			{ background: true, key: { title: 1 } },
+			{ background: true, key: { active_period_end_date: -1, active_period_start_date: -1 } },
+			{ background: true, key: { publish_end_date: -1, publish_start_date: -1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
 		return 'alerts';
 	}
 
-	protected getEnvName() {
+	protected getEnvName(): string {
 		return 'TML_INTERFACES_ALERTS';
 	}
 
