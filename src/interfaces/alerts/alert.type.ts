@@ -54,8 +54,8 @@ export const AlertSchema = DocumentSchema.extend({
 	image_url: z.string(),
 	line_ids: z.array(z.string()),
 	municipality_ids: z.array(z.string()),
-	publish_end_date: z.string().brand('OperationalDate'),
-	publish_start_date: z.string().brand('OperationalDate'),
+	publish_end_date: z.date(),
+	publish_start_date: z.date(),
 	publish_status: publishStatusSchema,
 	route_ids: z.array(z.string()),
 	stop_ids: z.array(z.string()),
@@ -79,16 +79,16 @@ export interface Alert
 		| 'active_period_start_date'
 		| 'cause'
 		| 'effect'
-		| 'publish_end_date'
-		| 'publish_start_date'
+		// | 'publish_end_date'
+		// | 'publish_start_date'
 		| 'publish_status'
 	> {
 	active_period_end_date: OperationalDate
 	active_period_start_date: OperationalDate
 	cause: Cause
 	effect: Effect
-	publish_end_date: OperationalDate
-	publish_start_date: OperationalDate
+	// publish_end_date: OperationalDate
+	// publish_start_date: OperationalDate
 	publish_status: PublishStatus
 }
 
@@ -99,16 +99,16 @@ export interface CreateAlertDto
 		| 'active_period_start_date'
 		| 'cause'
 		| 'effect'
-		| 'publish_end_date'
-		| 'publish_start_date'
+		// | 'publish_end_date'
+		// | 'publish_start_date'
 		| 'publish_status'
 	> {
 	active_period_end_date: OperationalDate
 	active_period_start_date: OperationalDate
 	cause: Cause
 	effect: Effect
-	publish_end_date: OperationalDate
-	publish_start_date: OperationalDate
+	// publish_end_date: OperationalDate
+	// publish_start_date: OperationalDate
 	publish_status: PublishStatus
 }
 

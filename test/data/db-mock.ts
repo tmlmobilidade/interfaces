@@ -317,8 +317,8 @@ export const mockAlerts: CreateAlertDto[] = [
 		municipality_ids: [
 			'649b4cce0ac399a0115319e3',
 		],
-		publish_end_date: createOperationalDate('20240201'),
-		publish_start_date: createOperationalDate('20240101'),
+		publish_end_date: new Date('20240201'),
+		publish_start_date: new Date('20240101'),
 		publish_status: 'PUBLISHED',
 		route_ids: [],
 		stop_ids: [
@@ -340,8 +340,8 @@ export const mockAlerts: CreateAlertDto[] = [
 		municipality_ids: [
 			'6450539f8f71c3c98f1fbed0',
 		],
-		publish_end_date: createOperationalDate('20240301'),
-		publish_start_date: createOperationalDate('20240201'),
+		publish_end_date: new Date('20240301'),
+		publish_start_date: new Date('20240201'),
 		publish_status: 'PUBLISHED',
 		route_ids: [],
 		stop_ids: [
@@ -365,8 +365,8 @@ export const mockAlerts: CreateAlertDto[] = [
 			'649b4cce0ac399a0115319e3',
 			'6450539f8f71c3c98f1fbed0',
 		],
-		publish_end_date: createOperationalDate('20240501'),
-		publish_start_date: createOperationalDate('20240401'),
+		publish_end_date: new Date('20240501'),
+		publish_start_date: new Date('20240401'),
 		publish_status: 'PUBLISHED',
 		route_ids: [],
 		stop_ids: [
