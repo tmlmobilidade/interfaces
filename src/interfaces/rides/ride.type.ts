@@ -41,7 +41,7 @@ export const RideSchema = DocumentSchema.extend({
 	trip_id: z.string(),
 }).strict();
 
-export const CreateRideSchema = RideSchema.omit({ created_at: true, updated_at: true });
+export const CreateRideSchema = RideSchema.partial({ _id: true }).omit({ created_at: true, updated_at: true });
 export const UpdateRideSchema = CreateRideSchema.partial();
 
 export interface Ride extends Omit<z.infer<typeof RideSchema>, 'operational_day'> {

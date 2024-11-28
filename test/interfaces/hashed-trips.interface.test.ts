@@ -2,6 +2,7 @@ import { hashedTrips } from '@/interfaces';
 import { CreateHashedTripDto } from '@/types';
 
 const newHashedTrip: CreateHashedTripDto = {
+	_id: 'hashed_trip_1',
 	agency_id: 'agency_1',
 	line_id: 'line_1',
 	line_long_name: 'Long Line Name',
@@ -12,6 +13,7 @@ const newHashedTrip: CreateHashedTripDto = {
 			departure_time: '10:05:00',
 			drop_off_type: 'regular',
 			pickup_type: 'regular',
+			shape_dist_traveled: 0,
 			stop_id: 'stop_1',
 			stop_lat: '38.79627920200005',
 			stop_lon: '-9.23542624099997',
