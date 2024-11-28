@@ -44,10 +44,15 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 		}
 
 		try {
+			// Connect to the MongoDB database
 			this.mongoConnector = new MongoConnector(dbUri, options);
 			await this.mongoConnector.connect();
+			// Setup collection
 			this.mongoCollection = this.mongoConnector.client.db('production').collection<T>(this.getCollectionName());
-			await this.mongoCollection.createIndexes(this.getCollectionIndexes());
+			// Create indexes, if any are defined
+			if (this.getCollectionIndexes().length > 0) {
+				await this.mongoCollection.createIndexes(this.getCollectionIndexes());
+			}
 
 			const schemas = createSchemaFactory(this.getCollectionName());
 			if (schemas) {
