@@ -25,7 +25,7 @@ class ZonesClass extends MongoCollectionClass<Zone, CreateZoneDto, UpdateZoneDto
 
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
-			{ background: true, key: { name: 1 } },
+			{ background: true, key: { code: 1 }, unique: true },
 		];
 	}
 

@@ -2,6 +2,7 @@ import { hashedShapes } from '@/interfaces';
 import { CreateHashedShapeDto } from '@/types';
 
 const newHashedShape: CreateHashedShapeDto = {
+	_id: 'hashed_shape_1',
 	agency_id: 'agency_1',
 	points: [
 		{ shape_dist_traveled: 0, shape_pt_lat: '38.79627920200005', shape_pt_lon: '-9.23542624099997', shape_pt_sequence: 1 },

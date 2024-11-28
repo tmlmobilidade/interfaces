@@ -2,6 +2,7 @@ import { rides } from '@/interfaces';
 import { createOperationalDate, CreateRideDto } from '@/types';
 
 const newRide: CreateRideDto = {
+	_id: 'ride_1',
 	agency_id: 'agency_1',
 	analysis: [],
 	extension: 1,

@@ -193,9 +193,13 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 			updated_at: doc.updated_at || new Date(),
 		} as unknown as OptionalUnlessRequiredId<T>;
 
-		while (await this.findById(newDocument._id)) {
-			newDocument._id = generateRandomString({ length: 5 });
+		if (!doc._id) {
+			while (await this.findById(newDocument._id)) {
+				newDocument._id = generateRandomString({ length: 5 });
+			}
 		}
+
+		console.log('newDocument._id', newDocument._id);
 
 		if (!unsafe) {
 			try {

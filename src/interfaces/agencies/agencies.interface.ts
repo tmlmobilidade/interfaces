@@ -27,6 +27,7 @@ class AgenciesClass extends MongoCollectionClass<Agency, CreateAgencyDto, Update
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
 			{ background: true, key: { name: 1 }, unique: true },
+			{ background: true, key: { code: 1 }, unique: true },
 			{ background: true, key: { email: 1 }, unique: true },
 		];
 	}

@@ -177,9 +177,9 @@ describe('UsersClass', () => {
 	});
 
 	describe('deleteOne', () => {
-		beforeAll(async () => {
-			await users.insertOne(newUser);
-		});
+		// beforeAll(async () => {
+		// 	await users.insertOne(newUser);
+		// });
 
 		it('should delete a user', async () => {
 			const result = await users.deleteOne({ _id: insertedUserId });
