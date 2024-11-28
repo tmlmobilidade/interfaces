@@ -1,9 +1,11 @@
 name: Publish to NPM
 
 on:
-  push:
-    branches:
-      - production
+  workflow_run:
+    workflows: ["Build & Test"]
+    branches: ["production"]
+    types:
+      - completed
 
 jobs:
   #
