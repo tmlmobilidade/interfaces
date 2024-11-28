@@ -164,6 +164,15 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	// }
 
 	/**
+	 * Gets the MongoDB collection instance.
+	 *
+	 * @returns The MongoDB collection instance
+	 */
+	getCollection(): Collection<T> {
+		return this.mongoCollection;
+	}
+
+	/**
 	 * Inserts a single document into the collection.
 	 *
 	 * @param doc - The document to insert
@@ -196,29 +205,6 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 		return this.mongoCollection.insertOne(newDocument);
 	}
 
-	/**
-	 * Updates a single document matching the filter criteria.
-	 *
-	 * @param filter - The filter criteria to match the document to update
-	 * @param updateFields - The fields to update in the document
-	 * @returns A promise that resolves to the result of the update operation
-	 */
-	async updateById(id: string, updateFields: TUpdate) {
-		if (this.updateSchema) {
-			try {
-				this.updateSchema.parse(updateFields);
-			}
-			catch (error) {
-				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
-			}
-		}
-
-		return this.mongoCollection.updateOne(
-			{ _id: { $eq: id } } as unknown as Filter<T>,
-			{ $set: { ...updateFields, updated_at: new Date() } } as unknown as Partial<T>,
-		);
-	}
-
 	// /**
 	//  * Updates multiple documents matching the filter criteria.
 	//  *
@@ -246,16 +232,30 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param updateFields - The fields to update in the document
 	 * @returns A promise that resolves to the result of the update operation
 	 */
-	async updateOne(filter: Filter<T>, updateFields: Partial<T>) {
-		return this.mongoCollection.updateOne(filter, { $set: { ...updateFields, updated_at: new Date() } });
+	async updateById(id: string, updateFields: TUpdate) {
+		if (this.updateSchema) {
+			try {
+				this.updateSchema.parse(updateFields);
+			}
+			catch (error) {
+				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
+			}
+		}
+
+		return this.mongoCollection.updateOne(
+			{ _id: { $eq: id } } as unknown as Filter<T>,
+			{ $set: { ...updateFields, updated_at: new Date() } } as unknown as Partial<T>,
+		);
 	}
 
 	/**
-	 * Gets the MongoDB collection instance.
+	 * Updates a single document matching the filter criteria.
 	 *
-	 * @returns The MongoDB collection instance
+	 * @param filter - The filter criteria to match the document to update
+	 * @param updateFields - The fields to update in the document
+	 * @returns A promise that resolves to the result of the update operation
 	 */
-	get collection(): Collection<T> {
-		return this.mongoCollection;
+	async updateOne(filter: Filter<T>, updateFields: Partial<T>) {
+		return this.mongoCollection.updateOne(filter, { $set: { ...updateFields, updated_at: new Date() } });
 	}
 }
