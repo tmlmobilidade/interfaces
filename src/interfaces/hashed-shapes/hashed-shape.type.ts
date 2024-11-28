@@ -26,7 +26,7 @@ export const HashedShapeSchema = DocumentSchema.extend({
 	points: z.array(HashedShapePointSchema),
 }).strict();
 
-export const CreateHashedShapeSchema = HashedShapeSchema.omit({ created_at: true, updated_at: true });
+export const CreateHashedShapeSchema = HashedShapeSchema.partial({ _id: true }).omit({ created_at: true, updated_at: true });
 export const UpdateHashedShapeSchema = CreateHashedShapeSchema.partial();
 
 export type HashedShape = z.infer<typeof HashedShapeSchema>;
