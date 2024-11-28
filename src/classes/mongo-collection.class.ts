@@ -168,7 +168,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 *
 	 * @returns The MongoDB collection instance
 	 */
-	getCollection(): Collection<T> {
+	async getCollection(): Promise<Collection<T>> {
 		return this.mongoCollection;
 	}
 
