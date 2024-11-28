@@ -26,8 +26,8 @@ class RidesClass extends MongoCollectionClass<Ride, CreateRideDto, UpdateRideDto
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
 			{ background: true, key: { agency_id: 1 } },
-			{ background: true, key: { code: 1 }, unique: true },
 			{ background: true, key: { line_id: 1 } },
+			{ background: true, key: { status: 1 } },
 			{ background: true, key: { operational_day: -1 } },
 		];
 	}

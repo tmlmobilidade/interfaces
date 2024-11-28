@@ -1,8 +1,12 @@
+/* * */
+
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Agency, AgencySchema, CreateAgencyDto, UpdateAgencyDto, UpdateAgencySchema } from '@/types';
 import { Filter, IndexDescription } from 'mongodb';
 import z from 'zod';
+
+/* * */
 
 class AgenciesClass extends MongoCollectionClass<Agency, CreateAgencyDto, UpdateAgencyDto> {
 	private static _instance: AgenciesClass;
@@ -23,7 +27,6 @@ class AgenciesClass extends MongoCollectionClass<Agency, CreateAgencyDto, Update
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
 			{ background: true, key: { name: 1 }, unique: true },
-			{ background: true, key: { code: 1 }, unique: true },
 			{ background: true, key: { email: 1 }, unique: true },
 		];
 	}
@@ -52,5 +55,7 @@ class AgenciesClass extends MongoCollectionClass<Agency, CreateAgencyDto, Update
 		return this.mongoCollection.updateOne({ code } as Filter<Agency>, { $set: fields });
 	}
 }
+
+/* * */
 
 export const agencies = AsyncSingletonProxy(AgenciesClass);

@@ -1,7 +1,11 @@
+/* * */
+
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Alert, CreateAlertDto, UpdateAlertDto } from '@/types';
 import { Filter, IndexDescription } from 'mongodb';
+
+/* * */
 
 class AlertsClass extends MongoCollectionClass<Alert, CreateAlertDto, UpdateAlertDto> {
 	private static _instance: AlertsClass;
@@ -64,5 +68,7 @@ class AlertsClass extends MongoCollectionClass<Alert, CreateAlertDto, UpdateAler
 		return this.mongoCollection.findOne({ title } as Filter<Alert>);
 	}
 }
+
+/* * */
 
 export const alerts = AsyncSingletonProxy(AlertsClass);

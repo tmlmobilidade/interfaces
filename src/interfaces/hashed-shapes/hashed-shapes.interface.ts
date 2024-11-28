@@ -25,7 +25,6 @@ class HashedShapesClass extends MongoCollectionClass<HashedShape, CreateHashedSh
 
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
-			{ background: true, key: { code: 1 }, unique: true },
 			{ background: true, key: { agency_id: 1 } },
 		];
 	}

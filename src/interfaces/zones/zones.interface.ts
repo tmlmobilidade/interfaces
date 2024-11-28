@@ -1,7 +1,11 @@
+/* * */
+
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateZoneDto, UpdateZoneDto, Zone } from '@/types';
-import { Collection, Filter, IndexDescription } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
+
+/* * */
 
 class ZonesClass extends MongoCollectionClass<Zone, CreateZoneDto, UpdateZoneDto> {
 	private static _instance: ZonesClass;
@@ -21,7 +25,6 @@ class ZonesClass extends MongoCollectionClass<Zone, CreateZoneDto, UpdateZoneDto
 
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
-			{ background: true, key: { code: 1 }, unique: true },
 			{ background: true, key: { name: 1 } },
 		];
 	}
@@ -66,12 +69,6 @@ class ZonesClass extends MongoCollectionClass<Zone, CreateZoneDto, UpdateZoneDto
 	}
 }
 
-// Create a proxy to delay access to methods until the instance is initialized
-export const zones = AsyncSingletonProxy(ZonesClass);
+/* * */
 
-export async function createZoneIndexes(collection: Collection<Zone>) {
-	return await collection.createIndexes([
-		{ background: true, key: { code: 1 }, unique: true },
-		{ background: true, key: { name: 1 } },
-	]);
-}
+export const zones = AsyncSingletonProxy(ZonesClass);

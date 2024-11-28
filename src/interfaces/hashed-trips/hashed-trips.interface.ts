@@ -25,7 +25,6 @@ class HashedTripsClass extends MongoCollectionClass<HashedTrip, CreateHashedTrip
 
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
-			{ background: true, key: { code: 1 }, unique: true },
 			{ background: true, key: { agency_id: 1 } },
 			{ background: true, key: { line_id: 1 } },
 		];

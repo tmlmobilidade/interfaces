@@ -21,7 +21,6 @@ class MunicipalitiesClass extends MongoCollectionClass<Municipality, CreateMunic
 
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
-			{ background: true, key: { code: 1 }, unique: true },
 			{ background: true, key: { name: 1 } },
 			{ background: true, key: { prefix: 1 } },
 		];

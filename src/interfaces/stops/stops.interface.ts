@@ -1,7 +1,11 @@
+/* * */
+
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { CreateStopDto, Stop, UpdateStopDto } from '@/interfaces/stops/stop.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Filter, IndexDescription, Sort } from 'mongodb';
+
+/* * */
 
 class StopsClass extends MongoCollectionClass<Stop, CreateStopDto, UpdateStopDto> {
 	private static _instance: StopsClass;
@@ -21,7 +25,6 @@ class StopsClass extends MongoCollectionClass<Stop, CreateStopDto, UpdateStopDto
 
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
-			{ background: true, key: { code: 1 }, unique: true },
 			{ background: true, key: { agency_id: 1 } },
 			{ background: true, key: { municipality_id: 1 } },
 			{ background: true, key: { name: 1 } },
@@ -85,5 +88,6 @@ class StopsClass extends MongoCollectionClass<Stop, CreateStopDto, UpdateStopDto
 	}
 }
 
-// Create a proxy to delay access to methods until the instance is initialized
+/* * */
+
 export const stops = AsyncSingletonProxy(StopsClass);
