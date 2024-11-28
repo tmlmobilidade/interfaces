@@ -1,9 +1,9 @@
 import { alerts } from '@/interfaces';
-import { CreateAlertDto, createOperationalDate } from '@/types';
+import { CreateAlertDto } from '@/types';
 
 const newAlert: CreateAlertDto = {
-	active_period_end_date: createOperationalDate('20240331'),
-	active_period_start_date: createOperationalDate('20240101'),
+	active_period_end_date: new Date(),
+	active_period_start_date: new Date(),
 	agency_ids: ['agency_1'],
 	cause: 'UNKNOWN_CAUSE',
 	description: 'Test Alert',

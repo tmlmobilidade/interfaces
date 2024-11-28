@@ -1,4 +1,4 @@
-import { createOperationalDate, DocumentSchema, OperationalDate } from '@/types/common';
+import { DocumentSchema } from '@/types/common';
 import z from 'zod';
 
 // Define constants for enum values for better maintainability
@@ -45,8 +45,8 @@ export const publishStatusSchema = z.enum(PUBLISH_STATUS_VALUES);
 
 // Define the Alert schema
 export const AlertSchema = DocumentSchema.extend({
-	active_period_end_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
-	active_period_start_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
+	active_period_end_date: z.date(),
+	active_period_start_date: z.date(),
 	agency_ids: z.array(z.string()),
 	cause: causeSchema,
 	description: z.string(),
@@ -75,40 +75,24 @@ export type PublishStatus = z.infer<typeof publishStatusSchema>;
 export interface Alert
 	extends Omit<
 		z.infer<typeof AlertSchema>,
-		'active_period_end_date'
-		| 'active_period_start_date'
-		| 'cause'
+		'cause'
 		| 'effect'
-		// | 'publish_end_date'
-		// | 'publish_start_date'
 		| 'publish_status'
 	> {
-	active_period_end_date: OperationalDate
-	active_period_start_date: OperationalDate
 	cause: Cause
 	effect: Effect
-	// publish_end_date: OperationalDate
-	// publish_start_date: OperationalDate
 	publish_status: PublishStatus
 }
 
 export interface CreateAlertDto
 	extends Omit<
 		z.infer<typeof CreateAlertSchema>,
-		'active_period_end_date'
-		| 'active_period_start_date'
-		| 'cause'
+		'cause'
 		| 'effect'
-		// | 'publish_end_date'
-		// | 'publish_start_date'
 		| 'publish_status'
 	> {
-	active_period_end_date: OperationalDate
-	active_period_start_date: OperationalDate
 	cause: Cause
 	effect: Effect
-	// publish_end_date: OperationalDate
-	// publish_start_date: OperationalDate
 	publish_status: PublishStatus
 }
 

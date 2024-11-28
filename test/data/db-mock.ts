@@ -304,8 +304,8 @@ export const mockAgencies: CreateAgencyDto[] = [
 
 export const mockAlerts: CreateAlertDto[] = [
 	{
-		active_period_end_date: createOperationalDate('20240201'),
-		active_period_start_date: createOperationalDate('20240101'),
+		active_period_end_date: new Date(),
+		active_period_start_date: new Date(),
 		agency_ids: [
 			'67378cebad93f9b2668ec93c',
 		],
@@ -327,8 +327,8 @@ export const mockAlerts: CreateAlertDto[] = [
 		title: '',
 	},
 	{
-		active_period_end_date: createOperationalDate('20240301'),
-		active_period_start_date: createOperationalDate('20240201'),
+		active_period_end_date: new Date(),
+		active_period_start_date: new Date(),
 		agency_ids: [
 			'67378cf97355b5132e6845c9',
 		],
@@ -350,8 +350,8 @@ export const mockAlerts: CreateAlertDto[] = [
 		title: '',
 	},
 	{
-		active_period_end_date: createOperationalDate('20240501'),
-		active_period_start_date: createOperationalDate('20240401'),
+		active_period_end_date: new Date(),
+		active_period_start_date: new Date(),
 		agency_ids: [
 			'67378cebad93f9b2668ec93c',
 			'67378cf97355b5132e6845c9',
