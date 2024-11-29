@@ -12,7 +12,7 @@ export const PlanSchema = DocumentSchema.extend({
 	operation_file: z.string().nullable(),
 	parsed_dates: z.array(z.string().transform(createOperationalDate).brand('OperationalDate')),
 	reference_file: z.string().nullable(),
-	status: z.enum(['pending', 'processing', 'complete', 'error']),
+	status: z.enum(['processing', 'active', 'disabled', 'error']),
 	valid_from: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	valid_until: z.string().transform(createOperationalDate).brand('OperationalDate'),
 }).strict();
