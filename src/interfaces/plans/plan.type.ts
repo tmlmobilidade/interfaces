@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 export const PlanSchema = DocumentSchema.extend({
 	agency_id: z.string(),
-	is_active: z.boolean(),
+	is_approved: z.boolean(),
 	is_locked: z.boolean(),
 	operation_file: z.string().nullable(),
 	reference_file: z.string().nullable(),
