@@ -23,13 +23,11 @@ export const UpdatePlanSchema = CreatePlanSchema.partial();
 /* * */
 
 export interface Plan extends Omit<z.infer<typeof PlanSchema>, 'parsed_dates' | 'valid_from' | 'valid_until'> {
-	parsed_dates: OperationalDate[]
 	valid_from: OperationalDate
 	valid_until: OperationalDate
 }
 
 export interface CreatePlanDto extends Omit<z.infer<typeof CreatePlanSchema>, 'parsed_dates' | 'valid_from' | 'valid_until'> {
-	parsed_dates: OperationalDate[]
 	valid_from: OperationalDate
 	valid_until: OperationalDate
 }
