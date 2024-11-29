@@ -113,6 +113,16 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	}
 
 	/**
+	 * Finds all distinct values for a key in the collection.
+	 *
+	 * @param key - The key to find distinct values for
+	 * @returns A promise that resolves to an array of distinct values for the given key
+	 */
+	async distinct(key: T[keyof T]) {
+		return this.mongoCollection.distinct(key);
+	}
+
+	/**
 	 * Finds a document by its ID.
 	 *
 	 * @param id - The ID of the document to find
@@ -198,8 +208,6 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 				newDocument._id = generateRandomString({ length: 5 });
 			}
 		}
-
-		console.log('newDocument._id', newDocument._id);
 
 		if (!unsafe) {
 			try {
