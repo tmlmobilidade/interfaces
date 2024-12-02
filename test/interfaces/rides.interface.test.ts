@@ -9,7 +9,7 @@ const newRide: CreateRideDto = {
 	hashed_shape_id: 'HASHED_SHAPE_1',
 	hashed_trip_id: 'HASHED_TRIP_1',
 	line_id: 'line_1',
-	operational_day: createOperationalDate('20240101'),
+	operational_date: createOperationalDate('20240101'),
 	pattern_id: 'pattern_1',
 	plan_id: 'plan_1',
 	route_id: 'route_1',

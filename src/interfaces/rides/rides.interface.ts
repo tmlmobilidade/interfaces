@@ -28,7 +28,7 @@ class RidesClass extends MongoCollectionClass<Ride, CreateRideDto, UpdateRideDto
 			{ background: true, key: { agency_id: 1 } },
 			{ background: true, key: { line_id: 1 } },
 			{ background: true, key: { status: 1 } },
-			{ background: true, key: { operational_day: -1 } },
+			{ background: true, key: { operational_date: -1 } },
 		];
 	}
 

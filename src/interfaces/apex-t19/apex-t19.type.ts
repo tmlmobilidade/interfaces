@@ -13,7 +13,7 @@ export const ApexT19Schema = DocumentSchema.extend({
 	device_id: z.string(),
 	extra_trip_id: z.string(),
 	line_id: z.string(),
-	operational_day: z.string().transform(createOperationalDate).brand('OperationalDate'),
+	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	pattern_id: z.string(),
 	pcgi_id: z.string(),
 	product_id: z.string(),

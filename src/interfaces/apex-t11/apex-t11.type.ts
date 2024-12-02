@@ -13,7 +13,7 @@ export const ApexT11Schema = DocumentSchema.extend({
 	device_id: z.string(),
 	extra_trip_id: z.string(),
 	line_id: z.string(),
-	operational_day: z.string().transform(createOperationalDate).brand('OperationalDate'),
+	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	pattern_id: z.string(),
 	pcgi_id: z.string(),
 	product_id: z.string(),
@@ -35,12 +35,12 @@ export const UpdateApexT11Schema = CreateApexT11Schema.partial();
  * or not, and with which conditions. A validation also contains information about the card holder's card, the vehicle,
  * the validator machine, the route, and the time and location of the validation.
  */
-export interface ApexT11 extends Omit<z.infer<typeof ApexT11Schema>, 'operational_day'> {
-	operational_day: OperationalDate
+export interface ApexT11 extends Omit<z.infer<typeof ApexT11Schema>, 'operational_date'> {
+	operational_date: OperationalDate
 }
 
-export interface CreateApexT11Dto extends Omit<z.infer<typeof CreateApexT11Schema>, 'operational_day'> {
-	operational_day: OperationalDate
+export interface CreateApexT11Dto extends Omit<z.infer<typeof CreateApexT11Schema>, 'operational_date'> {
+	operational_date: OperationalDate
 }
 
 export type UpdateApexT11Dto = Partial<CreateApexT11Dto>;

@@ -10,7 +10,7 @@ export const VehicleEventSchema = DocumentSchema.extend({
 	data: z.string(),
 	line_id: z.string(),
 	odometer: z.number(),
-	operational_day: z.string().transform(createOperationalDate).brand('OperationalDate'),
+	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	pattern_id: z.string(),
 	pcgi_id: z.string(),
 	route_id: z.string(),
@@ -33,7 +33,12 @@ export const UpdateVehicleEventSchema = CreateVehicleEventSchema.partial().omit(
  * These events are based on the GTFS-RT specification but extended with additional fields
  * specific to TML's needs.
  */
-export type VehicleEvent = { operational_day: OperationalDate } & Omit<z.infer<typeof VehicleEventSchema>, 'operational_day'>;
+export interface VehicleEvent extends Omit<z.infer<typeof VehicleEventSchema>, 'operational_date'> {
+	operational_date: OperationalDate
+}
 
-export type CreateVehicleEventDto = { operational_day: OperationalDate } & Omit<z.infer<typeof CreateVehicleEventSchema>, 'operational_day'>;
+export interface CreateVehicleEventDto extends Omit<z.infer<typeof CreateVehicleEventSchema>, 'operational_date'> {
+	operational_date: OperationalDate
+}
+
 export type UpdateVehicleEventDto = Partial<CreateVehicleEventDto>;

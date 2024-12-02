@@ -13,7 +13,7 @@ export const ApexT3Schema = DocumentSchema.extend({
 	device_id: z.string(),
 	extra_trip_id: z.string(),
 	line_id: z.string(),
-	operational_day: z.string().transform(createOperationalDate).brand('OperationalDate'),
+	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	pattern_id: z.string(),
 	pcgi_id: z.string(),
 	product_id: z.string(),
@@ -33,12 +33,12 @@ export const UpdateApexT3Schema = CreateApexT3Schema.partial();
  * in a vehicle, store or mobile app, and immediately loaded onto a transit card.
  * As such, these transactions represent sales of loadable products, such as tickets or passes.
  */
-export interface ApexT3 extends Omit<z.infer<typeof ApexT3Schema>, 'operational_day'> {
-	operational_day: OperationalDate
+export interface ApexT3 extends Omit<z.infer<typeof ApexT3Schema>, 'operational_date'> {
+	operational_date: OperationalDate
 }
 
-export interface CreateApexT3Dto extends Omit<z.infer<typeof CreateApexT3Schema>, 'operational_day'> {
-	operational_day: OperationalDate
+export interface CreateApexT3Dto extends Omit<z.infer<typeof CreateApexT3Schema>, 'operational_date'> {
+	operational_date: OperationalDate
 }
 
 export type UpdateApexT3Dto = Partial<CreateApexT3Dto>;

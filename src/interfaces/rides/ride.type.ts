@@ -31,7 +31,7 @@ export const RideSchema = DocumentSchema.extend({
 	hashed_shape_id: z.string(),
 	hashed_trip_id: z.string(),
 	line_id: z.string(),
-	operational_day: z.string().transform(createOperationalDate).brand('OperationalDate'),
+	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	pattern_id: z.string(),
 	plan_id: z.string(),
 	route_id: z.string(),
@@ -44,12 +44,12 @@ export const RideSchema = DocumentSchema.extend({
 export const CreateRideSchema = RideSchema.partial({ _id: true }).omit({ created_at: true, updated_at: true });
 export const UpdateRideSchema = CreateRideSchema.partial();
 
-export interface Ride extends Omit<z.infer<typeof RideSchema>, 'operational_day'> {
-	operational_day: OperationalDate
+export interface Ride extends Omit<z.infer<typeof RideSchema>, 'operational_date'> {
+	operational_date: OperationalDate
 }
 
-export interface CreateRideDto extends Omit<z.infer<typeof CreateRideSchema>, 'operational_day'> {
-	operational_day: OperationalDate
+export interface CreateRideDto extends Omit<z.infer<typeof CreateRideSchema>, 'operational_date'> {
+	operational_date: OperationalDate
 }
 
 export type UpdateRideDto = Partial<CreateRideDto>;
