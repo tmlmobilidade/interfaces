@@ -4,7 +4,14 @@ import { DateTime } from 'luxon';
 
 /* * */
 
-export function getOperationalDay(timestamp?: string, format?: string): string {
+/**
+ * Returns the operational date based on the provided timestamp and format.
+ *
+ * @param timestamp - The timestamp to be parsed.
+ * @param format - The format of the timestamp.
+ * @returns The operational date in the yyyyLLdd format.
+ */
+export function getOperationalDate(timestamp?: string, format?: string): string {
 	//
 
 	// Parse the transaction date using the provided format
