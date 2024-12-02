@@ -69,4 +69,4 @@ class ApexT11sClass extends MongoCollectionClass<ApexT11, CreateApexT11Dto, Upda
 
 /* * */
 
-export const apexT11s = AsyncSingletonProxy(ApexT11sClass);
+export const apexT11 = AsyncSingletonProxy(ApexT11sClass);

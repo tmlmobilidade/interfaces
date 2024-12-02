@@ -69,4 +69,4 @@ class ApexT3Class extends MongoCollectionClass<ApexT3, CreateApexT3Dto, UpdateAp
 
 /* * */
 
-export const apexT3s = AsyncSingletonProxy(ApexT3Class);
+export const apexT3 = AsyncSingletonProxy(ApexT3Class);

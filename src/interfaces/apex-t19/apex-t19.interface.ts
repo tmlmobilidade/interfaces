@@ -69,4 +69,4 @@ class ApexT19sClass extends MongoCollectionClass<ApexT19, CreateApexT19Dto, Upda
 
 /* * */
 
-export const apexT19s = AsyncSingletonProxy(ApexT19sClass);
+export const apexT19 = AsyncSingletonProxy(ApexT19sClass);
