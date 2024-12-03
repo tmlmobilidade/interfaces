@@ -12,7 +12,6 @@ const newRide: CreateRideDto = {
 	hashed_trip_id: 'HASHED_TRIP_1',
 	headsign: 'headsign_1',
 	line_id: 'line_1',
-	line_type: 1,
 	operational_date: createOperationalDate('20240101'),
 	passengers_estimated: null,
 	pattern_id: 'pattern_1',
