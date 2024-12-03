@@ -30,7 +30,7 @@ class RolesClass extends MongoCollectionClass<Role, CreateRoleDto, UpdateRoleDto
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_AUTH';
+		return 'TML_INTERFACE_AUTH';
 	}
 
 	/**

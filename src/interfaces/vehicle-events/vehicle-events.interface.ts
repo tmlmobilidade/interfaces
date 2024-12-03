@@ -32,7 +32,7 @@ class VehicleEventsClass extends MongoCollectionClass<VehicleEvent, CreateVehicl
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_VEHICLE_EVENTS';
+		return 'TML_INTERFACE_VEHICLE_EVENTS';
 	}
 
 	/**

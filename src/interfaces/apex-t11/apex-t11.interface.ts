@@ -32,7 +32,7 @@ class ApexT11sClass extends MongoCollectionClass<ApexT11, CreateApexT11Dto, Upda
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_APEX_T11';
+		return 'TML_INTERFACE_APEX_T11';
 	}
 
 	/**

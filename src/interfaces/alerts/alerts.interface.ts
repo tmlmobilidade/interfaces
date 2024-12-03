@@ -41,7 +41,7 @@ class AlertsClass extends MongoCollectionClass<Alert, CreateAlertDto, UpdateAler
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_ALERTS';
+		return 'TML_INTERFACE_ALERTS';
 	}
 
 	async findByAgencyId(agency_id: string) {

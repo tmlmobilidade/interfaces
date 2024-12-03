@@ -35,7 +35,7 @@ class HashedTripsClass extends MongoCollectionClass<HashedTrip, CreateHashedTrip
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_HASHED_TRIPS';
+		return 'TML_INTERFACE_HASHED_TRIPS';
 	}
 }
 

@@ -34,7 +34,7 @@ class ZonesClass extends MongoCollectionClass<Zone, CreateZoneDto, UpdateZoneDto
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_ZONES';
+		return 'TML_INTERFACE_ZONES';
 	}
 
 	/**

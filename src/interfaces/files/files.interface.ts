@@ -28,7 +28,7 @@ class FilesClass extends MongoCollectionClass<File, unknown, unknown> {
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_FILES';
+		return 'TML_INTERFACE_FILES';
 	}
 
 	/**

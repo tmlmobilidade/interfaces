@@ -31,7 +31,7 @@ class VerificationTokensClass extends MongoCollectionClass<VerificationToken, Cr
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_AUTH';
+		return 'TML_INTERFACE_AUTH';
 	}
 
 	/**

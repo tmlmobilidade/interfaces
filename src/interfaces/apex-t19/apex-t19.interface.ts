@@ -32,7 +32,7 @@ class ApexT19sClass extends MongoCollectionClass<ApexT19, CreateApexT19Dto, Upda
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_APEX_T19';
+		return 'TML_INTERFACE_APEX_T19';
 	}
 
 	/**

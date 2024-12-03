@@ -32,7 +32,7 @@ class ApexT3Class extends MongoCollectionClass<ApexT3, CreateApexT3Dto, UpdateAp
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_APEX_T3';
+		return 'TML_INTERFACE_APEX_T3';
 	}
 
 	/**

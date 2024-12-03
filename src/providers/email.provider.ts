@@ -30,20 +30,20 @@ class EmailProvider {
 	async connect(): Promise<nodemailer.Transporter> {
 		try {
 			// Check for required environment variables
-			if (!process.env.EMAIL_SERVER_PASSWORD) throw new Error('Missing EMAIL_SERVER_PASSWORD environment variable!');
-			if (!process.env.EMAIL_SERVER_USER) throw new Error('Missing EMAIL_SERVER_USER environment variable!');
-			if (!process.env.EMAIL_FROM) throw new Error('Missing EMAIL_FROM environment variable!');
-			if (!process.env.EMAIL_SERVER_HOST) throw new Error('Missing EMAIL_SERVER_HOST environment variable!');
-			if (!process.env.EMAIL_SERVER_PORT) throw new Error('Missing EMAIL_SERVER_PORT environment variable!');
+			if (!process.env.TML_PROVIDER_EMAIL_SERVER_PASSWORD) throw new Error('Missing TML_PROVIDER_EMAIL_SERVER_PASSWORD environment variable!');
+			if (!process.env.TML_PROVIDER_EMAIL_SERVER_USER) throw new Error('Missing TML_PROVIDER_EMAIL_SERVER_USER environment variable!');
+			if (!process.env.TML_PROVIDER_EMAIL_FROM) throw new Error('Missing TML_PROVIDER_EMAIL_FROM environment variable!');
+			if (!process.env.TML_PROVIDER_EMAIL_SERVER_HOST) throw new Error('Missing TML_PROVIDER_EMAIL_SERVER_HOST environment variable!');
+			if (!process.env.TML_PROVIDER_EMAIL_SERVER_PORT) throw new Error('Missing TML_PROVIDER_EMAIL_SERVER_PORT environment variable!');
 			// Create the SMTP transporter
 			const smtpTransportOptions: SMTPTransport.Options = {
 				auth: {
-					pass: process.env.EMAIL_SERVER_PASSWORD,
-					user: process.env.EMAIL_SERVER_USER,
+					pass: process.env.TML_PROVIDER_EMAIL_SERVER_PASSWORD,
+					user: process.env.TML_PROVIDER_EMAIL_SERVER_USER,
 				},
-				from: process.env.EMAIL_FROM,
-				host: process.env.EMAIL_SERVER_HOST,
-				port: Number(process.env.EMAIL_SERVER_PORT),
+				from: process.env.TML_PROVIDER_EMAIL_FROM,
+				host: process.env.TML_PROVIDER_EMAIL_SERVER_HOST,
+				port: Number(process.env.TML_PROVIDER_EMAIL_SERVER_PORT),
 			};
 			// Connect to the SMTP server
 			this._smtp_transporter = nodemailer.createTransport(smtpTransportOptions);

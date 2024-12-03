@@ -32,7 +32,7 @@ class MunicipalitiesClass extends MongoCollectionClass<Municipality, CreateMunic
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_MUNICIPALITIES';
+		return 'TML_INTERFACE_MUNICIPALITIES';
 	}
 
 	/**

@@ -35,7 +35,7 @@ class UsersClass extends MongoCollectionClass<User, CreateUserDto, UpdateUserDto
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_AUTH';
+		return 'TML_INTERFACE_AUTH';
 	}
 
 	private deletePasswordHash(user: WithId<User>) {

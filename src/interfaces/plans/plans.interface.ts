@@ -32,7 +32,7 @@ class PlansClass extends MongoCollectionClass<Plan, CreatePlanDto, UpdatePlanDto
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_PLANS';
+		return 'TML_INTERFACE_PLANS';
 	}
 
 	/**

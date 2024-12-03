@@ -30,7 +30,7 @@ class OrganizationsClass extends MongoCollectionClass<Organization, CreateOrgani
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_ORGANIZATIONS';
+		return 'TML_INTERFACE_ORGANIZATIONS';
 	}
 
 	/**

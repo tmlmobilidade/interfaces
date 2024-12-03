@@ -14,21 +14,21 @@ beforeAll(async () => {
 	const uri = mongoServer.getUri();
 
 	// Override environment variable for MongoDB URI
-	process.env.TML_INTERFACES_AUTH = uri;
-	process.env.TML_INTERFACES_STOPS = uri;
-	process.env.TML_INTERFACES_MUNICIPALITIES = uri;
-	process.env.TML_INTERFACES_ORGANIZATIONS = uri;
-	process.env.TML_INTERFACES_AGENCIES = uri;
-	process.env.TML_INTERFACES_ZONES = uri;
-	process.env.TML_INTERFACES_RIDES = uri;
-	process.env.TML_INTERFACES_ALERTS = uri;
-	process.env.TML_INTERFACES_HASHED_TRIPS = uri;
-	process.env.TML_INTERFACES_HASHED_SHAPES = uri;
-	process.env.TML_INTERFACES_VEHICLE_EVENTS = uri;
-	process.env.TML_INTERFACES_APEX_T3 = uri;
-	process.env.TML_INTERFACES_APEX_T11 = uri;
-	process.env.TML_INTERFACES_APEX_T19 = uri;
-	process.env.TML_INTERFACES_PLANS = uri;
+	process.env.TML_INTERFACE_AUTH = uri;
+	process.env.TML_INTERFACE_STOPS = uri;
+	process.env.TML_INTERFACE_MUNICIPALITIES = uri;
+	process.env.TML_INTERFACE_ORGANIZATIONS = uri;
+	process.env.TML_INTERFACE_AGENCIES = uri;
+	process.env.TML_INTERFACE_ZONES = uri;
+	process.env.TML_INTERFACE_RIDES = uri;
+	process.env.TML_INTERFACE_ALERTS = uri;
+	process.env.TML_INTERFACE_HASHED_TRIPS = uri;
+	process.env.TML_INTERFACE_HASHED_SHAPES = uri;
+	process.env.TML_INTERFACE_VEHICLE_EVENTS = uri;
+	process.env.TML_INTERFACE_APEX_T3 = uri;
+	process.env.TML_INTERFACE_APEX_T11 = uri;
+	process.env.TML_INTERFACE_APEX_T19 = uri;
+	process.env.TML_INTERFACE_PLANS = uri;
 	// Initialize MongoConnector
 	mongoConnector = new MongoConnector(uri);
 	await mongoConnector.connect();

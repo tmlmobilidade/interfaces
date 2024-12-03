@@ -41,7 +41,7 @@ class AgenciesClass extends MongoCollectionClass<Agency, CreateAgencyDto, Update
 	}
 
 	protected getEnvName(): string {
-		return 'TML_INTERFACES_AGENCIES';
+		return 'TML_INTERFACE_AGENCIES';
 	}
 
 	protected getUpdateSchema(): z.ZodSchema {
