@@ -24,7 +24,17 @@ class VehicleEventsClass extends MongoCollectionClass<VehicleEvent, CreateVehicl
 	}
 
 	protected getCollectionIndexes(): IndexDescription[] {
-		return [];
+		return [
+			{ background: true, key: { agency_id: 1 } },
+			{ background: true, key: { line_id: 1 } },
+			{ background: true, key: { route_id: 1 } },
+			{ background: true, key: { pattern_id: 1 } },
+			{ background: true, key: { trip_id: 1 } },
+			{ background: true, key: { stop_id: 1 } },
+			{ background: true, key: { vehicle_id: 1 } },
+			{ background: true, key: { vehicle_timestamp: -1 } },
+			{ background: true, key: { operational_date: -1 } },
+		];
 	}
 
 	protected getCollectionName(): string {
