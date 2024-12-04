@@ -30,8 +30,8 @@ class RidesClass extends MongoCollectionClass<Ride, CreateRideDto, UpdateRideDto
 			{ background: true, key: { trip_id: 1 } },
 			{ background: true, key: { status: 1 } },
 			{ background: true, key: { operational_date: -1 } },
-			{ background: true, key: { start_time_scheduled_unix: -1 } },
-			{ background: true, key: { start_time_scheduled_unix: -1, status: 1 } },
+			{ background: true, key: { start_time_scheduled: -1 } },
+			{ background: true, key: { start_time_scheduled: -1, status: 1 } },
 		];
 	}
 
