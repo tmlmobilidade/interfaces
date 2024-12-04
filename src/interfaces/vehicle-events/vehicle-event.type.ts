@@ -8,6 +8,7 @@ import { z } from 'zod';
 export const VehicleEventSchema = DocumentSchema.extend({
 	_raw: z.string().or(z.any()),
 	agency_id: z.string(),
+	driver_id: z.string(),
 	event_id: z.string(),
 	insert_timestamp: z.date(),
 	line_id: z.string(),
