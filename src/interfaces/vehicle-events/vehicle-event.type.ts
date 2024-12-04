@@ -9,7 +9,7 @@ export const VehicleEventSchema = DocumentSchema.extend({
 	agency_id: z.string(),
 	data: z.string(),
 	event_id: z.string(),
-	insert_timestamp: z.number(),
+	insert_timestamp: z.date(),
 	line_id: z.string(),
 	odometer: z.number(),
 	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
@@ -18,7 +18,7 @@ export const VehicleEventSchema = DocumentSchema.extend({
 	stop_id: z.string(),
 	trip_id: z.string(),
 	vehicle_id: z.string(),
-	vehicle_timestamp: z.number(),
+	vehicle_timestamp: z.date(),
 }).strict();
 
 export const CreateVehicleEventSchema = VehicleEventSchema.partial({
