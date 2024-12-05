@@ -25,10 +25,11 @@ class VehicleEventsClass extends MongoCollectionClass<VehicleEvent, CreateVehicl
 
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
-			{ background: true, key: { agency_id: 1 } },
-			{ background: true, key: { pattern_id: 1 } },
-			{ background: true, key: { vehicle_id: 1 } },
 			{ background: true, key: { operational_date: -1 } },
+			// eslint-disable-next-line perfectionist/sort-objects
+			{ background: true, key: { operational_date: -1, agency_id: 1 } },
+			{ background: true, key: { operational_date: -1, pattern_id: 1 } },
+			{ background: true, key: { operational_date: -1, vehicle_id: 1 } },
 			{ background: true, key: { operational_date: -1, trip_id: 1 } },
 		];
 	}
