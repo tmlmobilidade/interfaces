@@ -10,7 +10,6 @@ export const ApexT19Schema = DocumentSchema.extend({
 	agency_id: z.string(),
 	apex_version: z.string(),
 	device_id: z.string(),
-	extra_trip_id: z.string().nullable(),
 	line_id: z.string(),
 	mac_ase_counter_value: z.number(),
 	mac_sam_serial_number: z.number(),

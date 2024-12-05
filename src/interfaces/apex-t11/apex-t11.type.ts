@@ -100,7 +100,6 @@ export const ApexT11Schema = DocumentSchema.extend({
 	apex_version: z.string(),
 	card_serial_number: z.string(),
 	device_id: z.string(),
-	extra_trip_id: z.string().nullable(),
 	line_id: z.string(),
 	mac_ase_counter_value: z.number(),
 	mac_sam_serial_number: z.number(),
