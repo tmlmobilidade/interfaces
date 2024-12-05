@@ -1,6 +1,5 @@
 export * from '@/interfaces/agencies/agencies.interface';
 export * from '@/interfaces/alerts/alerts.interface';
-export * from '@/interfaces/apex-t3/apex-t3.interface';
 export * from '@/interfaces/apex-t11/apex-t11.interface';
 export * from '@/interfaces/apex-t19/apex-t19.interface';
 export * from '@/interfaces/auth/roles.interface';
