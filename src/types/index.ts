@@ -1,6 +1,5 @@
 export * from '@/interfaces/agencies/agency.type';
 export * from '@/interfaces/alerts/alert.type';
-export * from '@/interfaces/apex-t3/apex-t3.type';
 export * from '@/interfaces/apex-t11/apex-t11.type';
 export * from '@/interfaces/apex-t19/apex-t19.type';
 export * from '@/interfaces/auth/auth.type';
