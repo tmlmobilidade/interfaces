@@ -29,8 +29,8 @@ class VehicleEventsClass extends MongoCollectionClass<VehicleEvent, VehicleEvent
 			// eslint-disable-next-line perfectionist/sort-objects
 			{ background: true, key: { operational_date: -1, agency_id: 1 } },
 			{ background: true, key: { operational_date: -1, pattern_id: 1 } },
-			{ background: true, key: { operational_date: -1, vehicle_id: 1 } },
 			{ background: true, key: { operational_date: -1, trip_id: 1 } },
+			{ background: true, key: { operational_date: -1, vehicle_id: 1 } },
 		];
 	}
 

@@ -24,7 +24,14 @@ class ApexT19Class extends MongoCollectionClass<ApexT19, ApexT19, ApexT19> {
 	}
 
 	protected getCollectionIndexes(): IndexDescription[] {
-		return [];
+		return [
+			{ background: true, key: { operational_date: -1 } },
+			// eslint-disable-next-line perfectionist/sort-objects
+			{ background: true, key: { operational_date: -1, agency_id: 1 } },
+			{ background: true, key: { operational_date: -1, pattern_id: 1 } },
+			{ background: true, key: { operational_date: -1, trip_id: 1 } },
+			{ background: true, key: { operational_date: -1, vehicle_id: 1 } },
+		];
 	}
 
 	protected getCollectionName(): string {
