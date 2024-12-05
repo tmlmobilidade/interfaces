@@ -12,7 +12,6 @@ export const ApexT3Schema = DocumentSchema.extend({
 	card_serial_number: z.string(),
 	device_id: z.string(),
 	extra_trip_id: z.string(),
-	insert_timestamp: z.date(),
 	line_id: z.string(),
 	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	pattern_id: z.string(),

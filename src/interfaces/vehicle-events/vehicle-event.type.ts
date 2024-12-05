@@ -11,7 +11,6 @@ export const VehicleEventSchema = DocumentSchema.extend({
 	driver_id: z.string(),
 	event_id: z.string(),
 	extra_trip_id: z.string().nullable(),
-	insert_timestamp: z.date(),
 	line_id: z.string(),
 	odometer: z.number(),
 	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
