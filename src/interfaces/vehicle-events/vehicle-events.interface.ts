@@ -1,13 +1,13 @@
 /* * */
 
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
-import { CreateVehicleEventDto, UpdateVehicleEventDto, VehicleEvent } from '@/interfaces/vehicle-events/vehicle-event.type';
+import { VehicleEvent } from '@/interfaces/vehicle-events/vehicle-event.type';
 import { AsyncSingletonProxy } from '@/lib/utils';
-import { Filter, IndexDescription } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 
 /* * */
 
-class VehicleEventsClass extends MongoCollectionClass<VehicleEvent, CreateVehicleEventDto, UpdateVehicleEventDto> {
+class VehicleEventsClass extends MongoCollectionClass<VehicleEvent, VehicleEvent, VehicleEvent> {
 	private static _instance: VehicleEventsClass;
 
 	private constructor() {
@@ -40,37 +40,6 @@ class VehicleEventsClass extends MongoCollectionClass<VehicleEvent, CreateVehicl
 
 	protected getEnvName(): string {
 		return 'TML_INTERFACE_VEHICLE_EVENTS';
-	}
-
-	/**
-	 * Finds apexLocation documents by agency ID.
-	 *
-	 * @param id - The agency ID to search for
-	 * @returns A promise that resolves to an array of matching apexLocation documents
-	 */
-	async findByAgencyId(id: string) {
-		return this.mongoCollection.find({ agency_id: id } as Filter<VehicleEvent>).toArray();
-	}
-
-	/**
-	 * Finds a apexLocation document by its code.
-	 *
-	 * @param code - The code of the apexLocation to find
-	 * @returns A promise that resolves to the matching apexLocation document or null if not found
-	 */
-	async findByCode(code: string) {
-		return this.mongoCollection.findOne({ code } as Filter<VehicleEvent>);
-	}
-
-	/**
-	 * Updates a stop document by its code.
-	 *
-	 * @param code - The code of the stop to update.
-	 * @param updateFields - The fields to update in the stop document.
-	 * @returns A promise that resolves to the result of the update operation.
-	 */
-	async updateByCode(code: string, updateFields: Partial<VehicleEvent>) {
-		return this.mongoCollection.updateOne({ code } as Filter<VehicleEvent>, { $set: updateFields });
 	}
 }
 

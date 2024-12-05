@@ -10,6 +10,7 @@ export const VehicleEventSchema = DocumentSchema.extend({
 	agency_id: z.string(),
 	driver_id: z.string(),
 	event_id: z.string(),
+	extra_trip_id: z.string().nullable(),
 	insert_timestamp: z.date(),
 	line_id: z.string(),
 	odometer: z.number(),
@@ -22,12 +23,6 @@ export const VehicleEventSchema = DocumentSchema.extend({
 	vehicle_timestamp: z.date(),
 }).strict();
 
-export const CreateVehicleEventSchema = VehicleEventSchema.partial({
-	created_at: true,
-	updated_at: true,
-});
-export const UpdateVehicleEventSchema = CreateVehicleEventSchema.partial().omit({ _id: true, created_at: true, updated_at: true });
-
 /**
  * Vehicle Events are produced by the vehicle's on-board computer on a regular schedule
  * or whenever a significant event occurs. These events are used to track the vehicle's
@@ -38,9 +33,3 @@ export const UpdateVehicleEventSchema = CreateVehicleEventSchema.partial().omit(
 export interface VehicleEvent extends Omit<z.infer<typeof VehicleEventSchema>, 'operational_date'> {
 	operational_date: OperationalDate
 }
-
-export interface CreateVehicleEventDto extends Omit<z.infer<typeof CreateVehicleEventSchema>, 'operational_date'> {
-	operational_date: OperationalDate
-}
-
-export type UpdateVehicleEventDto = Partial<CreateVehicleEventDto>;
