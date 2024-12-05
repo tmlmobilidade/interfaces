@@ -8,7 +8,7 @@ import { z } from 'zod';
 export const ApexT19Schema = DocumentSchema.extend({
 	_raw: z.string(),
 	agency_id: z.string(),
-	apex_transaction_version: z.string(),
+	apex_version: z.string(),
 	device_id: z.string(),
 	extra_trip_id: z.string().nullable(),
 	line_id: z.string(),
