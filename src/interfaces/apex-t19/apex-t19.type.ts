@@ -1,6 +1,6 @@
 /* * */
 
-import { createOperationalDate, DocumentSchema } from '@/types/common';
+import { createOperationalDate, DocumentSchema, OperationalDate } from '@/types/common';
 import { z } from 'zod';
 
 /* * */
@@ -28,4 +28,6 @@ export const ApexT19Schema = DocumentSchema.extend({
  * In summary, these transactions are generated every time the vehicle has a change in
  * the current stop ID, trip ID, route ID, pattern ID, etc.
  */
-export type ApexT19 = z.infer<typeof ApexT19Schema>;
+export interface ApexT19 extends Omit<z.infer<typeof ApexT19Schema>, 'operational_date'> {
+	operational_date: OperationalDate
+}
