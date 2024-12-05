@@ -106,6 +106,7 @@ export const ApexT11Schema = DocumentSchema.extend({
 	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	pattern_id: z.string(),
 	product_id: z.string(),
+	received_at: z.date(),
 	stop_id: z.string(),
 	trip_id: z.string(),
 	validation_status: z.nativeEnum(ValidationStatus),
