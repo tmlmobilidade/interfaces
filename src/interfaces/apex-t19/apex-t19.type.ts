@@ -15,7 +15,6 @@ export const ApexT19Schema = DocumentSchema.extend({
 	mac_sam_serial_number: z.number(),
 	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	pattern_id: z.string(),
-	route_id: z.string(),
 	stop_id: z.string(),
 	trip_id: z.string(),
 	vehicle_id: z.string(),
