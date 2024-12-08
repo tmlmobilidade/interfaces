@@ -50,9 +50,10 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 			// Setup collection
 			this.mongoCollection = this.mongoConnector.client.db('production').collection<T>(this.getCollectionName());
 			// // Create indexes, if any are defined
-			// if (this.getCollectionIndexes().length > 0) {
-			// 	await this.mongoCollection.createIndexes(this.getCollectionIndexes());
-			// }
+			if (process.env.NODE_ENV !== 'production' && this.getCollectionIndexes().length > 0) {
+				// TODO: This is a temporary fix to avoid creating indexes in production
+				await this.mongoCollection.createIndexes(this.getCollectionIndexes());
+			}
 			// Create schemas, if any are defined
 			const schemas = createSchemaFactory(this.getCollectionName());
 			if (schemas) {
