@@ -94,6 +94,9 @@ export const AlertSchema = DocumentSchema.extend({
 	updated_at: z.date().optional(),
 }).strict();
 
+export const AlertReferenceOptions = ReferenceUnionSchema.options.map(option => option.shape.type.value);
+export type AlertReferenceType = (typeof AlertReferenceOptions)[number];
+
 export const CreateAlertSchema = AlertSchema.omit({ _id: true, created_at: true, updated_at: true });
 export const UpdateAlertSchema = CreateAlertSchema.partial();
 
