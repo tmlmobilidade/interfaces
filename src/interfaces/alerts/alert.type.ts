@@ -44,21 +44,52 @@ export const effectSchema = z.enum(EFFECT_VALUES);
 export const publishStatusSchema = z.enum(PUBLISH_STATUS_VALUES);
 
 // Define the Alert schema
+export const RouteReferenceSchema = z.object({
+	id: z.string().optional(),
+	route_id: z.string(),
+	stop_ids: z.array(z.string()),
+});
+
+export const StopReferenceSchema = z.object({
+	id: z.string().optional(),
+	route_ids: z.array(z.string()),
+	stop_id: z.string(),
+});
+
+export const AgencyReferenceSchema = z.object({
+	agency_id: z.string(),
+	id: z.string().optional(),
+});
+
+// Define discriminated union based on 'reference_type'
+const ReferenceUnionSchema = z.discriminatedUnion('type', [
+	z.object({
+		references: z.array(RouteReferenceSchema),
+		type: z.literal('route'),
+	}),
+	z.object({
+		references: z.array(StopReferenceSchema),
+		type: z.literal('stop'),
+	}),
+	z.object({
+		references: z.array(AgencyReferenceSchema),
+		type: z.literal('agency'),
+	}),
+]);
+
+// Updated AlertSchema with discriminated union
 export const AlertSchema = DocumentSchema.extend({
 	active_period_end_date: z.date(),
 	active_period_start_date: z.date(),
-	agency_ids: z.array(z.string()),
 	cause: causeSchema,
 	description: z.string(),
 	effect: effectSchema,
 	image_url: z.string(),
-	line_ids: z.array(z.string()),
 	municipality_ids: z.array(z.string()),
 	publish_end_date: z.date(),
 	publish_start_date: z.date(),
 	publish_status: publishStatusSchema,
-	route_ids: z.array(z.string()),
-	stop_ids: z.array(z.string()),
+	reference: ReferenceUnionSchema,
 	title: z.string(),
 	updated_at: z.date().optional(),
 }).strict();

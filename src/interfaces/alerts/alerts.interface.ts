@@ -44,24 +44,8 @@ class AlertsClass extends MongoCollectionClass<Alert, CreateAlertDto, UpdateAler
 		return 'TML_INTERFACE_ALERTS';
 	}
 
-	async findByAgencyId(agency_id: string) {
-		return this.mongoCollection.find({ agency_ids: { $in: [agency_id] } } as Filter<Alert>).toArray();
-	}
-
-	async findByLineId(line_id: string) {
-		return this.mongoCollection.find({ line_ids: { $in: [line_id] } } as Filter<Alert>).toArray();
-	}
-
 	async findByMunicipalityId(municipality_id: string) {
 		return this.mongoCollection.find({ municipality_ids: { $in: [municipality_id] } } as Filter<Alert>).toArray();
-	}
-
-	async findByRouteId(route_id: string) {
-		return this.mongoCollection.find({ route_ids: { $in: [route_id] } } as Filter<Alert>).toArray();
-	}
-
-	async findByStopId(stop_id: string) {
-		return this.mongoCollection.find({ stop_ids: { $in: [stop_id] } } as Filter<Alert>).toArray();
 	}
 
 	async findByTitle(title: string) {

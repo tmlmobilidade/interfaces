@@ -4,18 +4,22 @@ import { CreateAlertDto } from '@/types';
 const newAlert: CreateAlertDto = {
 	active_period_end_date: new Date(),
 	active_period_start_date: new Date(),
-	agency_ids: ['agency_1'],
 	cause: 'UNKNOWN_CAUSE',
 	description: 'Test Alert',
 	effect: 'NO_SERVICE',
 	image_url: 'http://example.com/image.png',
-	line_ids: ['line_1'],
 	municipality_ids: ['municipality_1'],
 	publish_end_date: new Date(),
 	publish_start_date: new Date(),
 	publish_status: 'PUBLISHED',
-	route_ids: ['route_1'],
-	stop_ids: ['stop_1'],
+	reference: {
+		references: [{
+			id: '1',
+			route_id: '1',
+			stop_ids: ['1'],
+		}],
+		type: 'route',
+	},
 	title: 'Test Alert Title',
 };
 
@@ -46,38 +50,6 @@ describe('AlertsClass', () => {
 		});
 	});
 
-	describe('findByAgencyId', () => {
-		it('should find alerts by agency ID', async () => {
-			const result = await alerts.findByAgencyId(newAlert.agency_ids[0]);
-			expect(result).toBeDefined();
-			expect(result.length).toBeGreaterThan(0);
-			result.forEach((alert) => {
-				expect(alert.agency_ids).toContain(newAlert.agency_ids[0]);
-			});
-		});
-
-		it('should return an empty array if no alerts are found for the agency ID', async () => {
-			const result = await alerts.findByAgencyId('NON_EXISTENT_AGENCY_ID');
-			expect(result).toEqual([]);
-		});
-	});
-
-	describe('findByLineId', () => {
-		it('should find alerts by line ID', async () => {
-			const result = await alerts.findByLineId(newAlert.line_ids[0]);
-			expect(result).toBeDefined();
-			expect(result.length).toBeGreaterThan(0);
-			result.forEach((alert) => {
-				expect(alert.line_ids).toContain(newAlert.line_ids[0]);
-			});
-		});
-
-		it('should return an empty array if no alerts are found for the line ID', async () => {
-			const result = await alerts.findByLineId('NON_EXISTENT_LINE_ID');
-			expect(result).toEqual([]);
-		});
-	});
-
 	describe('findByMunicipalityId', () => {
 		it('should find alerts by municipality ID', async () => {
 			const result = await alerts.findByMunicipalityId(newAlert.municipality_ids[0]);
@@ -90,38 +62,6 @@ describe('AlertsClass', () => {
 
 		it('should return an empty array if no alerts are found for the municipality ID', async () => {
 			const result = await alerts.findByMunicipalityId('NON_EXISTENT_MUNICIPALITY_ID');
-			expect(result).toEqual([]);
-		});
-	});
-
-	describe('findByRouteId', () => {
-		it('should find alerts by route ID', async () => {
-			const result = await alerts.findByRouteId(newAlert.route_ids[0]);
-			expect(result).toBeDefined();
-			expect(result.length).toBeGreaterThan(0);
-			result.forEach((alert) => {
-				expect(alert.route_ids).toContain(newAlert.route_ids[0]);
-			});
-		});
-
-		it('should return an empty array if no alerts are found for the route ID', async () => {
-			const result = await alerts.findByRouteId('NON_EXISTENT_ROUTE_ID');
-			expect(result).toEqual([]);
-		});
-	});
-
-	describe('findByStopId', () => {
-		it('should find alerts by stop ID', async () => {
-			const result = await alerts.findByStopId(newAlert.stop_ids[0]);
-			expect(result).toBeDefined();
-			expect(result.length).toBeGreaterThan(0);
-			result.forEach((alert) => {
-				expect(alert.stop_ids).toContain(newAlert.stop_ids[0]);
-			});
-		});
-
-		it('should return an empty array if no alerts are found for the stop ID', async () => {
-			const result = await alerts.findByStopId('NON_EXISTENT_STOP_ID');
 			expect(result).toEqual([]);
 		});
 	});
