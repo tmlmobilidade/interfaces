@@ -316,14 +316,11 @@ export const mockAlerts: CreateAlertDto[] = [
 		publish_end_date: new Date('20240201'),
 		publish_start_date: new Date('20240101'),
 		publish_status: 'PUBLISHED',
-		reference: {
-			references: [{
-				id: '1',
-				route_ids: ['1'],
-				stop_id: '1',
-			}],
-			type: 'stop',
-		},
+		reference_type: 'stop',
+		references: [{
+			child_ids: ['1'],
+			parent_id: '1',
+		}],
 		title: 'Alert 1',
 	},
 	{
@@ -339,14 +336,11 @@ export const mockAlerts: CreateAlertDto[] = [
 		publish_end_date: new Date('20240201'),
 		publish_start_date: new Date('20240101'),
 		publish_status: 'PUBLISHED',
-		reference: {
-			references: [{
-				id: '1',
-				route_id: '1',
-				stop_ids: ['1'],
-			}],
-			type: 'route',
-		},
+		reference_type: 'route',
+		references: [{
+			child_ids: ['1'],
+			parent_id: '1',
+		}],
 		title: 'Alert 2',
 	},
 	{
@@ -362,12 +356,11 @@ export const mockAlerts: CreateAlertDto[] = [
 		publish_end_date: new Date('20240201'),
 		publish_start_date: new Date('20240101'),
 		publish_status: 'PUBLISHED',
-		reference: {
-			references: [{
-				agency_id: '1',
-			}],
-			type: 'agency',
-		},
+		reference_type: 'agency',
+		references: [{
+			child_ids: ['1'],
+			parent_id: '1',
+		}],
 		title: 'Alert 3',
 	},
 ];

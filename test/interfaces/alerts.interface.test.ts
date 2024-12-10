@@ -12,14 +12,11 @@ const newAlert: CreateAlertDto = {
 	publish_end_date: new Date(),
 	publish_start_date: new Date(),
 	publish_status: 'PUBLISHED',
-	reference: {
-		references: [{
-			id: '1',
-			route_id: '1',
-			stop_ids: ['1'],
-		}],
-		type: 'route',
-	},
+	reference_type: 'route',
+	references: [{
+		child_ids: ['1'],
+		parent_id: '1',
+	}],
 	title: 'Test Alert Title',
 };
 

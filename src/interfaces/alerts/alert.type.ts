@@ -43,40 +43,6 @@ export const causeSchema = z.enum(CAUSE_VALUES);
 export const effectSchema = z.enum(EFFECT_VALUES);
 export const publishStatusSchema = z.enum(PUBLISH_STATUS_VALUES);
 
-// Define the Alert schema
-export const RouteReferenceSchema = z.object({
-	id: z.string().optional(),
-	route_id: z.string(),
-	stop_ids: z.array(z.string()),
-});
-
-export const StopReferenceSchema = z.object({
-	id: z.string().optional(),
-	route_ids: z.array(z.string()),
-	stop_id: z.string(),
-});
-
-export const AgencyReferenceSchema = z.object({
-	agency_id: z.string(),
-	id: z.string().optional(),
-});
-
-// Define discriminated union based on 'reference_type'
-const ReferenceUnionSchema = z.discriminatedUnion('type', [
-	z.object({
-		references: z.array(RouteReferenceSchema),
-		type: z.literal('route'),
-	}),
-	z.object({
-		references: z.array(StopReferenceSchema),
-		type: z.literal('stop'),
-	}),
-	z.object({
-		references: z.array(AgencyReferenceSchema),
-		type: z.literal('agency'),
-	}),
-]);
-
 // Updated AlertSchema with discriminated union
 export const AlertSchema = DocumentSchema.extend({
 	active_period_end_date: z.date(),
@@ -89,13 +55,14 @@ export const AlertSchema = DocumentSchema.extend({
 	publish_end_date: z.date(),
 	publish_start_date: z.date(),
 	publish_status: publishStatusSchema,
-	reference: ReferenceUnionSchema,
+	reference_type: z.enum(['route', 'stop', 'agency']),
+	references: z.array(z.object({
+		child_ids: z.array(z.string()),
+		parent_id: z.string(),
+	})),
 	title: z.string(),
 	updated_at: z.date().optional(),
 }).strict();
-
-export const AlertReferenceOptions = ReferenceUnionSchema.options.map(option => option.shape.type.value);
-export type AlertReferenceType = (typeof AlertReferenceOptions)[number];
 
 export const CreateAlertSchema = AlertSchema.omit({ _id: true, created_at: true, updated_at: true });
 export const UpdateAlertSchema = CreateAlertSchema.partial();
