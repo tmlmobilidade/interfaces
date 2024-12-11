@@ -2,6 +2,7 @@
 
 import { createOperationalDate, OperationalDate } from '@/types';
 import { DateTime } from 'luxon';
+import util from 'util';
 
 /* * */
 
@@ -18,17 +19,17 @@ export function getOperationalDate(timestamp?: Date | DateTime | string, format?
 	// Parse the transaction date using the provided format
 	let dateObject: DateTime;
 
-	if (timestamp instanceof DateTime) {
-		console.log('is luxon');
-		dateObject = timestamp;
-	}
-	else if (timestamp instanceof Date) {
+	if (util.types.isDate(timestamp)) {
 		console.log('is datejs');
-		dateObject = DateTime.fromJSDate(timestamp);
+		dateObject = DateTime.fromJSDate(timestamp as Date);
 	}
 	else if (typeof timestamp === 'string' && format) {
 		console.log('is string with format');
 		dateObject = DateTime.fromFormat(timestamp, format);
+	}
+	else if (timestamp && (timestamp as DateTime).isValid) {
+		console.log('is luxon');
+		dateObject = timestamp as DateTime;
 	}
 	else {
 		console.log('is now');
