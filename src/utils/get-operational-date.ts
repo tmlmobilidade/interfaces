@@ -18,14 +18,14 @@ export function getOperationalDate(timestamp?: DateTime | string, format?: strin
 	// Parse the transaction date using the provided format
 	let dateObject: DateTime;
 
-	if (!timestamp || !format) {
-		dateObject = DateTime.now();
-	}
-	else if (timestamp instanceof DateTime) {
+	if (timestamp instanceof DateTime) {
 		dateObject = timestamp;
 	}
-	else {
+	else if (typeof timestamp === 'string' && format) {
 		dateObject = DateTime.fromFormat(timestamp, format);
+	}
+	else {
+		dateObject = DateTime.now();
 	}
 
 	//
