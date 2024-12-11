@@ -1,12 +1,24 @@
 import { roles, sessions, users } from '@/interfaces';
 import HttpException from '@/lib/http-exception';
 import HttpStatus from '@/lib/http-status';
-import { generateRandomString, generateRandomToken } from '@/lib/utils';
+import { AsyncSingletonProxy, generateRandomString, generateRandomToken } from '@/lib/utils';
 import { LoginDto, Permission, Session } from '@/types';
 import bcrypt from 'bcrypt';
 import { mergekit } from 'mergekit';
 
 class AuthProvider {
+	private static _instance: AuthProvider;
+
+	/**
+	 * Return the instance of the AuthProvider.
+	 */
+	public static async getInstance() {
+		if (!AuthProvider._instance) {
+			AuthProvider._instance = new AuthProvider();
+		}
+		return AuthProvider._instance;
+	}
+
 	/**
 	 * Get Permissions
 	 *
@@ -15,7 +27,7 @@ class AuthProvider {
 	 * @param action - The action to check
 	 * @returns The permissions that the user has
 	 */
-	static async getPermissions<T>(session_token: string, scope: string, action: string): Promise<Permission<T>> {
+	public async getPermissions<T>(session_token: string, scope: string, action: string): Promise<Permission<T>> {
 		const user = await this.getUser(session_token);
 		const role_list = await roles.findMany({ _id: { $in: user.role_ids } });
 
@@ -53,7 +65,7 @@ class AuthProvider {
 	 *   - UNAUTHORIZED if session not found
 	 *   - UNAUTHORIZED if user not found
 	 */
-	static async getUser(session_token: string) {
+	public async getUser(session_token: string) {
 		// TODO: Implement caching with redis
 
 		const session = await sessions.findOne({ token: session_token });
@@ -81,7 +93,7 @@ class AuthProvider {
 	 *   - UNAUTHORIZED if user not found or password is incorrect
 	 *   - INTERNAL_SERVER_ERROR if login fails
 	 */
-	static async login(dto: LoginDto): Promise<Session> {
+	public async login(dto: LoginDto): Promise<Session> {
 		// TODO: Implement caching with redis
 
 		const user = await users.findByEmail(dto.email, true);
@@ -118,36 +130,36 @@ class AuthProvider {
 	 *
 	 * @param session_token - The session token to logout
 	 */
-	static async logout(session_token: string) {
+	public async logout(session_token: string) {
 		// TODO: Invalidate cache
 
 		await sessions.deleteOne({ token: session_token });
 	}
 
-	static async resetPassword(email: string, password: string) {
+	public async resetPassword(email: string, password: string) {
 		// TODO: Implement password reset
 		throw new Error('Not implemented');
 	}
 
-	static async sendEmailVerification(user_id: string) {
+	public async sendEmailVerification(user_id: string) {
 		// TODO: Implement email sending
 		throw new Error('Not implemented');
 	}
 
-	static async sendPasswordResetEmail(user_id: string) {
+	public async sendPasswordResetEmail(user_id: string) {
 		// TODO: Implement email sending
 		throw new Error('Not implemented');
 	}
 
-	static async sendVerificationEmail(user_id: string) {
+	public async sendVerificationEmail(user_id: string) {
 		// TODO: Implement email sending
 		throw new Error('Not implemented');
 	}
 
-	static async verifyEmail(token: string) {
+	public async verifyEmail(token: string) {
 		// TODO: Implement email verification
 		throw new Error('Not implemented');
 	}
 }
 
-export { AuthProvider };
+export const authProvider = AsyncSingletonProxy(AuthProvider);

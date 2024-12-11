@@ -1,19 +1,19 @@
 /**
- * Unit tests for AuthProvider
+ * Unit tests for authProvider
  */
 
 import { roles, sessions, users } from '@/interfaces';
 import HttpException from '@/lib/http-exception';
 import HttpStatus from '@/lib/http-status';
-import { AuthProvider } from '@/providers';
+import { authProvider } from '@/providers';
 import { Email, LoginDto, Session } from '@/types';
-import { mockPermissions, mockRoles, mockUsers } from '@test/data/db-mock';
+import { mockUsers } from '@test/data/db-mock';
 import bcrypt from 'bcrypt';
 
 // Mock bcrypt
 jest.mock('bcrypt');
 
-describe('AuthProvider', () => {
+describe('authProvider', () => {
 	let user_id: string;
 
 	beforeAll(async () => {
@@ -54,7 +54,7 @@ describe('AuthProvider', () => {
 			};
 
 			// Act
-			const session: Session = await AuthProvider.login(loginDto);
+			const session: Session = await authProvider.login(loginDto);
 
 			// Assert
 			expect(session).toBeDefined();
@@ -77,7 +77,7 @@ describe('AuthProvider', () => {
 			};
 
 			// Act & Assert
-			await expect(AuthProvider.login(loginDto)).rejects.toThrow(
+			await expect(authProvider.login(loginDto)).rejects.toThrow(
 				new HttpException(HttpStatus.UNAUTHORIZED, 'User not found'),
 			);
 		});
@@ -90,7 +90,7 @@ describe('AuthProvider', () => {
 			};
 
 			// Act & Assert
-			await expect(AuthProvider.login(loginDto)).rejects.toThrow(
+			await expect(authProvider.login(loginDto)).rejects.toThrow(
 				new HttpException(HttpStatus.UNAUTHORIZED, 'Invalid password'),
 			);
 		});
@@ -108,7 +108,7 @@ describe('AuthProvider', () => {
 			expect(result.acknowledged).toBe(true);
 
 			// Act
-			await AuthProvider.logout(session.token);
+			await authProvider.logout(session.token);
 
 			// Assert
 			const storedSession = await sessions.findOne({ token: session.token });
@@ -126,7 +126,7 @@ describe('AuthProvider', () => {
 			await users.insertOne({ ...mockUsers[0], _id: session.user_id, email: 'temp@example.com' as Email });
 			await sessions.insertOne(session);
 
-			const user = await AuthProvider.getUser(session.token);
+			const user = await authProvider.getUser(session.token);
 			expect(user).toBeDefined();
 			expect(user._id).toBe(session.user_id);
 			expect(user.email).toBe('temp@example.com');
@@ -155,7 +155,7 @@ describe('AuthProvider', () => {
 	// 		expect(user?.role_ids[0]).toBe(mockRoles[0].name);
 	// 		expect(user?.permissions.length).toBe(0);
 
-	// 		const permissions = await AuthProvider.getPermissions(session.token, mockRoles[0].permissions[0].scope, mockRoles[0].permissions[0].action);
+	// 		const permissions = await authProvider.getPermissions(session.token, mockRoles[0].permissions[0].scope, mockRoles[0].permissions[0].action);
 	// 		expect(permissions).toBeDefined();
 	// 		expect(Object.keys(permissions).length).toBeGreaterThanOrEqual(1);
 	// 	});
@@ -173,7 +173,7 @@ describe('AuthProvider', () => {
 	// 		expect(user?.role_ids.length).toBe(0);
 	// 		expect(user?.permissions.length).toBeGreaterThan(0);
 
-	// 		const permissions = await AuthProvider.getPermissions(session.token, mockPermissions[1].scope, mockPermissions[1].action);
+	// 		const permissions = await authProvider.getPermissions(session.token, mockPermissions[1].scope, mockPermissions[1].action);
 	// 		expect(permissions).toBeDefined();
 	// 		expect(Object.keys(permissions).length).toBeGreaterThanOrEqual(1);
 	// 	});
@@ -186,7 +186,7 @@ describe('AuthProvider', () => {
 
 	// 		await sessions.insertOne(session);
 
-	// 		await expect(AuthProvider.getPermissions(session.token, mockPermissions[0].scope, mockPermissions[0].action)).rejects.toThrow(
+	// 		await expect(authProvider.getPermissions(session.token, mockPermissions[0].scope, mockPermissions[0].action)).rejects.toThrow(
 	// 			new HttpException(HttpStatus.FORBIDDEN, 'User does not have permission'),
 	// 		);
 	// 	});
@@ -199,7 +199,7 @@ describe('AuthProvider', () => {
 
 	// 		await sessions.insertOne(session);
 
-	// 		const permissions = await AuthProvider.getPermissions(session.token, mockRoles[1].permissions[0].scope, mockRoles[1].permissions[0].action);
+	// 		const permissions = await authProvider.getPermissions(session.token, mockRoles[1].permissions[0].scope, mockRoles[1].permissions[0].action);
 
 	// 		expect(permissions).toBeDefined();
 	// 		expect(Object.keys(permissions).length).toBeGreaterThanOrEqual(1);
