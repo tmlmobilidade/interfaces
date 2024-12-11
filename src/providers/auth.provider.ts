@@ -3,7 +3,7 @@ import HttpException from '@/lib/http-exception';
 import HttpStatus from '@/lib/http-status';
 import { AsyncSingletonProxy, generateRandomString, generateRandomToken } from '@/lib/utils';
 import { LoginDto, Permission, Session } from '@/types';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { mergekit } from 'mergekit';
 
 class AuthProvider {

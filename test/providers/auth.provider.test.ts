@@ -8,10 +8,10 @@ import HttpStatus from '@/lib/http-status';
 import { authProvider } from '@/providers';
 import { Email, LoginDto, Session } from '@/types';
 import { mockUsers } from '@test/data/db-mock';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 // Mock bcrypt
-jest.mock('bcrypt');
+jest.mock('bcryptjs');
 
 describe('authProvider', () => {
 	let user_id: string;
