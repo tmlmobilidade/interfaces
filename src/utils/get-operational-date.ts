@@ -20,19 +20,15 @@ export function getOperationalDate(timestamp?: Date | DateTime | string, format?
 	let dateObject: DateTime;
 
 	if (util.types.isDate(timestamp)) {
-		console.log('is datejs');
 		dateObject = DateTime.fromJSDate(timestamp as Date);
 	}
 	else if (typeof timestamp === 'string' && format) {
-		console.log('is string with format');
 		dateObject = DateTime.fromFormat(timestamp, format);
 	}
 	else if (timestamp && (timestamp as DateTime).isValid) {
-		console.log('is luxon');
 		dateObject = timestamp as DateTime;
 	}
 	else {
-		console.log('is now');
 		dateObject = DateTime.now();
 	}
 
