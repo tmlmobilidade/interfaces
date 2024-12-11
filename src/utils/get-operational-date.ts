@@ -12,7 +12,7 @@ import { DateTime } from 'luxon';
  * @param format - The format of the timestamp.
  * @returns The operational date in the yyyyLLdd format.
  */
-export function getOperationalDate(timestamp?: DateTime | string, format?: string): OperationalDate {
+export function getOperationalDate(timestamp?: Date | DateTime | string, format?: string): OperationalDate {
 	//
 
 	// Parse the transaction date using the provided format
@@ -20,6 +20,9 @@ export function getOperationalDate(timestamp?: DateTime | string, format?: strin
 
 	if (timestamp instanceof DateTime) {
 		dateObject = timestamp;
+	}
+	else if (timestamp instanceof Date) {
+		dateObject = DateTime.fromJSDate(timestamp);
 	}
 	else if (typeof timestamp === 'string' && format) {
 		dateObject = DateTime.fromFormat(timestamp, format);
