@@ -95,7 +95,6 @@ export enum ValidationStatus {
 /* * */
 
 export const ApexT11Schema = DocumentSchema.extend({
-	_raw: z.string(),
 	agency_id: z.string(),
 	apex_version: z.string(),
 	card_serial_number: z.string(),

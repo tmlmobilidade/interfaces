@@ -6,18 +6,19 @@ import { z } from 'zod';
 /* * */
 
 export const VehicleEventSchema = DocumentSchema.extend({
-	_raw: z.string().or(z.any()),
 	agency_id: z.string(),
 	driver_id: z.string(),
 	event_id: z.string(),
 	extra_trip_id: z.string().nullable(),
-	line_id: z.string(),
+	latitude: z.number(),
+	longitude: z.number(),
 	odometer: z.number(),
 	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	pattern_id: z.string(),
 	received_at: z.date(),
-	route_id: z.string(),
 	stop_id: z.string(),
+	trigger_activity: z.string(),
+	trigger_door: z.string(),
 	trip_id: z.string(),
 	vehicle_id: z.string(),
 }).strict();
