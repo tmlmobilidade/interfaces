@@ -5,6 +5,7 @@ module.exports = {
 		'<rootDir>/src/classes/',
 		'<rootDir>/src/lib/',
 		'<rootDir>/test/data/',
+		'<rootDir>/src/utils/',
 	],
 	moduleDirectories: ['node_modules', 'src'], // So Jest can resolve modules
 	moduleNameMapper: {
