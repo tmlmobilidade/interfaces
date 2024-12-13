@@ -8,7 +8,7 @@ export const ZoneSchema = DocumentSchema.extend({
 	border_opacity: z.number(),
 	border_width: z.number(),
 	code: z.string(),
-	created_at: z.date(),
+	created_at: z.coerce.date(),
 	fill_color: z.string(),
 	fill_opacity: z.number(),
 	geojson: z.record(z.any()), // TODO: Validate GeoJSON

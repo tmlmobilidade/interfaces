@@ -33,6 +33,6 @@ export function createOperationalDate(date: string): OperationalDate {
 
 export const DocumentSchema = z.object({
 	_id: z.string(),
-	created_at: z.date(),
-	updated_at: z.date(),
+	created_at: z.coerce.date(),
+	updated_at: z.coerce.date(),
 });

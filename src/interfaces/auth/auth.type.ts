@@ -21,7 +21,7 @@ export const UserSchema = DocumentSchema.extend({
 	avatar: z.string().optional(),
 	bio: z.string().optional(),
 	email: z.string().email(),
-	email_verified: z.date().optional(),
+	email_verified: z.coerce.date().optional(),
 	first_name: z.string(),
 	last_name: z.string(),
 	organization_ids: z.array(z.string()).default([]),
@@ -72,7 +72,7 @@ export type UpdateRoleDto = Partial<CreateRoleDto>;
 /* * */
 
 export const VerificationTokenSchema = DocumentSchema.extend({
-	expires: z.date(),
+	expires: z.coerce.date(),
 	token: z.string(),
 	user_id: z.string(),
 }).strict();
@@ -87,7 +87,7 @@ export type UpdateVerificationTokenDto = Partial<CreateVerificationTokenDto>;
 /* * */
 
 export const SessionSchema = DocumentSchema.extend({
-	expires_at: z.date().optional(),
+	expires_at: z.coerce.date().optional(),
 	token: z.string(),
 	user_id: z.string(),
 }).strict();

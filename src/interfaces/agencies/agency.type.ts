@@ -17,7 +17,7 @@ export const AgencySchema = DocumentSchema.extend({
 	price_per_km: z.number(),
 	timezone: z.string(),
 	total_vkm_per_year: z.number(),
-	updated_at: z.date().optional(),
+	updated_at: z.coerce.date().optional(),
 	url: z.string().url(),
 }).strict();
 

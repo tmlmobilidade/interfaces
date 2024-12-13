@@ -3,7 +3,7 @@ import z from 'zod';
 export const StopSchema = z.object({
 	_id: z.string(),
 	code: z.string(),
-	created_at: z.date(),
+	created_at: z.coerce.date(),
 	latitude: z.number(),
 	locality: z.string(),
 	longitude: z.number(),
@@ -13,7 +13,7 @@ export const StopSchema = z.object({
 	operational_status: z.string(),
 	short_name: z.string(),
 	tts_name: z.string(),
-	updated_at: z.date(),
+	updated_at: z.coerce.date(),
 	zones: z.array(z.string()),
 }).strict();
 

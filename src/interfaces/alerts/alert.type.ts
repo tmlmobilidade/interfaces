@@ -45,15 +45,15 @@ export const publishStatusSchema = z.enum(PUBLISH_STATUS_VALUES);
 
 // Updated AlertSchema with discriminated union
 export const AlertSchema = DocumentSchema.extend({
-	active_period_end_date: z.date(),
-	active_period_start_date: z.date(),
+	active_period_end_date: z.coerce.date(),
+	active_period_start_date: z.coerce.date(),
 	cause: causeSchema,
 	description: z.string(),
 	effect: effectSchema,
 	image_url: z.string().optional(),
 	municipality_ids: z.array(z.string()),
-	publish_end_date: z.date(),
-	publish_start_date: z.date(),
+	publish_end_date: z.coerce.date(),
+	publish_start_date: z.coerce.date(),
 	publish_status: publishStatusSchema,
 	reference_type: z.enum(['route', 'stop', 'agency']),
 	references: z.array(z.object({
