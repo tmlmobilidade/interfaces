@@ -43,28 +43,69 @@ export const causeSchema = z.enum(CAUSE_VALUES);
 export const effectSchema = z.enum(EFFECT_VALUES);
 export const publishStatusSchema = z.enum(PUBLISH_STATUS_VALUES);
 
-// Updated AlertSchema with discriminated union
-export const AlertSchema = DocumentSchema.extend({
+// Base schema for alerts with common validation rules
+const BaseAlertSchema = DocumentSchema.extend({
 	active_period_end_date: z.coerce.date(),
 	active_period_start_date: z.coerce.date(),
 	cause: causeSchema,
 	description: z.string(),
 	effect: effectSchema,
-	image_url: z.string().optional(),
-	municipality_ids: z.array(z.string()),
+	image_url: z.string().url().optional(),
+	municipality_ids: z.array(z.string().min(1)),
 	publish_end_date: z.coerce.date(),
 	publish_start_date: z.coerce.date(),
 	publish_status: publishStatusSchema,
 	reference_type: z.enum(['route', 'stop', 'agency']),
 	references: z.array(z.object({
-		child_ids: z.array(z.string()),
-		parent_id: z.string(),
-	})),
-	title: z.string(),
+		child_ids: z.array(z.string().min(1)),
+		parent_id: z.string().min(1),
+	})).min(1),
+	title: z.string().min(1),
 }).strict();
 
-export const CreateAlertSchema = AlertSchema.omit({ _id: true, created_at: true, updated_at: true });
-export const UpdateAlertSchema = CreateAlertSchema.partial();
+// Refinements
+const partialBaseAlertSchema = BaseAlertSchema.partial();
+
+const refinements = (data: z.infer<typeof partialBaseAlertSchema>, ctx: z.RefinementCtx) => {
+	if (data.publish_status === 'PUBLISHED' && data.description && data.description.length < 1) {
+		ctx.addIssue({
+			code: z.ZodIssueCode.custom,
+			message: 'Description is required when publish_status is \'PUBLISHED\'.',
+		});
+	}
+
+	// Active period start date must be before or equal to end date
+	if (data.active_period_start_date && data.active_period_end_date) {
+		if (data.active_period_start_date > data.active_period_end_date) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: 'Active period start date must be before or equal to end date',
+			});
+		}
+	}
+
+	// Publish start date must be before or equal to end date
+	if (data.publish_start_date && data.publish_end_date) {
+		if (data.publish_start_date > data.publish_end_date) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: 'Publish start date must be before or equal to end date',
+			});
+		}
+	}
+};
+
+// Export Schemas
+export const AlertSchema = BaseAlertSchema.superRefine(refinements);
+
+export const CreateAlertSchema = BaseAlertSchema
+	.omit({ _id: true, created_at: true, updated_at: true })
+	.superRefine(refinements);
+
+export const UpdateAlertSchema = BaseAlertSchema
+	.omit({ _id: true, created_at: true, updated_at: true })
+	.partial()
+	.superRefine(refinements);
 
 // Define types based on schemas
 export type Cause = z.infer<typeof causeSchema>;
@@ -74,7 +115,7 @@ export type PublishStatus = z.infer<typeof publishStatusSchema>;
 // Define the Alert interface
 export interface Alert
 	extends Omit<
-		z.infer<typeof AlertSchema>,
+		z.infer<typeof BaseAlertSchema>,
 		'cause'
 		| 'effect'
 		| 'publish_status'
