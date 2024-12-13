@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import z from 'zod';
 
 /**
@@ -9,11 +10,11 @@ import z from 'zod';
  * @throws {Error} If a required field is missing from the source object
  */
 export function convertObject<T extends z.ZodObject<z.ZodRawShape>>(
-	source: Record<string, unknown>,
+	source: Record<any, unknown>,
 	template: T,
 ): z.infer<T> {
 	const templateKeys = Object.keys(template.shape);
-	const result: Record<string, unknown> = {};
+	const result: Record<any, unknown> = {};
 
 	for (const key of templateKeys) {
 		const fieldSchema = template.shape[key];
