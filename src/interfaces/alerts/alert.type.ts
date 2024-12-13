@@ -44,7 +44,7 @@ export const effectSchema = z.enum(EFFECT_VALUES);
 export const publishStatusSchema = z.enum(PUBLISH_STATUS_VALUES);
 
 // Base schema for alerts with common validation rules
-const BaseAlertSchema = DocumentSchema.extend({
+const AlertSchema = DocumentSchema.extend({
 	active_period_end_date: z.coerce.date(),
 	active_period_start_date: z.coerce.date(),
 	cause: causeSchema,
@@ -63,49 +63,12 @@ const BaseAlertSchema = DocumentSchema.extend({
 	title: z.string().min(1),
 }).strict();
 
-// Refinements
-const partialBaseAlertSchema = BaseAlertSchema.partial();
+export const CreateAlertSchema = AlertSchema
+	.omit({ _id: true, created_at: true, updated_at: true });
 
-const refinements = (data: z.infer<typeof partialBaseAlertSchema>, ctx: z.RefinementCtx) => {
-	if (data.publish_status === 'PUBLISHED' && data.description && data.description.length < 1) {
-		ctx.addIssue({
-			code: z.ZodIssueCode.custom,
-			message: 'Description is required when publish_status is \'PUBLISHED\'.',
-		});
-	}
-
-	// Active period start date must be before or equal to end date
-	if (data.active_period_start_date && data.active_period_end_date) {
-		if (data.active_period_start_date > data.active_period_end_date) {
-			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-				message: 'Active period start date must be before or equal to end date',
-			});
-		}
-	}
-
-	// Publish start date must be before or equal to end date
-	if (data.publish_start_date && data.publish_end_date) {
-		if (data.publish_start_date > data.publish_end_date) {
-			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-				message: 'Publish start date must be before or equal to end date',
-			});
-		}
-	}
-};
-
-// Export Schemas
-export const AlertSchema = BaseAlertSchema.superRefine(refinements);
-
-export const CreateAlertSchema = BaseAlertSchema
+export const UpdateAlertSchema = AlertSchema
 	.omit({ _id: true, created_at: true, updated_at: true })
-	.superRefine(refinements);
-
-export const UpdateAlertSchema = BaseAlertSchema
-	.omit({ _id: true, created_at: true, updated_at: true })
-	.partial()
-	.superRefine(refinements);
+	.partial();
 
 // Define types based on schemas
 export type Cause = z.infer<typeof causeSchema>;
@@ -115,7 +78,7 @@ export type PublishStatus = z.infer<typeof publishStatusSchema>;
 // Define the Alert interface
 export interface Alert
 	extends Omit<
-		z.infer<typeof BaseAlertSchema>,
+		z.infer<typeof AlertSchema>,
 		'cause'
 		| 'effect'
 		| 'publish_status'
