@@ -50,7 +50,7 @@ export const AlertSchema = DocumentSchema.extend({
 	cause: causeSchema,
 	description: z.string(),
 	effect: effectSchema,
-	image_url: z.string(),
+	image_url: z.string().optional(),
 	municipality_ids: z.array(z.string()),
 	publish_end_date: z.date(),
 	publish_start_date: z.date(),
@@ -61,7 +61,6 @@ export const AlertSchema = DocumentSchema.extend({
 		parent_id: z.string(),
 	})),
 	title: z.string(),
-	updated_at: z.date().optional(),
 }).strict();
 
 export const CreateAlertSchema = AlertSchema.omit({ _id: true, created_at: true, updated_at: true });
