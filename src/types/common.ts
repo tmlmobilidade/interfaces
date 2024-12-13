@@ -1,5 +1,7 @@
 /* * */
 
+import type { DeleteResult as MongoDeleteResult, InsertOneResult as MongoInsertOneResult, UpdateResult as MongoUpdateResult } from 'mongodb';
+
 import { DateTime } from 'luxon';
 import z from 'zod';
 
@@ -36,3 +38,9 @@ export const DocumentSchema = z.object({
 	created_at: z.coerce.date(),
 	updated_at: z.coerce.date(),
 });
+
+/* * */
+
+export type InsertOneResult<T> = MongoInsertOneResult<T>;
+export type UpdateResult = MongoUpdateResult;
+export type DeleteResult = MongoDeleteResult;

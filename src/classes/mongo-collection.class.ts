@@ -2,7 +2,7 @@ import { MongoConnector } from '@/connectors/mongo.connector';
 import { HttpException, HttpStatus } from '@/lib';
 import { createSchemaFactory } from '@/lib/schema.factory';
 import { generateRandomString } from '@/lib/utils';
-import { Collection, Document, Filter, IndexDescription, MongoClientOptions, OptionalUnlessRequiredId, Sort } from 'mongodb';
+import { Collection, DeleteResult, Document, Filter, IndexDescription, InsertOneResult, MongoClientOptions, OptionalUnlessRequiredId, Sort, UpdateResult, WithId } from 'mongodb';
 import z from 'zod';
 
 export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate> {
@@ -72,7 +72,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param filter - The filter criteria to match documents
 	 * @returns A promise that resolves to the count of matching documents
 	 */
-	async count(filter?: Filter<T>) {
+	async count(filter?: Filter<T>): Promise<number> {
 		return this.mongoCollection.countDocuments(filter);
 	}
 
@@ -82,7 +82,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param id - The ID of the document to delete
 	 * @returns A promise that resolves to the result of the delete operation
 	 */
-	async deleteById(id: string) {
+	async deleteById(id: string): Promise<DeleteResult> {
 		return this.mongoCollection.deleteOne({ _id: { $eq: id } } as unknown as Filter<T>);
 	}
 
@@ -92,7 +92,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param filter - The filter criteria to match documents to delete
 	 * @returns A promise that resolves to the result of the delete operation
 	 */
-	async deleteMany(filter: Filter<T>) {
+	async deleteMany(filter: Filter<T>): Promise<DeleteResult> {
 		return this.mongoCollection.deleteMany(filter);
 	}
 
@@ -102,7 +102,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param filter - The filter criteria to match the document to delete
 	 * @returns A promise that resolves to the result of the delete operation
 	 */
-	async deleteOne(filter: Filter<T>) {
+	async deleteOne(filter: Filter<T>): Promise<DeleteResult> {
 		return this.mongoCollection.deleteOne(filter);
 	}
 
@@ -129,7 +129,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param id - The ID of the document to find
 	 * @returns A promise that resolves to the matching document or null if not found
 	 */
-	async findById(id: string) {
+	async findById(id: string): Promise<null | WithId<T>> {
 		return this.mongoCollection.findOne({ _id: { $eq: id } } as unknown as Filter<T>);
 	}
 
@@ -142,7 +142,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param sort - (Optional) sort specification
 	 * @returns A promise that resolves to an array of matching documents
 	 */
-	async findMany(filter?: Filter<T>, perPage?: number, page?: number, sort?: Sort) {
+	async findMany(filter?: Filter<T>, perPage?: number, page?: number, sort?: Sort): Promise<WithId<T>[]> {
 		const query = this.mongoCollection.find(filter ?? {});
 		if (perPage) query.limit(perPage);
 		if (page && perPage) query.skip(perPage * (page - 1));
@@ -156,7 +156,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param filter - The filter criteria to match the document
 	 * @returns A promise that resolves to the matching document or null if not found
 	 */
-	async findOne(filter: Filter<T>) {
+	async findOne(filter: Filter<T>): Promise<null | WithId<T>> {
 		return this.mongoCollection.findOne(filter);
 	}
 
@@ -196,7 +196,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param doc - The document to insert
 	 * @returns A promise that resolves to the result of the insert operation
 	 */
-	async insertOne(doc: { _id?: string, created_at?: Date, updated_at?: Date } & TCreate, { unsafe = false } = {}) {
+	async insertOne(doc: { _id?: string, created_at?: Date, updated_at?: Date } & TCreate, { unsafe = false } = {}): Promise<InsertOneResult<T>> {
 		const newDocument = {
 			...doc,
 			_id: doc._id || generateRandomString({ length: 5 }),
@@ -252,7 +252,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param updateFields - The fields to update in the document
 	 * @returns A promise that resolves to the result of the update operation
 	 */
-	async updateById(id: string, updateFields: TUpdate) {
+	async updateById(id: string, updateFields: TUpdate): Promise<UpdateResult> {
 		if (this.updateSchema) {
 			try {
 				this.updateSchema.parse(updateFields);
@@ -275,7 +275,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param updateFields - The fields to update in the document
 	 * @returns A promise that resolves to the result of the update operation
 	 */
-	async updateOne(filter: Filter<T>, updateFields: Partial<T>) {
+	async updateOne(filter: Filter<T>, updateFields: Partial<T>): Promise<UpdateResult> {
 		return this.mongoCollection.updateOne(filter, { $set: { ...updateFields, updated_at: new Date() } });
 	}
 }
