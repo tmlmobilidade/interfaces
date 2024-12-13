@@ -59,7 +59,7 @@ export const AlertSchema = DocumentSchema.extend({
 	references: z.array(z.object({
 		child_ids: z.array(z.string().min(1)),
 		parent_id: z.string().min(1),
-	})).min(1),
+	})),
 	title: z.string().min(1),
 }).strict();
 
