@@ -44,7 +44,7 @@ export const effectSchema = z.enum(EFFECT_VALUES);
 export const publishStatusSchema = z.enum(PUBLISH_STATUS_VALUES);
 
 // Base schema for alerts with common validation rules
-const AlertSchema = DocumentSchema.extend({
+export const AlertSchema = DocumentSchema.extend({
 	active_period_end_date: z.coerce.date(),
 	active_period_start_date: z.coerce.date(),
 	cause: causeSchema,
