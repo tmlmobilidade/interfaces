@@ -50,7 +50,7 @@ export const AlertSchema = DocumentSchema.extend({
 	cause: causeSchema,
 	description: z.string(),
 	effect: effectSchema,
-	image_url: z.string().url().optional(),
+	image_url: z.string().url().optional().or(z.literal('')),
 	municipality_ids: z.array(z.string().min(1)),
 	publish_end_date: z.coerce.date(),
 	publish_start_date: z.coerce.date(),
