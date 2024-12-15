@@ -122,3 +122,8 @@ export const ApexT11Schema = DocumentSchema.extend({
 export interface ApexT11 extends Omit<z.infer<typeof ApexT11Schema>, 'operational_date'> {
 	operational_date: OperationalDate
 }
+
+/**
+ * Validation statuses that are considered valid for the card holder to travel.
+ */
+export const ALLOWED_VALIDATION_STATUSES = [ValidationStatus._0_ContractValid, ValidationStatus._4_CardInWhiteList, ValidationStatus._5_ProfileInWhiteList, ValidationStatus._6_Interchange];
