@@ -32,6 +32,7 @@ export const RideSchema = DocumentSchema.extend({
 	hashed_shape_id: z.string(),
 	hashed_trip_id: z.string(),
 	headsign: z.string(),
+	is_ended: z.boolean(),
 	line_id: z.string(),
 	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
 	passengers_estimated: z.number().nullable(),
