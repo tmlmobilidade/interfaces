@@ -1,4 +1,4 @@
-import { AgencySchema, AlertSchema, CreateFileSchema, HashedShapeSchema, HashedTripSchema, MunicipalitySchema, OrganizationSchema, PlanSchema, RideSchema, RoleSchema, SessionSchema, StopSchema, UpdateAgencySchema, UpdateAlertSchema, UpdateFileSchema, UpdateHashedShapeSchema, UpdateHashedTripSchema, UpdateMunicipalitySchema, UpdateOrganizationSchema, UpdatePlanSchema, UpdateRideSchema, UpdateRoleSchema, UpdateStopSchema, UpdateUserSchema, UpdateZoneSchema, UserSchema, VerificationTokenSchema, ZoneSchema } from '@/types';
+import { AgencySchema, AlertSchema, FileSchema, HashedShapeSchema, HashedTripSchema, MunicipalitySchema, OrganizationSchema, PlanSchema, RideSchema, RoleSchema, SessionSchema, StopSchema, UpdateAgencySchema, UpdateAlertSchema, UpdateFileSchema, UpdateHashedShapeSchema, UpdateHashedTripSchema, UpdateMunicipalitySchema, UpdateOrganizationSchema, UpdatePlanSchema, UpdateRideSchema, UpdateRoleSchema, UpdateStopSchema, UpdateUserSchema, UpdateZoneSchema, UserSchema, VerificationTokenSchema, ZoneSchema } from '@/types';
 
 export function createSchemaFactory(collectionName: string) {
 	switch (collectionName) {
@@ -7,7 +7,7 @@ export function createSchemaFactory(collectionName: string) {
 		case 'alerts':
 			return [AlertSchema, UpdateAlertSchema];
 		case 'files':
-			return [CreateFileSchema, UpdateFileSchema];
+			return [FileSchema, UpdateFileSchema];
 		case 'hashed_shapes':
 			return [HashedShapeSchema, UpdateHashedShapeSchema];
 		case 'hashed_trips':
