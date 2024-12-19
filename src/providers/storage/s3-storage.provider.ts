@@ -1,39 +1,29 @@
-import {
-	CreateBucketCommand,
-	DeleteObjectCommand,
-	DeleteObjectsCommand,
-	GetObjectCommand,
-	HeadBucketCommand,
-	ListObjectsV2Command,
-	PutObjectCommand,
-	S3Client,
-
-} from '@aws-sdk/client-s3';
+import { CreateBucketCommand, DeleteObjectCommand, DeleteObjectsCommand, GetObjectCommand, HeadBucketCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 
 import { IStorageProvider } from './storage.interface';
 
-export interface CloudflareStorageProviderConfiguration {
+export interface S3StorageProviderConfiguration {
 	access_key_id: string
-	account_id: string
 	bucket_name: string
+	endpoint?: string
 	region?: string
 	secret_access_key: string
 }
 
-export class CloudflareStorageProvider implements IStorageProvider {
+export class S3StorageProvider implements IStorageProvider {
 	private readonly bucketName: string;
 	private readonly s3Client: S3Client;
 
-	constructor(config: CloudflareStorageProviderConfiguration) {
+	constructor(config: S3StorageProviderConfiguration) {
 		this.s3Client = new S3Client({
 			credentials: {
 				accessKeyId: config.access_key_id,
 				secretAccessKey: config.secret_access_key,
 			},
-			endpoint: `https://${config.account_id}.r2.cloudflarestorage.com`,
-			region: config.region || 'auto',
+			endpoint: config.endpoint,
+			region: config.region || 'eu-south-2', // Default region, Spain
 		});
 		this.bucketName = config.bucket_name;
 	}
@@ -156,7 +146,6 @@ export class CloudflareStorageProvider implements IStorageProvider {
 	async uploadFile(key: string, body: Buffer | Readable | string): Promise<void> {
 		try {
 			await this.checkBucket();
-
 			const command = new PutObjectCommand({
 				Body: body,
 				Bucket: this.bucketName,

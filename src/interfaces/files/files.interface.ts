@@ -34,14 +34,14 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 				});
 				break;
 			case 'cloudflare':
-				if (!process.env.CLOUDFLARE_ACCESS_KEY_ID || !process.env.CLOUDFLARE_ACCOUNT_ID || !process.env.CLOUDFLARE_BUCKET_NAME || !process.env.CLOUDFLARE_SECRET_ACCESS_KEY) {
-					throw new Error('CLOUDFLARE_ACCESS_KEY_ID, CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_BUCKET_NAME, and CLOUDFLARE_SECRET_ACCESS_KEY must be set');
+				if (!process.env.CLOUDFLARE_ACCESS_KEY_ID || !process.env.CLOUDFLARE_BUCKET_NAME || !process.env.CLOUDFLARE_SECRET_ACCESS_KEY || !process.env.CLOUDFLARE_ENDPOINT) {
+					throw new Error('CLOUDFLARE_ACCESS_KEY_ID, CLOUDFLARE_BUCKET_NAME, CLOUDFLARE_SECRET_ACCESS_KEY, and CLOUDFLARE_ENDPOINT must be set');
 				}
 				this.storageService = StorageFactory.create({
 					cloudflare_config: {
 						access_key_id: process.env.CLOUDFLARE_ACCESS_KEY_ID,
-						account_id: process.env.CLOUDFLARE_ACCOUNT_ID,
 						bucket_name: process.env.CLOUDFLARE_BUCKET_NAME,
+						endpoint: process.env.CLOUDFLARE_ENDPOINT,
 						secret_access_key: process.env.CLOUDFLARE_SECRET_ACCESS_KEY,
 					},
 					type: 'cloudflare',

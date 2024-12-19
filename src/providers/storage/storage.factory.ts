@@ -1,12 +1,13 @@
-import { AwsStorageProvider, AwsStorageProviderConfiguration } from './aws-storage.provider';
-import { CloudflareStorageProvider, CloudflareStorageProviderConfiguration } from './cloudflare-storage.provider';
+import { S3StorageProvider, S3StorageProviderConfiguration } from './s3-storage.provider';
 import { IStorageProvider } from './storage.interface';
 
 export type StorageConfiguration = {
-	aws_config: AwsStorageProviderConfiguration
+	aws_config: S3StorageProviderConfiguration
 	type: 'aws'
 } | {
-	cloudflare_config: CloudflareStorageProviderConfiguration
+	cloudflare_config: {
+		endpoint: string
+	} & S3StorageProviderConfiguration
 	type: 'cloudflare'
 };
 
@@ -20,9 +21,9 @@ export class StorageFactory {
 	public static create(config: StorageConfiguration): IStorageProvider {
 		switch (config.type) {
 			case 'aws':
-				return new AwsStorageProvider(config.aws_config);
+				return new S3StorageProvider(config.aws_config);
 			case 'cloudflare':
-				return new CloudflareStorageProvider(config.cloudflare_config);
+				return new S3StorageProvider(config.cloudflare_config);
 			default:
 				throw new Error(`Invalid storage type`);
 		}
