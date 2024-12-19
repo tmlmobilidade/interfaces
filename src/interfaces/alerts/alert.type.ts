@@ -52,6 +52,7 @@ export const AlertSchema = DocumentSchema.extend({
 	description: z.string(),
 	effect: effectSchema,
 	image_url: z.string().url().optional().or(z.literal('')),
+	modified_by: z.string().min(1),
 	municipality_ids: z.array(z.string().min(1)),
 	publish_end_date: z.coerce.date(),
 	publish_start_date: z.coerce.date(),
@@ -101,4 +102,4 @@ export interface CreateAlertDto
 	publish_status: PublishStatus
 }
 
-export type UpdateAlertDto = Partial<CreateAlertDto>;
+export type UpdateAlertDto = Partial<Omit<CreateAlertDto, 'created_by'>>;
