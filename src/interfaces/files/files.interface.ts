@@ -106,7 +106,7 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 			if (!file) {
 				throw new HttpException(HttpStatus.NOT_FOUND, 'File not found');
 			}
-			key = file.key; // Use the file's storage key
+			key = `${file.key}/${file.name}`; // Use the file's storage key
 		}
 
 		// At this point, `key` must exist
