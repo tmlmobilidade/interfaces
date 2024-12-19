@@ -1,7 +1,9 @@
 import {
+	CreateBucketCommand,
 	DeleteObjectCommand,
 	DeleteObjectsCommand,
 	GetObjectCommand,
+	HeadBucketCommand,
 	ListObjectsV2Command,
 	PutObjectCommand,
 	S3Client,
@@ -34,6 +36,20 @@ export class CloudflareStorageProvider implements IStorageProvider {
 			region: config.region || 'auto',
 		});
 		this.bucketName = config.bucket_name;
+	}
+
+	/**
+	 * Checks if the bucket exists and creates it if it doesn't.
+	 */
+	async checkBucket(): Promise<void> {
+		try {
+			await this.s3Client.send(new HeadBucketCommand({ Bucket: this.bucketName }));
+		}
+		catch (error) {
+			if ((error as any).name === 'NotFound') {
+				await this.s3Client.send(new CreateBucketCommand({ Bucket: this.bucketName }));
+			}
+		}
 	}
 
 	/**
@@ -139,6 +155,8 @@ export class CloudflareStorageProvider implements IStorageProvider {
 	 */
 	async uploadFile(key: string, body: Buffer | Readable | string): Promise<void> {
 		try {
+			await this.checkBucket();
+
 			const command = new PutObjectCommand({
 				Body: body,
 				Bucket: this.bucketName,

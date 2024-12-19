@@ -1,4 +1,4 @@
-import { DeleteObjectCommand, DeleteObjectsCommand, GetObjectCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { CreateBucketCommand, DeleteObjectCommand, DeleteObjectsCommand, GetObjectCommand, HeadBucketCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 
@@ -24,6 +24,20 @@ export class AwsStorageProvider implements IStorageProvider {
 			region: config.region || 'eu-south-2', // Default region, Spain
 		});
 		this.bucketName = config.bucket_name;
+	}
+
+	/**
+	 * Checks if the bucket exists and creates it if it doesn't.
+	 */
+	async checkBucket(): Promise<void> {
+		try {
+			await this.s3Client.send(new HeadBucketCommand({ Bucket: this.bucketName }));
+		}
+		catch (error) {
+			if ((error as any).name === 'NotFound') {
+				await this.s3Client.send(new CreateBucketCommand({ Bucket: this.bucketName }));
+			}
+		}
 	}
 
 	/**
@@ -129,6 +143,7 @@ export class AwsStorageProvider implements IStorageProvider {
 	 */
 	async uploadFile(key: string, body: Buffer | Readable | string): Promise<void> {
 		try {
+			await this.checkBucket();
 			const command = new PutObjectCommand({
 				Body: body,
 				Bucket: this.bucketName,
