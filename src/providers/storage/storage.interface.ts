@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 
-export interface IStorageService {
+export interface IStorageProvider {
 	// Delete a file from the storage.
 	deleteFile(key: string): Promise<void>
 

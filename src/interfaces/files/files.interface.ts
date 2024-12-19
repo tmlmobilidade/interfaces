@@ -5,7 +5,7 @@ import { HttpStatus } from '@/lib';
 import { HttpException } from '@/lib';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { StorageFactory } from '@/providers/storage/storage.factory';
-import { IStorageService } from '@/providers/storage/storage.interface';
+import { IStorageProvider } from '@/providers/storage/storage.interface';
 import { CreateFileDto, File, UpdateFileDto } from '@/types';
 import { IndexDescription, InsertOneResult } from 'mongodb';
 
@@ -13,7 +13,7 @@ import { IndexDescription, InsertOneResult } from 'mongodb';
 
 class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto> {
 	private static _instance: FilesClass;
-	private readonly storageService: IStorageService;
+	private readonly storageService: IStorageProvider;
 
 	private constructor() {
 		super();

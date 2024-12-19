@@ -10,9 +10,9 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 
-import { IStorageService } from './storage.interface';
+import { IStorageProvider } from './storage.interface';
 
-export interface CloudflareStorageServiceConfiguration {
+export interface CloudflareStorageProviderConfiguration {
 	access_key_id: string
 	account_id: string
 	bucket_name: string
@@ -20,11 +20,11 @@ export interface CloudflareStorageServiceConfiguration {
 	secret_access_key: string
 }
 
-export class CloudflareStorageService implements IStorageService {
+export class CloudflareStorageProvider implements IStorageProvider {
 	private readonly bucketName: string;
 	private readonly s3Client: S3Client;
 
-	constructor(config: CloudflareStorageServiceConfiguration) {
+	constructor(config: CloudflareStorageProviderConfiguration) {
 		this.s3Client = new S3Client({
 			credentials: {
 				accessKeyId: config.access_key_id,

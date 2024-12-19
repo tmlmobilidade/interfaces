@@ -2,20 +2,20 @@ import { DeleteObjectCommand, DeleteObjectsCommand, GetObjectCommand, ListObject
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 
-import { IStorageService } from './storage.interface';
+import { IStorageProvider } from './storage.interface';
 
-export interface AwsStorageServiceConfiguration {
+export interface AwsStorageProviderConfiguration {
 	access_key_id: string
 	bucket_name: string
 	region?: string
 	secret_access_key: string
 }
 
-export class AwsStorageService implements IStorageService {
+export class AwsStorageProvider implements IStorageProvider {
 	private readonly bucketName: string;
 	private readonly s3Client: S3Client;
 
-	constructor(config: AwsStorageServiceConfiguration) {
+	constructor(config: AwsStorageProviderConfiguration) {
 		this.s3Client = new S3Client({
 			credentials: {
 				accessKeyId: config.access_key_id,
