@@ -48,6 +48,7 @@ export const AlertSchema = DocumentSchema.extend({
 	active_period_end_date: z.coerce.date(),
 	active_period_start_date: z.coerce.date(),
 	cause: causeSchema,
+	created_by: z.string().min(1),
 	description: z.string(),
 	effect: effectSchema,
 	image_url: z.string().url().optional().or(z.literal('')),
