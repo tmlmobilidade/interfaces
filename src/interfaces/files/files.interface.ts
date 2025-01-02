@@ -42,6 +42,7 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 						access_key_id: process.env.CLOUDFLARE_ACCESS_KEY_ID,
 						bucket_name: process.env.CLOUDFLARE_BUCKET_NAME,
 						endpoint: `https://${process.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+						region: 'auto',
 						secret_access_key: process.env.CLOUDFLARE_SECRET_ACCESS_KEY,
 					},
 					type: 'cloudflare',
