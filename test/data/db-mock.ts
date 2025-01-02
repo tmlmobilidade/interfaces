@@ -310,7 +310,8 @@ export const mockAlerts: CreateAlertDto[] = [
 		created_by: '1',
 		description: '',
 		effect: 'SIGNIFICANT_DELAYS',
-		image_url: '',
+		image_path: '',
+		info_url: '',
 		modified_by: '1',
 		municipality_ids: [
 			'649b4cce0ac399a0115319e3',
@@ -332,7 +333,8 @@ export const mockAlerts: CreateAlertDto[] = [
 		created_by: '1',
 		description: '',
 		effect: 'SIGNIFICANT_DELAYS',
-		image_url: '',
+		image_path: '',
+		info_url: '',
 		modified_by: '1',
 		municipality_ids: [
 			'649b4cce0ac399a0115319e3',
@@ -354,7 +356,8 @@ export const mockAlerts: CreateAlertDto[] = [
 		created_by: '1',
 		description: '',
 		effect: 'SIGNIFICANT_DELAYS',
-		image_url: '',
+		image_path: '',
+		info_url: '',
 		modified_by: '1',
 		municipality_ids: [
 			'649b4cce0ac399a0115319e3',
