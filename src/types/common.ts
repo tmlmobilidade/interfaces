@@ -7,9 +7,9 @@ import z from 'zod';
 
 /* * */
 
-export type Email = {
+export type Email = string & {
 	__brand: 'Email'
-} & string;
+};
 
 export function createEmail(email: string): Email {
 	const parsedEmail = email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
@@ -21,9 +21,9 @@ export function createEmail(email: string): Email {
 
 export const OPERATIONAL_DATE_FORMAT = 'yyyyMMdd';
 
-export type OperationalDate = {
+export type OperationalDate = string & {
 	__brand: 'OperationalDate'
-} & string;
+};
 
 export function createOperationalDate(date: string): OperationalDate {
 	const parsedDate = DateTime.fromFormat(date, OPERATIONAL_DATE_FORMAT);
@@ -41,6 +41,14 @@ export const DocumentSchema = z.object({
 
 /* * */
 
+export const CommentSchema = DocumentSchema.extend({
+	_id: z.string(),
+	text: z.string(),
+	user_id: z.string(),
+}).strict();
+
+/* * */
+
+export type DeleteResult = MongoDeleteResult;
 export type InsertOneResult<T> = MongoInsertOneResult<T>;
 export type UpdateResult = MongoUpdateResult;
-export type DeleteResult = MongoDeleteResult;
