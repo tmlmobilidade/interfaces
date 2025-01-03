@@ -25,6 +25,9 @@ export const StopSchema = DocumentSchema.extend({
 
 	address: z.string().optional(),
 	district_id: z.string(),
+	jurisdiction: z
+		.enum(['ip', 'municipality', 'other', 'unknown'])
+		.default('unknown'),
 	locality_id: z.string().optional(),
 	municipality_id: z.string(),
 	parish_id: z.string().optional(),
