@@ -23,26 +23,6 @@ class RidesClass extends MongoCollectionClass<Ride, CreateRideDto, UpdateRideDto
 		return RidesClass._instance;
 	}
 
-	protected getCollectionIndexes(): IndexDescription[] {
-		return [
-			{ background: true, key: { agency_id: 1 } },
-			{ background: true, key: { line_id: 1 } },
-			{ background: true, key: { trip_id: 1 } },
-			{ background: true, key: { status: 1 } },
-			{ background: true, key: { operational_date: -1 } },
-			{ background: true, key: { start_time_scheduled: -1 } },
-			{ background: true, key: { start_time_scheduled: -1, status: 1 } },
-		];
-	}
-
-	protected getCollectionName(): string {
-		return 'rides';
-	}
-
-	protected getEnvName(): string {
-		return 'TML_INTERFACE_RIDES';
-	}
-
 	/**
 	 * Finds ride documents by Agency ID.
 	 *
@@ -101,6 +81,26 @@ class RidesClass extends MongoCollectionClass<Ride, CreateRideDto, UpdateRideDto
 	 */
 	async findByTripId(tripId: string) {
 		return this.mongoCollection.find({ trip_id: tripId } as Filter<Ride>).toArray();
+	}
+
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { agency_id: 1 } },
+			{ background: true, key: { line_id: 1 } },
+			{ background: true, key: { trip_id: 1 } },
+			{ background: true, key: { status: 1 } },
+			{ background: true, key: { operational_date: -1 } },
+			{ background: true, key: { start_time_scheduled: -1 } },
+			{ background: true, key: { start_time_scheduled: -1, status: 1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
+		return 'rides';
+	}
+
+	protected getEnvName(): string {
+		return 'TML_INTERFACE_RIDES';
 	}
 }
 

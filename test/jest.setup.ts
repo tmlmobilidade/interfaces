@@ -58,7 +58,7 @@ export async function seedDatabase(db: Db) {
 		{ data: mockRoles, name: 'roles' },
 		{ data: mockUsers, name: 'users' },
 		{ data: mockZones, name: 'zones' },
-		{ data: mockStops, name: 'stops' },
+		{ data: mockStops, name: 'stops' }, // TODO - Allow _id that are strings (not ObjectIds)
 		{ data: mockOrganizations, name: 'organizations' },
 		{ data: mockMunicipalities, name: 'municipalities' },
 		{ data: mockAgencies, name: 'agencies' },
@@ -67,7 +67,7 @@ export async function seedDatabase(db: Db) {
 
 	for (const collection of collections) {
 		for (const item of collection.data) {
-			await db.collection(collection.name).insertOne(item);
+			await db.collection(collection.name).insertOne(item as any);
 		}
 	}
 }

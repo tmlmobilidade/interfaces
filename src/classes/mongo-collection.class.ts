@@ -11,15 +11,6 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	protected mongoConnector: MongoConnector;
 	protected updateSchema: null | z.ZodSchema = null;
 
-	// Abstract method for subclasses to provide the MongoDB collection indexes
-	protected abstract getCollectionIndexes(): IndexDescription[];
-
-	// Abstract method for subclasses to provide the MongoDB collection name
-	protected abstract getCollectionName(): string;
-
-	// Abstract method for subclasses to provide the environment variable name
-	protected abstract getEnvName(): string;
-
 	/**
 	 * Gets all documents in the collection.
 	 *
@@ -160,27 +151,6 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 		return this.mongoCollection.findOne(filter);
 	}
 
-	// /**
-	//  * Inserts multiple documents into the collection.
-	//  *
-	//  * @param docs - Array of documents to insert
-	//  * @returns A promise that resolves to the result of the insert operation
-	//  */
-	// async insertMany(docs: OptionalUnlessRequiredId<T>[]) {
-	// 	if (this.createSchema) {
-	// 		for (const doc of docs) {
-	// 			try {
-	// 				this.createSchema.parse(doc);
-	// 			}
-	// 			catch (error) {
-	// 				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
-	// 			}
-	// 		}
-	// 	}
-
-	// 	return this.mongoCollection.insertMany(docs.map(doc => ({ ...doc, created_at: new Date(), updated_at: new Date() })));
-	// }
-
 	/**
 	 * Gets the MongoDB collection instance.
 	 *
@@ -196,7 +166,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param doc - The document to insert
 	 * @returns A promise that resolves to the result of the insert operation
 	 */
-	async insertOne(doc: { _id?: string, created_at?: Date, updated_at?: Date } & TCreate, { unsafe = false } = {}): Promise<InsertOneResult<T>> {
+	async insertOne(doc: TCreate & { _id?: string, created_at?: Date, updated_at?: Date }, { unsafe = false } = {}): Promise<InsertOneResult<T>> {
 		const newDocument = {
 			...doc,
 			_id: doc._id || generateRandomString({ length: 5 }),
@@ -225,26 +195,6 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 		return this.mongoCollection.insertOne(newDocument);
 	}
 
-	// /**
-	//  * Updates multiple documents matching the filter criteria.
-	//  *
-	//  * @param filter - The filter criteria to match documents to update
-	//  * @param updateFields - The fields to update in the documents
-	//  * @returns A promise that resolves to the result of the update operation
-	//  */
-	// async updateMany(filter: Filter<T>, updateFields: Partial<T>) {
-	// 	if (this.updateSchema) {
-	// 		try {
-	// 			this.updateSchema.parse(updateFields);
-	// 		}
-	// 		catch (error) {
-	// 			throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
-	// 		}
-	// 	}
-
-	// 	return this.mongoCollection.updateMany(filter, { $set: { ...updateFields, updated_at: new Date() } });
-	// }
-
 	/**
 	 * Updates a single document matching the filter criteria.
 	 *
@@ -268,6 +218,27 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 		);
 	}
 
+	// /**
+	//  * Inserts multiple documents into the collection.
+	//  *
+	//  * @param docs - Array of documents to insert
+	//  * @returns A promise that resolves to the result of the insert operation
+	//  */
+	// async insertMany(docs: OptionalUnlessRequiredId<T>[]) {
+	// 	if (this.createSchema) {
+	// 		for (const doc of docs) {
+	// 			try {
+	// 				this.createSchema.parse(doc);
+	// 			}
+	// 			catch (error) {
+	// 				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
+	// 			}
+	// 		}
+	// 	}
+
+	// 	return this.mongoCollection.insertMany(docs.map(doc => ({ ...doc, created_at: new Date(), updated_at: new Date() })));
+	// }
+
 	/**
 	 * Updates a single document matching the filter criteria.
 	 *
@@ -278,4 +249,33 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	async updateOne(filter: Filter<T>, updateFields: Partial<T>): Promise<UpdateResult> {
 		return this.mongoCollection.updateOne(filter, { $set: { ...updateFields, updated_at: new Date() } });
 	}
+
+	// Abstract method for subclasses to provide the MongoDB collection indexes
+	protected abstract getCollectionIndexes(): IndexDescription[];
+
+	// /**
+	//  * Updates multiple documents matching the filter criteria.
+	//  *
+	//  * @param filter - The filter criteria to match documents to update
+	//  * @param updateFields - The fields to update in the documents
+	//  * @returns A promise that resolves to the result of the update operation
+	//  */
+	// async updateMany(filter: Filter<T>, updateFields: Partial<T>) {
+	// 	if (this.updateSchema) {
+	// 		try {
+	// 			this.updateSchema.parse(updateFields);
+	// 		}
+	// 		catch (error) {
+	// 			throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
+	// 		}
+	// 	}
+
+	// 	return this.mongoCollection.updateMany(filter, { $set: { ...updateFields, updated_at: new Date() } });
+	// }
+
+	// Abstract method for subclasses to provide the MongoDB collection name
+	protected abstract getCollectionName(): string;
+
+	// Abstract method for subclasses to provide the environment variable name
+	protected abstract getEnvName(): string;
 }

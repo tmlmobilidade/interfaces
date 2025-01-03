@@ -24,6 +24,14 @@ class AgenciesClass extends MongoCollectionClass<Agency, CreateAgencyDto, Update
 		return AgenciesClass._instance;
 	}
 
+	async findByCode(code: string) {
+		return this.mongoCollection.findOne({ code } as Filter<Agency>);
+	}
+
+	async updateByCode(code: string, fields: Partial<Agency>) {
+		return this.mongoCollection.updateOne({ code } as Filter<Agency>, { $set: fields });
+	}
+
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
 			{ background: true, key: { name: 1 }, unique: true },
@@ -46,14 +54,6 @@ class AgenciesClass extends MongoCollectionClass<Agency, CreateAgencyDto, Update
 
 	protected getUpdateSchema(): z.ZodSchema {
 		return UpdateAgencySchema;
-	}
-
-	async findByCode(code: string) {
-		return this.mongoCollection.findOne({ code } as Filter<Agency>);
-	}
-
-	async updateByCode(code: string, fields: Partial<Agency>) {
-		return this.mongoCollection.updateOne({ code } as Filter<Agency>, { $set: fields });
 	}
 }
 

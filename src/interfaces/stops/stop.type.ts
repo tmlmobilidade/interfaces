@@ -1,6 +1,6 @@
 /* * */
 
-import { CommentSchema, DocumentSchema } from '@/types';
+import { CommentSchema, DocumentSchema } from '@/types/common';
 import z from 'zod';
 
 /* * */
@@ -76,7 +76,7 @@ export const StopSchema = DocumentSchema.extend({
 
 }).strict();
 
-export const CreateStopSchema = StopSchema.omit({ created_at: true, updated_at: true });
+export const CreateStopSchema = StopSchema;
 export const UpdateStopSchema = CreateStopSchema.partial();
 
 export type Stop = z.infer<typeof StopSchema>;

@@ -1,121 +1,80 @@
 import { stops } from '@/interfaces';
 import { CreateStopDto } from '@/types';
-import { mockMunicipalities, mockStops } from '@test/data/db-mock';
-import { Sort } from 'mongodb';
+import { mockStops } from '@test/data/db-mock';
 
 const newStop: CreateStopDto = {
 	...mockStops[0],
-	code: 'NEW_CODE',
+	_id: '123456',
 };
-
-let insertedStopId: string;
 
 describe('StopsClass', () => {
 	afterAll(async () => {
 		await stops.disconnect();
 	});
 
-	describe('findByCode', () => {
-		it('should find a stop by its code', async () => {
-			const stop = await stops.findByCode(mockStops[0].code);
-			expect(stop?.code).toBe(mockStops[0].code);
+	describe('findById', () => {
+		it('should find a stop by its _id', async () => {
+			const stop = await stops.findById(mockStops[0]._id);
+			expect(stop?._id).toBe(mockStops[0]._id);
 		});
 
 		it('should return undefined if the stop is not found', async () => {
-			const stop = await stops.findByCode('999999');
+			const stop = await stops.findById('999999');
 			expect(stop).toBeNull();
 		});
 	});
 
-	describe('findByMunicipalityCode', () => {
-		it('should find stops by municipality code', async () => {
-			const municipalityCode = mockMunicipalities[0].code;
-			const result = await stops.findByMunicipalityCode(municipalityCode);
-
-			expect(result).toBeDefined();
-			expect(result.length).toBeGreaterThan(0);
-
-			result.forEach((stop) => {
-				expect(stop.municipality_code).toBe(municipalityCode);
-			});
-		});
-
-		it('should return an empty array if no stops are found for the municipality code', async () => {
-			const municipalityCode = 'NON_EXISTENT_CODE';
-			const result = await stops.findByMunicipalityCode(municipalityCode);
-			expect(result).toEqual([]);
-		});
-
-		it('should apply pagination correctly', async () => {
-			const municipalityCode = mockMunicipalities[0].code;
-			const perPage = 1;
-			const page = 1;
-			const result = await stops.findByMunicipalityCode(municipalityCode, perPage, page);
-			expect(result.length).toBeLessThanOrEqual(perPage);
-		});
-
-		it('should apply sorting correctly', async () => {
-			const municipalityCode = mockMunicipalities[0].code;
-			const sort: Sort = { name: 1 };
-
-			const result = await stops.findByMunicipalityCode(municipalityCode, undefined, undefined, sort);
-			for (let i = 1; i < result.length; i++) {
-				expect(result[i].name >= result[i - 1].name).toBe(true);
-			}
-		});
-	});
-
-	describe('findManyByCodes', () => {
-		it('should find multiple stops by their codes', async () => {
-			const codes = [mockStops[0].code, mockStops[1].code];
-			const result = await stops.findManyByCodes(codes);
+	describe('findManyByIds', () => {
+		it('should find multiple stops by their ids', async () => {
+			const ids = [mockStops[0]._id, mockStops[1]._id];
+			const result = await stops.findManyByIds(ids);
 			expect(result.length).toBe(2);
-			const foundCodes = result.map(stop => stop.code);
-			expect(foundCodes).toContain(mockStops[0].code);
-			expect(foundCodes).toContain(mockStops[1].code);
+			const foundIds = result.map(stop => stop._id);
+			expect(foundIds).toContain(mockStops[0]._id);
+			expect(foundIds).toContain(mockStops[1]._id);
 		});
 
-		it('should return only existing stops when some codes do not exist', async () => {
-			const codes = [mockStops[0].code, 'NON_EXISTENT_CODE'];
-			const result = await stops.findManyByCodes(codes);
+		it('should return only existing stops when some ids do not exist', async () => {
+			const ids = [mockStops[0]._id, '090909'];
+			const result = await stops.findManyByIds(ids);
 			expect(result.length).toBe(1);
-			expect(result[0].code).toBe(mockStops[0].code);
+			expect(result[0]._id).toBe(mockStops[0]._id);
 		});
 
-		it('should return an empty array if no codes match', async () => {
-			const codes = ['INVALID_CODE1', 'INVALID_CODE2'];
-			const result = await stops.findManyByCodes(codes);
+		it('should return an empty array if no ids match', async () => {
+			const ids = ['090909', '909090'];
+			const result = await stops.findManyByIds(ids);
 			expect(result).toEqual([]);
 		});
 	});
 
-	describe('updateByCode', () => {
+	describe('updateById', () => {
 		it('should update a stop by its code', async () => {
-			const code = mockStops[0].code;
+			const code = mockStops[0]._id;
 			const updateFields = { name: 'Updated Stop Name' };
-			const updateResult = await stops.updateByCode(code, updateFields);
+			const updateResult = await stops.updateById(code, updateFields);
 			expect(updateResult.modifiedCount).toBe(1);
 
-			const updatedStop = await stops.findByCode(code);
+			const updatedStop = await stops.findById(code);
 			expect(updatedStop?.name).toBe('Updated Stop Name');
 		});
 
 		it('should return modifiedCount as 0 if the stop does not exist', async () => {
-			const code = 'NON_EXISTENT_CODE';
+			const code = '000000';
 			const updateFields = { name: 'Should Not Update' };
-			const updateResult = await stops.updateByCode(code, updateFields);
+			const updateResult = await stops.updateById(code, updateFields);
 			expect(updateResult.modifiedCount).toBe(0);
 		});
 
 		it('should handle partial updates correctly', async () => {
-			const code = mockStops[1].code;
-			const originalStop = await stops.findByCode(code);
-			const updateFields = { locality: 'Updated Locality' };
-			const updateResult = await stops.updateByCode(code, updateFields);
+			const code = mockStops[1]._id;
+			const originalStop = await stops.findById(code);
+			const updateFields = { locality_id: 'Updated Locality' };
+			const updateResult = await stops.updateById(code, updateFields);
 			expect(updateResult.modifiedCount).toBe(1);
 
-			const updatedStop = await stops.findByCode(code);
-			expect(updatedStop?.locality).toBe('Updated Locality');
+			const updatedStop = await stops.findById(code);
+			expect(updatedStop?.locality_id).toBe('Updated Locality');
 			// Ensure other fields remain unchanged
 			expect(updatedStop?.name).toBe(originalStop?.name);
 		});
@@ -130,25 +89,23 @@ describe('StopsClass', () => {
 
 	describe('insertOne', () => {
 		afterAll(async () => {
-			await stops.deleteOne({ _id: insertedStopId });
+			await stops.deleteOne({ _id: newStop._id });
 		});
 
 		it('should insert a stop', async () => {
 			const result = await stops.insertOne(newStop);
 			expect(result.insertedId).toBeDefined();
 
-			const insertedStop = await stops.findByCode(newStop.code);
+			const insertedStop = await stops.findById(newStop._id);
 
 			expect(insertedStop).toBeDefined();
 
 			// compare all properties except created_at, updated_at and Id
 			if (insertedStop) {
-				insertedStopId = insertedStop._id;
-
-				const { _id, created_at, updated_at, ...rest } = insertedStop;
+				const { created_at, updated_at, ...rest } = insertedStop;
 				expect(created_at).toBeDefined();
 				expect(updated_at).toBeDefined();
-				expect(_id).toBeDefined();
+				expect(insertedStop._id).toBeDefined();
 				expect(rest).toEqual(newStop);
 			}
 			else {
@@ -164,12 +121,11 @@ describe('StopsClass', () => {
 
 	describe('deleteOne', () => {
 		beforeAll(async () => {
-			const result = await stops.insertOne(newStop);
-			insertedStopId = result.insertedId.toString();
+			await stops.insertOne(newStop);
 		});
 
 		it('should delete a stop', async () => {
-			const result = await stops.deleteOne({ _id: insertedStopId });
+			const result = await stops.deleteOne({ _id: newStop._id });
 			expect(result.deletedCount).toBe(1);
 
 			const count = await stops.count();
