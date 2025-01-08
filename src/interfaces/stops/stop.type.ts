@@ -23,7 +23,6 @@ export const StopSchema = DocumentSchema.extend({
 	//
 	// Location
 
-	address: z.string().optional(),
 	district_id: z.string(),
 	jurisdiction: z
 		.enum(['ip', 'municipality', 'other', 'unknown'])
@@ -42,8 +41,20 @@ export const StopSchema = DocumentSchema.extend({
 	bench_status: z
 		.enum(['not_applicable', 'unknown', 'is_missing', 'is_damaged', 'is_ok'])
 		.default('unknown'),
+	docking_bay_type: z
+		.enum(['unknown', 'simple_interaction', 'cut_in_road_without_marks', 'cut_in_road_with_marks', 'island', 'peninsula'])
+		.default('unknown'),
+	electricity_status: z
+		.enum(['available', 'unavailable', 'unknown'])
+		.default('unknown'),
 	flag_status: z
 		.enum(['not_applicable', 'unknown', 'is_missing', 'is_damaged', 'is_ok'])
+		.default('unknown'),
+	lighting_status: z
+		.enum(['confortable', 'damaged', 'insuficient', 'moderate', 'unavailable', 'unknown'])
+		.default('unknown'),
+	pavement_type: z
+		.enum(['asphalt', 'concrete', 'dirt', 'grass', 'gravel', 'portuguese_stones', 'unknown'])
 		.default('unknown'),
 	pole_status: z
 		.enum(['not_applicable', 'unknown', 'is_missing', 'is_damaged', 'is_ok'])
@@ -55,8 +66,8 @@ export const StopSchema = DocumentSchema.extend({
 	shelter_status: z
 		.enum(['not_applicable', 'unknown', 'is_missing', 'is_damaged', 'is_ok'])
 		.default('unknown'),
-	trash_bin_status: z
-		.enum(['not_applicable', 'unknown', 'is_missing', 'is_damaged', 'is_ok'])
+	sidewalk_type: z
+		.enum(['unknown', 'none', 'gutter', 'inaccessible', 'is_ok'])
 		.default('unknown'),
 
 	//
@@ -72,6 +83,38 @@ export const StopSchema = DocumentSchema.extend({
 
 	comments: z
 		.array(CommentSchema)
+		.default([]),
+
+	//
+	// Facilities
+
+	connections: z
+		.array(z.enum([
+			'ferry',
+			'light_rail',
+			'subway',
+			'train',
+			'boat',
+			'airport',
+			'bike_sharing',
+			'bike_parking',
+			'car_parking',
+		]))
+		.default([]),
+
+	facilities: z
+		.array(z.enum([
+			'fire_station',
+			'health_clinic',
+			'historic_building',
+			'hospital',
+			'police_station',
+			'school',
+			'shopping',
+			'transit_office',
+			'university',
+			'pip',
+		]))
 		.default([]),
 
 }).strict();
