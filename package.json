@@ -24,7 +24,7 @@
 		"dist/"
 	],
 	"scripts": {
-		"build": "rimraf ./dist && tsc -p tsconfig.prod.json && tsc-alias",
+		"build": "rimraf ./dist && tsup",
 		"clean": "rimraf dist && rimraf node_modules",
 		"dev": "dotenv-run -- tsx src/stops/index.ts",
 		"docker:local": "docker compose -f docker/local/compose.local.yaml up -d",
@@ -37,27 +37,27 @@
 	},
 	"exports": {
 		"./interfaces": {
-			"import": "./dist/interfaces/index.js",
+			"import": "./dist/interfaces/index.mjs",
 			"require": "./dist/interfaces/index.js",
 			"types": "./dist/interfaces/index.d.ts"
 		},
 		"./lib": {
-			"import": "./dist/lib/index.js",
+			"import": "./dist/lib/index.mjs",
 			"require": "./dist/lib/index.js",
 			"types": "./dist/lib/index.d.ts"
 		},
 		"./providers": {
-			"import": "./dist/providers/index.js",
+			"import": "./dist/providers/index.mjs",
 			"require": "./dist/providers/index.js",
 			"types": "./dist/providers/index.d.ts"
 		},
 		"./types": {
-			"import": "./dist/types/index.js",
+			"import": "./dist/types/index.mjs",
 			"require": "./dist/types/index.js",
 			"types": "./dist/types/index.d.ts"
 		},
 		"./utils": {
-			"import": "./dist/utils/index.js",
+			"import": "./dist/utils/index.mjs",
 			"require": "./dist/utils/index.js",
 			"types": "./dist/utils/index.d.ts"
 		}
@@ -91,6 +91,7 @@
 		"rimraf": "6.0.1",
 		"ts-jest": "29.2.5",
 		"tsc-alias": "1.8.10",
+		"tsup": "^8.3.5",
 		"turbo": "2.3.3",
 		"typescript": "5.7.2"
 	},
