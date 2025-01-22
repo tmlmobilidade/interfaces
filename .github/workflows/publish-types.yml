@@ -1,0 +1,44 @@
+name: 'Publish Types'
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - production
+    paths:
+      - 'src/types/index.ts'
+  push:
+    branches:
+      - production
+    paths:
+      - 'src/types/index.ts'
+
+jobs:
+
+  publish:
+    name: 'Publish Types to NPM'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/production'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Build package
+        run: tsx scripts/build-types.ts && rimraf ./dist && tsup --config tsup-types.config.ts
+
+      - name: Bump package version
+        run: npx @helperkits/bumper bump
+
+      - name: Publish package to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
