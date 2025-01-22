@@ -38,28 +38,28 @@
 	"exports": {
 		"./interfaces": {
 			"import": "./dist/interfaces/index.mjs",
-			"require": "./dist/interfaces/index.js",
-			"types": "./dist/interfaces/index.d.ts"
+			"types": "./dist/interfaces/index.d.ts",
+			"require": "./dist/interfaces/index.js"
 		},
 		"./lib": {
 			"import": "./dist/lib/index.mjs",
-			"require": "./dist/lib/index.js",
-			"types": "./dist/lib/index.d.ts"
+			"types": "./dist/lib/index.d.ts",
+			"require": "./dist/lib/index.js"
 		},
 		"./providers": {
 			"import": "./dist/providers/index.mjs",
-			"require": "./dist/providers/index.js",
-			"types": "./dist/providers/index.d.ts"
+			"types": "./dist/providers/index.d.ts",
+			"require": "./dist/providers/index.js"
 		},
 		"./types": {
 			"import": "./dist/types/index.mjs",
-			"require": "./dist/types/index.js",
-			"types": "./dist/types/index.d.ts"
+			"types": "./dist/types/index.d.ts",
+			"require": "./dist/types/index.js"
 		},
 		"./utils": {
 			"import": "./dist/utils/index.mjs",
-			"require": "./dist/utils/index.js",
-			"types": "./dist/utils/index.d.ts"
+			"types": "./dist/utils/index.d.ts",
+			"require": "./dist/utils/index.js"
 		}
 	},
 	"dependencies": {
