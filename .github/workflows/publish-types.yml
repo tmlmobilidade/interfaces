@@ -33,7 +33,7 @@ jobs:
         run: npm install
 
       - name: Build package
-        run: tsx scripts/build-types.ts && rimraf ./dist && tsup --config tsup-types.config.ts
+        run: tsx -y scripts/build-types.ts && npx -y rimraf ./dist && npx -y tsup --config tsup-types.config.ts
 
       - name: Bump package version
         run: npx @helperkits/bumper bump
