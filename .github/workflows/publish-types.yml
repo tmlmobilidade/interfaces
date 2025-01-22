@@ -7,12 +7,14 @@ on:
       - production
     paths:
       - 'src/types/index.ts'
+      - '.github/workflows/publish-types.yml'
+  
   push:
     branches:
       - production
     paths:
       - 'src/types/index.ts'
-
+      - '.github/workflows/publish-types.yml'
 jobs:
 
   publish:
@@ -33,7 +35,7 @@ jobs:
         run: npm install
 
       - name: Build package
-        run: npx tsx -y scripts/build-types.ts && npx -y rimraf ./dist && npx -y tsup --config tsup-types.config.ts
+        run: npx tsx scripts/build-types.ts && npx rimraf ./dist && npx tsup --config tsup-types.config.ts
 
       - name: Bump package version
         run: npx @helperkits/bumper bump
