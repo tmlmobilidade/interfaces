@@ -57,7 +57,7 @@ export type UpdateResult = MongoUpdateResult;
 
 export const WebSocketMessageSchema = z.object({
 	action: z.string(),
-	data: z.string(),
+	data: z.string().optional(),
 	module: z.string(),
 	status: z.string(),
 }).strict();
