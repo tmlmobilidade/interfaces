@@ -33,9 +33,8 @@ const EFFECT_VALUES = [
 
 const PUBLISH_STATUS_VALUES = [
 	'PUBLISHED',
-	'EXPIRED',
 	'ARCHIVED',
-	'UNPUBLISHED',
+	'DRAFT',
 ] as const;
 
 // Define schemas using constants
