@@ -52,3 +52,14 @@ export const CommentSchema = DocumentSchema.extend({
 export type DeleteResult = MongoDeleteResult;
 export type InsertOneResult<T> = MongoInsertOneResult<T>;
 export type UpdateResult = MongoUpdateResult;
+
+/* * */
+
+export const WebSocketMessageSchema = z.object({
+	action: z.string(),
+	data: z.string(),
+	module: z.string(),
+	status: z.string(),
+}).strict();
+
+export type WebSocketMessage = z.infer<typeof WebSocketMessageSchema>;

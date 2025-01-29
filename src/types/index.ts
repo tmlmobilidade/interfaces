@@ -16,4 +16,3 @@ export * from '@/interfaces/vehicle-events/vehicle-event.type';
 export * from '@/interfaces/zones/zone.type';
 
 export * from '@/types/common';
-
