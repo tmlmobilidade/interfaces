@@ -16,10 +16,24 @@ const newAlert: CreateAlertDto = {
 	publish_start_date: new Date(),
 	publish_status: 'PUBLISHED',
 	reference_type: 'route',
-	references: [{
-		child_ids: ['1'],
-		parent_id: '1',
-	}],
+	references: [
+		{
+			child_ids: [
+				'120001',
+				'120005',
+				'120007',
+			],
+			parent_id: '1101_0',
+		},
+		{
+			child_ids: [
+				'070513',
+				'060223',
+				'070121',
+			],
+			parent_id: '2728_0',
+		},
+	],
 	title: 'Test Alert Title',
 };
 
@@ -39,6 +53,10 @@ describe('AlertsClass', () => {
 			const insertedAlert = await alerts.findById(insertedAlertId);
 			expect(insertedAlert).toBeDefined();
 			expect(insertedAlert?.title).toBe(newAlert.title);
+
+			// Check if the metadata is correctly set
+			expect(insertedAlert?.metadata?.line_ids).toEqual(newAlert.references.map(reference => reference.parent_id));
+			expect(insertedAlert?.metadata?.stop_ids).toEqual(newAlert.references.flatMap(reference => reference.child_ids));
 		});
 
 		it('should create a new alert with a predefined _id', async () => {
