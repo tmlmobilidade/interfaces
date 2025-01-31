@@ -3,7 +3,7 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { Alert, CreateAlertDto, UpdateAlertDto } from '@/types';
-import { Filter, IndexDescription, InsertOneResult } from 'mongodb';
+import { Filter, IndexDescription } from 'mongodb';
 
 /* * */
 
@@ -31,10 +31,6 @@ class AlertsClass extends MongoCollectionClass<Alert, CreateAlertDto, UpdateAler
 		return this.mongoCollection.findOne({ title } as Filter<Alert>);
 	}
 
-	async insertOne(doc: CreateAlertDto & { _id?: string, created_at?: Date, updated_at?: Date }, { unsafe = false } = {}): Promise<InsertOneResult<Alert>> {
-		return super.insertOne(this.populateMetadata(doc), { unsafe });
-	}
-
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
 			{ background: true, key: { agency_ids: 1 } },
@@ -54,25 +50,6 @@ class AlertsClass extends MongoCollectionClass<Alert, CreateAlertDto, UpdateAler
 
 	protected getEnvName(): string {
 		return 'TML_INTERFACE_ALERTS';
-	}
-
-	private populateMetadata(doc: CreateAlertDto) {
-		let lineIds: string[] = [];
-		let stopIds: string[] = [];
-
-		if (doc.reference_type === 'route') {
-			lineIds = doc.references.map(reference => reference.parent_id);
-			stopIds = doc.references.flatMap(reference => reference.child_ids);
-		}
-
-		if (doc.reference_type === 'stop') {
-			stopIds = doc.references.map(reference => reference.parent_id);
-			lineIds = doc.references.flatMap(reference => reference.child_ids);
-		}
-
-		doc.metadata = { line_ids: lineIds, stop_ids: stopIds };
-
-		return doc;
 	}
 }
 

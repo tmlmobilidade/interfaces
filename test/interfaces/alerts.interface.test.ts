@@ -53,10 +53,6 @@ describe('AlertsClass', () => {
 			const insertedAlert = await alerts.findById(insertedAlertId);
 			expect(insertedAlert).toBeDefined();
 			expect(insertedAlert?.title).toBe(newAlert.title);
-
-			// Check if the metadata is correctly set
-			expect(insertedAlert?.metadata?.line_ids).toEqual(newAlert.references.map(reference => reference.parent_id));
-			expect(insertedAlert?.metadata?.stop_ids).toEqual(newAlert.references.flatMap(reference => reference.child_ids));
 		});
 
 		it('should create a new alert with a predefined _id', async () => {

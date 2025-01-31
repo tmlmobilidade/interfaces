@@ -52,10 +52,6 @@ export const AlertSchema = DocumentSchema.extend({
 	effect: effectSchema,
 	image_path: z.string().optional().or(z.literal('')),
 	info_url: z.string().url().optional().or(z.literal('')),
-	metadata: z.object({
-		line_ids: z.array(z.string().min(1)),
-		stop_ids: z.array(z.string().min(1)),
-	}).optional(),
 	modified_by: z.string().min(1),
 	municipality_ids: z.array(z.string().min(1)),
 	publish_end_date: z.coerce.date(),
