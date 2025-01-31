@@ -23,6 +23,14 @@ class AlertsClass extends MongoCollectionClass<Alert, CreateAlertDto, UpdateAler
 		return AlertsClass._instance;
 	}
 
+	async findByMunicipalityId(municipality_id: string) {
+		return this.mongoCollection.find({ municipality_ids: { $in: [municipality_id] } } as Filter<Alert>).toArray();
+	}
+
+	async findByTitle(title: string) {
+		return this.mongoCollection.findOne({ title } as Filter<Alert>);
+	}
+
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
 			{ background: true, key: { agency_ids: 1 } },
@@ -42,14 +50,6 @@ class AlertsClass extends MongoCollectionClass<Alert, CreateAlertDto, UpdateAler
 
 	protected getEnvName(): string {
 		return 'TML_INTERFACE_ALERTS';
-	}
-
-	async findByMunicipalityId(municipality_id: string) {
-		return this.mongoCollection.find({ municipality_ids: { $in: [municipality_id] } } as Filter<Alert>).toArray();
-	}
-
-	async findByTitle(title: string) {
-		return this.mongoCollection.findOne({ title } as Filter<Alert>);
 	}
 }
 
