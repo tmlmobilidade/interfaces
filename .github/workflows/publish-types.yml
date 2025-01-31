@@ -6,7 +6,7 @@ on:
     branches:
       - production
     paths:
-      - 'src/types/index.ts'
+      - 'src/**/*.type.ts'
       - '.github/workflows/publish-types.yml'
   
   push:
