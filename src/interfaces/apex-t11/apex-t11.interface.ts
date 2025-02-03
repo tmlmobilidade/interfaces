@@ -26,11 +26,12 @@ class ApexT11Class extends MongoCollectionClass<ApexT11, ApexT11, ApexT11> {
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
 			{ background: true, key: { operational_date: -1 } },
-			// eslint-disable-next-line perfectionist/sort-objects
-			{ background: true, key: { operational_date: -1, agency_id: 1 } },
-			{ background: true, key: { operational_date: -1, pattern_id: 1 } },
+			{ background: true, key: { created_at: -1 } },
+			{ background: true, key: { received_at: -1 } },
+			{ background: true, key: { card_serial_number: -1 } },
+			{ background: true, key: { agency_id: -1 } },
 			{ background: true, key: { operational_date: -1, trip_id: 1 } },
-			{ background: true, key: { operational_date: -1, vehicle_id: 1 } },
+			{ background: true, key: { agency_id: 1, operational_date: -1 } },
 		];
 	}
 
