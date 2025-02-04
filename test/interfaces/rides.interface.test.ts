@@ -8,6 +8,7 @@ const newRide: CreateRideDto = {
 	driver_ids: [],
 	end_time_observed: null,
 	end_time_scheduled: new Date(),
+	execution_status: 'success',
 	extension_observed: null,
 	extension_scheduled: 1,
 	hashed_shape_id: 'HASHED_SHAPE_1',
@@ -15,6 +16,7 @@ const newRide: CreateRideDto = {
 	headsign: 'headsign_1',
 	line_id: 'line_1',
 	operational_date: createOperationalDate('20240101'),
+	operational_status: 'scheduled',
 	passengers_estimated: null,
 	pattern_id: 'pattern_1',
 	plan_id: 'plan_1',
@@ -23,7 +25,7 @@ const newRide: CreateRideDto = {
 	seen_last_at: new Date(),
 	start_time_observed: null,
 	start_time_scheduled: new Date(),
-	status: 'complete',
+	system_status: 'complete',
 	trip_id: 'trip_1',
 	validations_count: null,
 	vehicle_ids: [],
@@ -66,15 +68,15 @@ describe('RidesClass', () => {
 
 	describe('updateByCode', () => {
 		it('should update a ride', async () => {
-			const updateResult = await rides.updateById(rideId, { status: 'complete' });
+			const updateResult = await rides.updateById(rideId, { system_status: 'complete' });
 			expect(updateResult.modifiedCount).toBe(1);
 
 			const updatedRide = await rides.findById(rideId);
-			expect(updatedRide?.status).toBe('complete');
+			expect(updatedRide?.system_status).toBe('complete');
 		});
 
 		it('should return modifiedCount as 0 if the ride does not exist', async () => {
-			const updateResult = await rides.updateById('NON_EXISTENT_CODE', { status: 'complete' });
+			const updateResult = await rides.updateById('NON_EXISTENT_CODE', { system_status: 'complete' });
 			expect(updateResult.modifiedCount).toBe(0);
 		});
 	});
