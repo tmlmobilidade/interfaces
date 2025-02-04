@@ -2,10 +2,9 @@
 	"extends": "@tmlmobilidade/tsconfig/base.json",
 	"compilerOptions": {
 		"rootDir": ".",
-		"baseUrl": ".",
 		"outDir": "dist",
 		"paths": {
-			"@/*": ["src/*"],
+			"@/*": ["./src/*"],
 			"@test/*": ["./test/*"]
 		},
 		"strictNullChecks": true,
