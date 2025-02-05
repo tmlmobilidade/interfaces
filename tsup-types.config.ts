@@ -10,7 +10,7 @@ const baseConfig: Partial<Options> = {
 export default defineConfig([
 	{
 		...baseConfig,
-		entry: ['src/types/index.ts', 'src/utils/index.ts'],
+		entry: ['src/core-types.ts'],
 		outDir: 'dist',
 	},
 ]);
