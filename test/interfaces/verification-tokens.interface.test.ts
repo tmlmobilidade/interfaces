@@ -1,6 +1,6 @@
 import { verificationTokens } from '@/interfaces';
-import { generateRandomString } from '@/lib/utils';
 import { CreateVerificationTokenDto } from '@/types';
+import { generateRandomString } from '@/utils';
 
 const newToken: CreateVerificationTokenDto = {
 	expires: new Date(Date.now() + 3600000), // 1 hour from now

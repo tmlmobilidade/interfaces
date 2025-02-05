@@ -1,7 +1,7 @@
 import { MongoConnector } from '@/connectors/mongo.connector';
 import { HttpException, HttpStatus } from '@/lib';
 import { createSchemaFactory } from '@/lib/schema.factory';
-import { generateRandomString } from '@/lib/utils';
+import { generateRandomString } from '@/utils';
 import { Collection, DeleteResult, Document, Filter, IndexDescription, InsertOneResult, MongoClientOptions, OptionalUnlessRequiredId, Sort, UpdateResult, WithId } from 'mongodb';
 import z from 'zod';
 

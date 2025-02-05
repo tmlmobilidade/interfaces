@@ -1,6 +1,6 @@
 import { sessions } from '@/interfaces';
-import { generateRandomString } from '@/lib/utils';
 import { CreateSessionDto } from '@/types';
+import { generateRandomString } from '@/utils';
 
 let insertedSessionId: string;
 const userId = generateRandomString({ length: 10 });

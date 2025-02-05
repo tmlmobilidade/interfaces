@@ -1,6 +1,6 @@
 import { users } from '@/interfaces';
-import { generateRandomString } from '@/lib/utils';
 import { CreateUserDto, Email } from '@/types';
+import { generateRandomString } from '@/utils';
 import { mockUsers } from '@test/data/db-mock';
 import { Sort } from 'mongodb';
 
