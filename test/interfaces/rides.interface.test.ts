@@ -16,7 +16,6 @@ const newRide: CreateRideDto = {
 	headsign: 'headsign_1',
 	line_id: 'line_1',
 	operational_date: createOperationalDate('20240101'),
-	operational_status: 'scheduled',
 	passengers_estimated: null,
 	pattern_id: 'pattern_1',
 	plan_id: 'plan_1',
