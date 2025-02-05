@@ -37,7 +37,6 @@ export const RideSchema = DocumentSchema.extend({
 	headsign: z.string(),
 	line_id: z.string(),
 	operational_date: z.string().transform(createOperationalDate).brand('OperationalDate'),
-	operational_status: z.enum(['scheduled', 'missed', 'running', 'ended']),
 	passengers_estimated: z.number().nullable(),
 	pattern_id: z.string(),
 	plan_id: z.string(),
@@ -64,3 +63,13 @@ export interface CreateRideDto extends Omit<z.infer<typeof CreateRideSchema>, 'o
 }
 
 export type UpdateRideDto = Partial<CreateRideDto>;
+
+/* * */
+
+export const RideDisplaySchema = z.object({
+	_ride: RideSchema,
+	operational_status: z.enum(['scheduled', 'missed', 'running', 'ended']),
+	seen_status: z.enum(['scheduled', 'missed', 'running', 'ended']),
+}).strict();
+
+export type RideDisplay = z.infer<typeof RideDisplaySchema>;
