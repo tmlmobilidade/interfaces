@@ -84,17 +84,22 @@ class RidesClass extends MongoCollectionClass<Ride, CreateRideDto, UpdateRideDto
 	}
 
 	protected getCollectionIndexes(): IndexDescription[] {
+		/**
+		 * IMPORTANT:
+		 * Automatic sorting (ESLint) of keys in the JS objects should be disabled.
+		 * The order of keys in a compound index is very important and should be
+		 * carefully considered based on the cardinality of each key.
+		 */
 		return [
-			{ background: true, key: { agency_id: 1 } },
-			{ background: true, key: { line_id: 1 } },
-			{ background: true, key: { trip_id: 1 } },
-			{ background: true, key: { system_status: 1 } },
-			{ background: true, key: { operational_status: 1 } },
-			{ background: true, key: { operational_date: 1 } },
 			{ background: true, key: { hashed_trip_id: 1 } },
 			{ background: true, key: { hashed_shape_id: 1 } },
+			{ background: true, key: { operational_date: 1 } },
+			{ background: true, key: { operational_date: 1, system_status: 1 } },
 			{ background: true, key: { start_time_scheduled: 1 } },
-			{ background: true, key: { start_time_scheduled: 1, system_status: 1 } },
+			{ background: true, key: { system_status: 1 } },
+			// eslint-disable-next-line perfectionist/sort-objects
+			{ background: true, key: { system_status: 1, start_time_scheduled: 1 } },
+			{ background: true, key: { trip_id: 1 } },
 		];
 	}
 
