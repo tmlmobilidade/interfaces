@@ -7,12 +7,14 @@ on:
       - production
     paths:
       - 'src/**/*.type.ts'
+      - 'src/utils/**/*.ts'
       - '.github/workflows/publish-types.yml'
   push:
     branches:
       - production
     paths:
-      - 'src/types/index.ts'
+      - 'src/**/*.type.ts'
+      - 'src/utils/**/*.ts'
       - '.github/workflows/publish-types.yml'
 jobs:
 
