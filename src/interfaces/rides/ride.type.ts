@@ -69,7 +69,7 @@ export type UpdateRideDto = Partial<CreateRideDto>;
 export const RideDisplaySchema = z.object({
 	_ride: RideSchema,
 	operational_status: z.enum(['scheduled', 'missed', 'running', 'ended']),
-	seen_status: z.enum(['scheduled', 'missed', 'running', 'ended']),
+	seen_status: z.enum(['unseen', 'seen', 'gone']),
 }).strict();
 
 export type RideDisplay = z.infer<typeof RideDisplaySchema>;
