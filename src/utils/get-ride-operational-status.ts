@@ -13,7 +13,7 @@ import { DateTime } from 'luxon';
  * @param rideData The Ride to be analyzed.
  * @returns The operational status for the Ride.
  */
-export function getOperationalStatus(rideData: Ride): RideDisplay['operational_status'] {
+export function getRideOperationalStatus(rideData: Ride): RideDisplay['operational_status'] {
 	//
 
 	//
