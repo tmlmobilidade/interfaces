@@ -4,9 +4,9 @@ import z from 'zod';
 export const FileSchema = DocumentSchema.extend({
 	created_by: z.string(),
 	description: z.string().optional(),
-	key: z.string().describe('final path of the file in the storage, can be the resource id or the file name'),
 	metadata: z.record(z.unknown()).optional(),
 	name: z.string(),
+	resource_id: z.string(),
 	scope: z.string(),
 	size: z.number().describe('size in bytes'),
 	type: z.string().describe('mime type'),

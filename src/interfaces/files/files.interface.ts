@@ -7,6 +7,7 @@ import { AsyncSingletonProxy } from '@/lib/utils';
 import { StorageFactory } from '@/providers/storage/storage.factory';
 import { IStorageProvider } from '@/providers/storage/storage.interface';
 import { CreateFileDto, File, UpdateFileDto } from '@/types';
+import { generateRandomString } from '@/utils';
 import { IndexDescription, InsertOneResult } from 'mongodb';
 
 /* * */
@@ -90,7 +91,7 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 			if (!file) {
 				throw new HttpException(HttpStatus.NOT_FOUND, 'File not found');
 			}
-			key = `${file.scope}/${file.key}`; // Use the file's storage key
+			key = `${file.scope}/${file.resource_id}/${file._id}`; // Use the file's storage key
 		}
 
 		// Check if key exists
@@ -110,8 +111,9 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 	 * @returns The file that was uploaded.
 	 */
 	public async upload(file: Buffer, createFileDto: CreateFileDto): Promise<InsertOneResult<File>> {
-		await this.storageService.uploadFile(`${createFileDto.scope}/${createFileDto.key}`, file);
-		return await this.insertOne(createFileDto);
+		const _id = generateRandomString({ length: 5 });
+		await this.storageService.uploadFile(`${createFileDto.scope}/${createFileDto.resource_id}/${_id}`, file);
+		return await this.insertOne({ ...createFileDto, _id });
 	}
 
 	protected getCollectionIndexes(): IndexDescription[] {
