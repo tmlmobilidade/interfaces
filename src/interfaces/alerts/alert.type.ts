@@ -50,7 +50,7 @@ export const AlertSchema = DocumentSchema.extend({
 	created_by: z.string().min(1),
 	description: z.string(),
 	effect: effectSchema,
-	image_path: z.string().optional().or(z.literal('')),
+	file_id: z.string().optional(),
 	info_url: z.string().url().optional().or(z.literal('')),
 	modified_by: z.string().min(1),
 	municipality_ids: z.array(z.string().min(1)),

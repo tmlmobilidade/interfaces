@@ -336,7 +336,7 @@ export const mockAlerts: CreateAlertDto[] = [
 		created_by: '1',
 		description: '',
 		effect: 'SIGNIFICANT_DELAYS',
-		image_path: '',
+		file_id: '',
 		info_url: '',
 		modified_by: '1',
 		municipality_ids: [
@@ -359,7 +359,7 @@ export const mockAlerts: CreateAlertDto[] = [
 		created_by: '1',
 		description: '',
 		effect: 'SIGNIFICANT_DELAYS',
-		image_path: '',
+		file_id: '',
 		info_url: '',
 		modified_by: '1',
 		municipality_ids: [
@@ -382,7 +382,7 @@ export const mockAlerts: CreateAlertDto[] = [
 		created_by: '1',
 		description: '',
 		effect: 'SIGNIFICANT_DELAYS',
-		image_path: '',
+		file_id: '',
 		info_url: '',
 		modified_by: '1',
 		municipality_ids: [

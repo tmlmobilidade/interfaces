@@ -8,7 +8,7 @@ const newAlert: CreateAlertDto = {
 	created_by: '1',
 	description: 'Test Alert',
 	effect: 'NO_SERVICE',
-	image_path: 'http://example.com/image.png',
+	file_id: '',
 	info_url: 'http://example.com/info.html',
 	modified_by: '1',
 	municipality_ids: ['municipality_1'],
