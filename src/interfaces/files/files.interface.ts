@@ -13,6 +13,7 @@ import { IndexDescription, InsertOneResult } from 'mongodb';
 
 class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto> {
 	private static _instance: FilesClass;
+	private readonly bucketName: string;
 	private readonly storageService: IStorageProvider;
 
 	private constructor() {
@@ -23,7 +24,7 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 				if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_BUCKET_NAME || !process.env.AWS_SECRET_ACCESS_KEY) {
 					throw new Error('AWS_ACCESS_KEY_ID, AWS_BUCKET_NAME, and AWS_SECRET_ACCESS_KEY must be set');
 				}
-
+				this.bucketName = process.env.AWS_BUCKET_NAME;
 				this.storageService = StorageFactory.create({
 					aws_config: {
 						access_key_id: process.env.AWS_ACCESS_KEY_ID,
@@ -37,6 +38,7 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 				if (!process.env.CLOUDFLARE_ACCESS_KEY_ID || !process.env.CLOUDFLARE_BUCKET_NAME || !process.env.CLOUDFLARE_SECRET_ACCESS_KEY) {
 					throw new Error('CLOUDFLARE_ACCESS_KEY_ID, CLOUDFLARE_BUCKET_NAME, and CLOUDFLARE_SECRET_ACCESS_KEY must be set');
 				}
+				this.bucketName = process.env.CLOUDFLARE_BUCKET_NAME;
 				this.storageService = StorageFactory.create({
 					cloudflare_config: {
 						access_key_id: process.env.CLOUDFLARE_ACCESS_KEY_ID,
@@ -88,13 +90,13 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 			if (!file) {
 				throw new HttpException(HttpStatus.NOT_FOUND, 'File not found');
 			}
-			key = `${file.key}/${file.name}`; // Use the file's storage key
+			key = `${file.scope}/${file.key}`; // Use the file's storage key
 		}
 
 		// Check if key exists
 		const keyExists = await this.storageService.fileExists(key as string);
 		if (!keyExists) {
-			throw new HttpException(HttpStatus.NOT_FOUND, 'File not found');
+			throw new HttpException(HttpStatus.NOT_FOUND, `Key ${key} does not exist in bucket ${this.bucketName}`);
 		}
 
 		// At this point, `key` must exist
