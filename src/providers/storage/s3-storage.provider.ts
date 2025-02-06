@@ -1,4 +1,4 @@
-import { CreateBucketCommand, DeleteObjectCommand, DeleteObjectsCommand, GetObjectCommand, HeadBucketCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { CreateBucketCommand, DeleteObjectCommand, DeleteObjectsCommand, GetObjectCommand, HeadBucketCommand, HeadObjectCommand, ListObjectsV2Command, NotFound, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 
@@ -36,7 +36,7 @@ export class S3StorageProvider implements IStorageProvider {
 			await this.s3Client.send(new HeadBucketCommand({ Bucket: this.bucketName }));
 		}
 		catch (error) {
-			if ((error as any).name === 'NotFound') {
+			if (error instanceof NotFound) {
 				await this.s3Client.send(new CreateBucketCommand({ Bucket: this.bucketName }));
 			}
 		}
@@ -98,6 +98,26 @@ export class S3StorageProvider implements IStorageProvider {
 		}
 		catch (error) {
 			console.error('Error downloading file:', error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Checks if a file exists in S3.
+	 * @param key - The file path and name in S3.
+	 * @returns True if the file exists, false otherwise.
+	 */
+	async fileExists(key: string): Promise<boolean> {
+		try {
+			const command = new HeadObjectCommand({ Bucket: this.bucketName, Key: key });
+			await this.s3Client.send(command);
+			return true;
+		}
+		catch (error) {
+			if (error instanceof NotFound) {
+				return false;
+			}
+
 			throw error;
 		}
 	}

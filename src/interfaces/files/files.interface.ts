@@ -91,6 +91,12 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 			key = `${file.key}/${file.name}`; // Use the file's storage key
 		}
 
+		// Check if key exists
+		const keyExists = await this.storageService.fileExists(key as string);
+		if (!keyExists) {
+			throw new HttpException(HttpStatus.NOT_FOUND, 'File not found');
+		}
+
 		// At this point, `key` must exist
 		return this.storageService.getFileUrl(key as string);
 	}

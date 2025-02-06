@@ -7,6 +7,9 @@ export interface IStorageProvider {
 	// Delete multiple files from the storage.
 	deleteFiles(keys: string[]): Promise<void>
 
+	// Check if a file exists in the storage.
+	fileExists(key: string): Promise<boolean>
+
 	// Get a file from the storage.
 	getFileUrl(key: string): Promise<string>
 
