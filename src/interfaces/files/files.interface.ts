@@ -108,7 +108,7 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 	 * @returns The file that was uploaded.
 	 */
 	public async upload(file: Buffer, createFileDto: CreateFileDto): Promise<InsertOneResult<File>> {
-		await this.storageService.uploadFile(`${createFileDto.key}/${createFileDto.name}`, file);
+		await this.storageService.uploadFile(`${createFileDto.scope}/${createFileDto.key}`, file);
 		return await this.insertOne(createFileDto);
 	}
 
