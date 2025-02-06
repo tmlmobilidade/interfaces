@@ -62,25 +62,6 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 		return FilesClass._instance;
 	}
 
-	protected getCollectionIndexes(): IndexDescription[] {
-		return [
-			{ background: true, key: { created_by: 1 } },
-			{ background: true, key: { updated_by: 1 } },
-			{ background: true, key: { name: 1 } },
-			{ background: true, key: { type: 1 } },
-			{ background: true, key: { created_at: -1 } },
-			{ background: true, key: { updated_at: -1 } },
-		];
-	}
-
-	protected getCollectionName(): string {
-		return 'files';
-	}
-
-	protected getEnvName(): string {
-		return 'TML_INTERFACE_FILES';
-	}
-
 	/**
 	 * Retrieves the signed URL of a file from the storage service.
 	 * @param params - Object containing either `file_id` or `key`.
@@ -123,6 +104,25 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 	public async upload(file: Buffer, createFileDto: CreateFileDto): Promise<InsertOneResult<File>> {
 		await this.storageService.uploadFile(`${createFileDto.key}/${createFileDto.name}`, file);
 		return await this.insertOne(createFileDto);
+	}
+
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { created_by: 1 } },
+			{ background: true, key: { updated_by: 1 } },
+			{ background: true, key: { name: 1 } },
+			{ background: true, key: { type: 1 } },
+			{ background: true, key: { created_at: -1 } },
+			{ background: true, key: { updated_at: -1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
+		return 'files';
+	}
+
+	protected getEnvName(): string {
+		return 'TML_INTERFACE_FILES';
 	}
 }
 
