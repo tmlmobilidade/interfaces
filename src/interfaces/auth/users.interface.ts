@@ -21,29 +21,6 @@ class UsersClass extends MongoCollectionClass<User, CreateUserDto, UpdateUserDto
 		return UsersClass._instance;
 	}
 
-	protected getCollectionIndexes(): IndexDescription[] {
-		return [
-			{ background: true, key: { email: 1 }, unique: true },
-			{ background: true, key: { 'profile.first_name': 1, 'profile.last_name': 1 } },
-			{ background: true, key: { session_ids: 1 } },
-			{ background: true, key: { role_ids: 1 } },
-		];
-	}
-
-	protected getCollectionName(): string {
-		return 'users';
-	}
-
-	protected getEnvName(): string {
-		return 'TML_INTERFACE_AUTH';
-	}
-
-	private deletePasswordHash(user: WithId<User>) {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { password_hash, ...userWithoutPassword } = user;
-		return userWithoutPassword;
-	}
-
 	/**
 	 * Finds a user document by its email.
 	 *
@@ -124,6 +101,29 @@ class UsersClass extends MongoCollectionClass<User, CreateUserDto, UpdateUserDto
 		}
 
 		return this.deletePasswordHash(user) as WithId<User>;
+	}
+
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { email: 1 }, unique: true },
+			{ background: true, key: { 'profile.first_name': 1, 'profile.last_name': 1 } },
+			{ background: true, key: { session_ids: 1 } },
+			{ background: true, key: { role_ids: 1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
+		return 'users';
+	}
+
+	protected getEnvName(): string {
+		return 'TML_INTERFACE_AUTH';
+	}
+
+	private deletePasswordHash(user: WithId<User>) {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { password_hash, ...userWithoutPassword } = user;
+		return userWithoutPassword;
 	}
 }
 

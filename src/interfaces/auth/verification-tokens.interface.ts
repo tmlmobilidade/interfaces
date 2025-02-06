@@ -19,6 +19,16 @@ class VerificationTokensClass extends MongoCollectionClass<VerificationToken, Cr
 		return VerificationTokensClass._instance;
 	}
 
+	/**
+	 * Finds a verification token by its token.
+	 *
+	 * @param token - The token to find
+	 * @returns The verification token or null if not found
+	 */
+	async findByToken(token: string) {
+		return this.findOne({ token });
+	}
+
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [
 			{ background: true, key: { expires: 1 } },
@@ -32,16 +42,6 @@ class VerificationTokensClass extends MongoCollectionClass<VerificationToken, Cr
 
 	protected getEnvName(): string {
 		return 'TML_INTERFACE_AUTH';
-	}
-
-	/**
-	 * Finds a verification token by its token.
-	 *
-	 * @param token - The token to find
-	 * @returns The verification token or null if not found
-	 */
-	async findByToken(token: string) {
-		return this.findOne({ token });
 	}
 }
 

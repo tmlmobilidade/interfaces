@@ -23,20 +23,6 @@ class ZonesClass extends MongoCollectionClass<Zone, CreateZoneDto, UpdateZoneDto
 		return ZonesClass._instance;
 	}
 
-	protected getCollectionIndexes(): IndexDescription[] {
-		return [
-			{ background: true, key: { code: 1 }, unique: true },
-		];
-	}
-
-	protected getCollectionName(): string {
-		return 'zones';
-	}
-
-	protected getEnvName(): string {
-		return 'TML_INTERFACE_ZONES';
-	}
-
 	/**
 	 * Finds a zone document by its code.
 	 *
@@ -66,6 +52,20 @@ class ZonesClass extends MongoCollectionClass<Zone, CreateZoneDto, UpdateZoneDto
 	 */
 	async updateByCode(code: string, updateFields: Partial<Zone>) {
 		return this.mongoCollection.updateOne({ code } as Filter<Zone>, { $set: updateFields });
+	}
+
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { code: 1 }, unique: true },
+		];
+	}
+
+	protected getCollectionName(): string {
+		return 'zones';
+	}
+
+	protected getEnvName(): string {
+		return 'TML_INTERFACE_ZONES';
 	}
 }
 

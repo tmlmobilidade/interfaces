@@ -1,6 +1,13 @@
 import { Collection, Db, DbOptions, MongoClient, MongoClientOptions } from 'mongodb';
 
 export class MongoConnector {
+	/**
+	 * Get the MongoClient instance.
+	 */
+	get client(): MongoClient {
+		return this._client;
+	}
+
 	private _client: MongoClient;
 
 	constructor(uri: string, options?: MongoClientOptions) {
@@ -73,12 +80,5 @@ export class MongoConnector {
 	 */
 	async watch<T extends Document>(collection: Collection<T>) {
 		return collection.watch();
-	}
-
-	/**
-	 * Get the MongoClient instance.
-	 */
-	get client(): MongoClient {
-		return this._client;
 	}
 }

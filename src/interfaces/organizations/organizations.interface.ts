@@ -19,20 +19,6 @@ class OrganizationsClass extends MongoCollectionClass<Organization, CreateOrgani
 		return OrganizationsClass._instance;
 	}
 
-	protected getCollectionIndexes(): IndexDescription[] {
-		return [
-			{ background: true, key: { name: 1 }, unique: true },
-		];
-	}
-
-	protected getCollectionName(): string {
-		return 'organizations';
-	}
-
-	protected getEnvName(): string {
-		return 'TML_INTERFACE_ORGANIZATIONS';
-	}
-
 	/**
 	 * Finds an organization by its code
 	 *
@@ -52,6 +38,20 @@ class OrganizationsClass extends MongoCollectionClass<Organization, CreateOrgani
 	 */
 	async updateByCode(code: string, fields: Partial<Organization>) {
 		return this.mongoCollection.updateOne({ code } as Filter<Organization>, { $set: fields });
+	}
+
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { name: 1 }, unique: true },
+		];
+	}
+
+	protected getCollectionName(): string {
+		return 'organizations';
+	}
+
+	protected getEnvName(): string {
+		return 'TML_INTERFACE_ORGANIZATIONS';
 	}
 }
 

@@ -23,6 +23,16 @@ class PlansClass extends MongoCollectionClass<Plan, CreatePlanDto, UpdatePlanDto
 		return PlansClass._instance;
 	}
 
+	/**
+	 * Finds Plan documents by agency ID.
+	 *
+	 * @param id - The agency ID to search for
+	 * @returns A promise that resolves to an array of matching documents
+	 */
+	async findByAgencyId(id: string) {
+		return this.mongoCollection.find({ agency_id: id } as Filter<Plan>).toArray();
+	}
+
 	protected getCollectionIndexes(): IndexDescription[] {
 		return [];
 	}
@@ -33,16 +43,6 @@ class PlansClass extends MongoCollectionClass<Plan, CreatePlanDto, UpdatePlanDto
 
 	protected getEnvName(): string {
 		return 'TML_INTERFACE_PLANS';
-	}
-
-	/**
-	 * Finds Plan documents by agency ID.
-	 *
-	 * @param id - The agency ID to search for
-	 * @returns A promise that resolves to an array of matching documents
-	 */
-	async findByAgencyId(id: string) {
-		return this.mongoCollection.find({ agency_id: id } as Filter<Plan>).toArray();
 	}
 }
 

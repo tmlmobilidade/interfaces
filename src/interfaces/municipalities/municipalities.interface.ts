@@ -19,22 +19,6 @@ class MunicipalitiesClass extends MongoCollectionClass<Municipality, CreateMunic
 		return MunicipalitiesClass._instance;
 	}
 
-	protected getCollectionIndexes(): IndexDescription[] {
-		return [
-			{ background: true, key: { code: 1 }, unique: true },
-			{ background: true, key: { name: 1 } },
-			{ background: true, key: { prefix: 1 } },
-		];
-	}
-
-	protected getCollectionName(): string {
-		return 'municipalities';
-	}
-
-	protected getEnvName(): string {
-		return 'TML_INTERFACE_MUNICIPALITIES';
-	}
-
 	/**
 	 * Finds a municipality by its code
 	 *
@@ -54,6 +38,22 @@ class MunicipalitiesClass extends MongoCollectionClass<Municipality, CreateMunic
 	 */
 	async updateByCode(code: string, fields: Partial<Municipality>) {
 		return this.mongoCollection.updateOne({ code } as Filter<Municipality>, { $set: fields });
+	}
+
+	protected getCollectionIndexes(): IndexDescription[] {
+		return [
+			{ background: true, key: { code: 1 }, unique: true },
+			{ background: true, key: { name: 1 } },
+			{ background: true, key: { prefix: 1 } },
+		];
+	}
+
+	protected getCollectionName(): string {
+		return 'municipalities';
+	}
+
+	protected getEnvName(): string {
+		return 'TML_INTERFACE_MUNICIPALITIES';
 	}
 }
 

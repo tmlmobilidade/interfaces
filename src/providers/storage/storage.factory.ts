@@ -5,9 +5,9 @@ export type StorageConfiguration = {
 	aws_config: S3StorageProviderConfiguration
 	type: 'aws'
 } | {
-	cloudflare_config: {
+	cloudflare_config: S3StorageProviderConfiguration & {
 		endpoint: string
-	} & S3StorageProviderConfiguration
+	}
 	type: 'cloudflare'
 };
 

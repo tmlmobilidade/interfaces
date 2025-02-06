@@ -16,9 +16,14 @@ export interface SshTunnelConnectorOptions {
 
 export class SshTunnelConnector {
 	private static _instance: SshTunnelConnector;
+	get server(): Server | undefined {
+		return this._server;
+	}
+
 	private _server: Server;
 	private config: SshConfig;
 	private options: SshTunnelConnectorOptions;
+
 	private retries = 0;
 
 	constructor(config: SshConfig, options: SshTunnelConnectorOptions = {}) {
@@ -116,9 +121,5 @@ export class SshTunnelConnector {
 	async reconnect() {
 		await this.disconnect();
 		this.connect();
-	}
-
-	get server(): Server | undefined {
-		return this._server;
 	}
 }

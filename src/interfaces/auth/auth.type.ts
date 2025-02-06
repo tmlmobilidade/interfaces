@@ -36,8 +36,8 @@ export const UserSchema = DocumentSchema.extend({
 export const CreateUserSchema = UserSchema.omit({ _id: true, created_at: true, updated_at: true });
 export const UpdateUserSchema = CreateUserSchema.partial();
 
-export type User = { email: Email } & Omit<z.infer<typeof UserSchema>, 'email'>;
-export type CreateUserDto = { email: Email } & z.infer<typeof CreateUserSchema>;
+export type User = Omit<z.infer<typeof UserSchema>, 'email'> & { email: Email };
+export type CreateUserDto = z.infer<typeof CreateUserSchema> & { email: Email };
 export type UpdateUserDto = Partial<CreateUserDto>;
 
 /* * */
@@ -53,7 +53,7 @@ export const LoginDtoSchema = z.object({
 	}),
 }).strict();
 
-export type LoginDto = { email: Email } & z.infer<typeof LoginDtoSchema>;
+export type LoginDto = z.infer<typeof LoginDtoSchema> & { email: Email };
 
 /* * */
 
