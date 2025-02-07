@@ -78,7 +78,7 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 		}
 
 		await this.storageService.deleteFile(`${file.scope}/${file.resource_id}/${file._id}`);
-		return await super.deleteOne({ _id: file_id });
+		return await super.deleteById(file_id);
 	}
 
 	/**
