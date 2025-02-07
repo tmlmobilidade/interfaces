@@ -70,7 +70,7 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 	 * @param file_id - The unique identifier of the file in the database.
 	 * @returns The file that was deleted.
 	 */
-	public async delete(file_id: string): Promise<DeleteResult> {
+	public override async deleteById(file_id: string): Promise<DeleteResult> {
 		const file = await this.findOne({ _id: file_id });
 
 		if (!file) {
