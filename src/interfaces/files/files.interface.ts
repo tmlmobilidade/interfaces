@@ -8,7 +8,7 @@ import { StorageFactory } from '@/providers/storage/storage.factory';
 import { IStorageProvider } from '@/providers/storage/storage.interface';
 import { CreateFileDto, File, UpdateFileDto } from '@/types';
 import { generateRandomString } from '@/utils';
-import { IndexDescription, InsertOneResult } from 'mongodb';
+import { DeleteResult, IndexDescription, InsertOneResult } from 'mongodb';
 
 /* * */
 
@@ -63,6 +63,22 @@ class FilesClass extends MongoCollectionClass<File, CreateFileDto, UpdateFileDto
 			FilesClass._instance = instance;
 		}
 		return FilesClass._instance;
+	}
+
+	/**
+	 * Deletes a file from the storage service and the database.
+	 * @param file_id - The unique identifier of the file in the database.
+	 * @returns The file that was deleted.
+	 */
+	public async delete(file_id: string): Promise<DeleteResult> {
+		const file = await this.findOne({ _id: file_id });
+
+		if (!file) {
+			throw new HttpException(HttpStatus.NOT_FOUND, 'File not found');
+		}
+
+		await this.storageService.deleteFile(`${file.scope}/${file.resource_id}/${file._id}`);
+		return await super.deleteOne({ _id: file_id });
 	}
 
 	/**
