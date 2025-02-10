@@ -6,7 +6,7 @@ import z from 'zod';
 
 /* * */
 
-export const MunicipalitySchema = DocumentSchema.extend({
+export const LocalitySchema = DocumentSchema.extend({
 	border_color: z.string(),
 	border_opacity: z.number(),
 	border_width: z.number(),
@@ -21,11 +21,11 @@ export const MunicipalitySchema = DocumentSchema.extend({
 	region: z.string(),
 }).strict();
 
-export const CreateMunicipalitySchema = MunicipalitySchema.omit({ _id: true, created_at: true, updated_at: true });
-export const UpdateMunicipalitySchema = CreateMunicipalitySchema.partial();
+export const CreateLocalitySchema = LocalitySchema.omit({ _id: true, created_at: true, updated_at: true });
+export const UpdateLocalitySchema = CreateLocalitySchema.partial();
 
-export interface Municipality extends z.infer<typeof MunicipalitySchema> {
+export interface Locality extends z.infer<typeof LocalitySchema> {
 	geojson: GeoJSON
 }
-export type CreateMunicipalityDto = z.infer<typeof CreateMunicipalitySchema>;
-export type UpdateMunicipalityDto = Partial<CreateMunicipalityDto>;
+export type CreateLocalityDto = z.infer<typeof CreateLocalitySchema>;
+export type UpdateLocalityDto = Partial<CreateLocalityDto>;
