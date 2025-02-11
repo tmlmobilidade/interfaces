@@ -1,6 +1,6 @@
 /* * */
 
-import { DocumentSchema, Email } from '@/types/common';
+import { DocumentSchema } from '@/types/common';
 import z from 'zod';
 
 export const PermissionSchema = z.object({
@@ -36,8 +36,8 @@ export const UserSchema = DocumentSchema.extend({
 export const CreateUserSchema = UserSchema.omit({ _id: true, created_at: true, updated_at: true });
 export const UpdateUserSchema = CreateUserSchema.partial();
 
-export type User = Omit<z.infer<typeof UserSchema>, 'email'> & { email: Email };
-export type CreateUserDto = z.infer<typeof CreateUserSchema> & { email: Email };
+export type User = z.infer<typeof UserSchema>;
+export type CreateUserDto = z.infer<typeof CreateUserSchema>;
 export type UpdateUserDto = Partial<CreateUserDto>;
 
 /* * */
@@ -53,7 +53,7 @@ export const LoginDtoSchema = z.object({
 	}),
 }).strict();
 
-export type LoginDto = z.infer<typeof LoginDtoSchema> & { email: Email };
+export type LoginDto = z.infer<typeof LoginDtoSchema>;
 
 /* * */
 
