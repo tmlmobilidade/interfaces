@@ -204,10 +204,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @returns A promise that resolves to the result of the update operation
 	 */
 	async updateById(id: string, updateFields: TUpdate): Promise<UpdateResult> {
-		return this.mongoCollection.updateOne(
-			{ _id: { $eq: id } } as unknown as Filter<T>,
-			{ $set: { ...updateFields, updated_at: new Date() } } as unknown as Partial<T>,
-		);
+		return this.updateOne({ _id: { $eq: id } } as unknown as Filter<T>, updateFields);
 	}
 
 	// /**
@@ -238,7 +235,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @param updateFields - The fields to update in the document
 	 * @returns A promise that resolves to the result of the update operation
 	 */
-	async updateOne(filter: Filter<T>, updateFields: Partial<T>): Promise<UpdateResult> {
+	async updateOne(filter: Filter<T>, updateFields: TUpdate): Promise<UpdateResult> {
 		let parsedUpdateFields = updateFields;
 		if (this.updateSchema) {
 			try {
@@ -249,7 +246,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 			}
 		}
 
-		return this.mongoCollection.updateOne(filter, { $set: { ...parsedUpdateFields, updated_at: new Date() } });
+		return this.mongoCollection.updateOne(filter, { $set: { ...parsedUpdateFields, updated_at: new Date() } } as unknown as Partial<T>);
 	}
 
 	// Abstract method for subclasses to provide the MongoDB collection indexes
