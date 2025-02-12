@@ -180,19 +180,20 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 			}
 		}
 
+		let parsedDocument = newDocument;
 		if (!unsafe) {
 			try {
 				if (!this.createSchema) {
 					throw new Error('No schema defined for insert operation. This is either an internal interface error or you should pass unsafe=true to the insert operation.');
 				}
-				this.createSchema.parse(newDocument);
+				parsedDocument = this.createSchema.parse(newDocument);
 			}
 			catch (error) {
 				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
 			}
 		}
 
-		return this.mongoCollection.insertOne(newDocument);
+		return this.mongoCollection.insertOne(parsedDocument);
 	}
 
 	/**
@@ -203,15 +204,6 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @returns A promise that resolves to the result of the update operation
 	 */
 	async updateById(id: string, updateFields: TUpdate): Promise<UpdateResult> {
-		if (this.updateSchema) {
-			try {
-				this.updateSchema.parse(updateFields);
-			}
-			catch (error) {
-				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
-			}
-		}
-
 		return this.mongoCollection.updateOne(
 			{ _id: { $eq: id } } as unknown as Filter<T>,
 			{ $set: { ...updateFields, updated_at: new Date() } } as unknown as Partial<T>,
@@ -247,7 +239,17 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 * @returns A promise that resolves to the result of the update operation
 	 */
 	async updateOne(filter: Filter<T>, updateFields: Partial<T>): Promise<UpdateResult> {
-		return this.mongoCollection.updateOne(filter, { $set: { ...updateFields, updated_at: new Date() } });
+		let parsedUpdateFields = updateFields;
+		if (this.updateSchema) {
+			try {
+				parsedUpdateFields = this.updateSchema.parse(updateFields);
+			}
+			catch (error) {
+				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
+			}
+		}
+
+		return this.mongoCollection.updateOne(filter, { $set: { ...parsedUpdateFields, updated_at: new Date() } });
 	}
 
 	// Abstract method for subclasses to provide the MongoDB collection indexes
