@@ -100,6 +100,7 @@ class RidesClass extends MongoCollectionClass<Ride, CreateRideDto, UpdateRideDto
 			// eslint-disable-next-line perfectionist/sort-objects
 			{ background: true, key: { system_status: 1, start_time_scheduled: 1 } },
 			{ background: true, key: { trip_id: 1 } },
+			{ background: true, key: { plan_id: 1 } },
 		];
 	}
 
