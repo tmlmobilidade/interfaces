@@ -44,8 +44,8 @@ export const publishStatusSchema = z.enum(PUBLISH_STATUS_VALUES);
 
 // Base schema for alerts with common validation rules
 export const AlertSchema = DocumentSchema.extend({
-	active_period_end_date: z.coerce.date(),
-	active_period_start_date: z.coerce.date(),
+	active_period_end_date: z.coerce.date().transform(val => new Date(val)),
+	active_period_start_date: z.coerce.date().transform(val => new Date(val)),
 	cause: causeSchema,
 	created_by: z.string().min(1),
 	description: z.string(),
@@ -54,8 +54,8 @@ export const AlertSchema = DocumentSchema.extend({
 	info_url: z.string().url().optional().or(z.literal('')),
 	modified_by: z.string().min(1),
 	municipality_ids: z.array(z.string().min(1)),
-	publish_end_date: z.coerce.date(),
-	publish_start_date: z.coerce.date(),
+	publish_end_date: z.coerce.date().transform(val => new Date(val)),
+	publish_start_date: z.coerce.date().transform(val => new Date(val)),
 	publish_status: publishStatusSchema,
 	reference_type: z.enum(['route', 'stop', 'agency']),
 	references: z.array(z.object({
