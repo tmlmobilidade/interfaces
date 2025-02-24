@@ -351,6 +351,7 @@ export const mockAlerts: CreateAlertDto[] = [
 			parent_id: '1',
 		}],
 		title: 'Alert 1',
+		type: 'PLANNED',
 	},
 	{
 		active_period_end_date: new Date(),
@@ -374,6 +375,7 @@ export const mockAlerts: CreateAlertDto[] = [
 			parent_id: '1',
 		}],
 		title: 'Alert 2',
+		type: 'PLANNED',
 	},
 	{
 		active_period_end_date: new Date(),
@@ -397,5 +399,6 @@ export const mockAlerts: CreateAlertDto[] = [
 			parent_id: '1',
 		}],
 		title: 'Alert 3',
+		type: 'PLANNED',
 	},
 ];

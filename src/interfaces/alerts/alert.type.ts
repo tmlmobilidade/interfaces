@@ -37,10 +37,16 @@ const PUBLISH_STATUS_VALUES = [
 	'DRAFT',
 ] as const;
 
+const ALERT_TYPE_VALUES = [
+	'PLANNED',
+	'REALTIME',
+] as const;
+
 // Define schemas using constants
 export const causeSchema = z.enum(CAUSE_VALUES);
 export const effectSchema = z.enum(EFFECT_VALUES);
 export const publishStatusSchema = z.enum(PUBLISH_STATUS_VALUES);
+export const alertTypeSchema = z.enum(ALERT_TYPE_VALUES);
 
 // Base schema for alerts with common validation rules
 export const AlertSchema = DocumentSchema.extend({
@@ -63,6 +69,7 @@ export const AlertSchema = DocumentSchema.extend({
 		parent_id: z.string().min(1),
 	})),
 	title: z.string().min(1),
+	type: alertTypeSchema,
 }).strict();
 
 export const CreateAlertSchema = AlertSchema
@@ -76,6 +83,7 @@ export const UpdateAlertSchema = AlertSchema
 export type Cause = z.infer<typeof causeSchema>;
 export type Effect = z.infer<typeof effectSchema>;
 export type PublishStatus = z.infer<typeof publishStatusSchema>;
+export type AlertType = z.infer<typeof alertTypeSchema>;
 
 // Define the Alert interface
 export interface Alert
@@ -84,10 +92,12 @@ export interface Alert
 		'cause'
 		| 'effect'
 		| 'publish_status'
+		| 'type'
 	> {
 	cause: Cause
 	effect: Effect
 	publish_status: PublishStatus
+	type: AlertType
 }
 
 export interface CreateAlertDto
@@ -96,10 +106,12 @@ export interface CreateAlertDto
 		'cause'
 		| 'effect'
 		| 'publish_status'
+		| 'type'
 	> {
 	cause: Cause
 	effect: Effect
 	publish_status: PublishStatus
+	type: AlertType
 }
 
 export type UpdateAlertDto = Partial<Omit<CreateAlertDto, 'created_by'>>;

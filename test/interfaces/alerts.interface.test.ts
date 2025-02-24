@@ -35,6 +35,7 @@ const newAlert: CreateAlertDto = {
 		},
 	],
 	title: 'Test Alert Title',
+	type: 'PLANNED',
 };
 
 let insertedAlertId: string;
