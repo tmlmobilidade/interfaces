@@ -42,11 +42,19 @@ const ALERT_TYPE_VALUES = [
 	'REALTIME',
 ] as const;
 
+const REFERENCE_TYPE_VALUES = [
+	'ROUTE',
+	'STOP',
+	'AGENCY',
+	'TRIP',
+] as const;
+
 // Define schemas using constants
 export const causeSchema = z.enum(CAUSE_VALUES);
 export const effectSchema = z.enum(EFFECT_VALUES);
 export const publishStatusSchema = z.enum(PUBLISH_STATUS_VALUES);
 export const alertTypeSchema = z.enum(ALERT_TYPE_VALUES);
+export const referenceTypeSchema = z.enum(REFERENCE_TYPE_VALUES);
 
 // Base schema for alerts with common validation rules
 export const AlertSchema = DocumentSchema.extend({
@@ -63,7 +71,7 @@ export const AlertSchema = DocumentSchema.extend({
 	publish_end_date: z.coerce.date().transform(val => new Date(val)),
 	publish_start_date: z.coerce.date().transform(val => new Date(val)),
 	publish_status: publishStatusSchema,
-	reference_type: z.enum(['route', 'stop', 'agency']),
+	reference_type: referenceTypeSchema,
 	references: z.array(z.object({
 		child_ids: z.array(z.string().min(1)),
 		parent_id: z.string().min(1),
@@ -84,7 +92,7 @@ export type Cause = z.infer<typeof causeSchema>;
 export type Effect = z.infer<typeof effectSchema>;
 export type PublishStatus = z.infer<typeof publishStatusSchema>;
 export type AlertType = z.infer<typeof alertTypeSchema>;
-
+export type ReferenceType = z.infer<typeof referenceTypeSchema>;
 // Define the Alert interface
 export interface Alert
 	extends Omit<
@@ -92,11 +100,13 @@ export interface Alert
 		'cause'
 		| 'effect'
 		| 'publish_status'
+		| 'reference_type'
 		| 'type'
 	> {
 	cause: Cause
 	effect: Effect
 	publish_status: PublishStatus
+	reference_type: ReferenceType
 	type: AlertType
 }
 
@@ -106,11 +116,13 @@ export interface CreateAlertDto
 		'cause'
 		| 'effect'
 		| 'publish_status'
+		| 'reference_type'
 		| 'type'
 	> {
 	cause: Cause
 	effect: Effect
 	publish_status: PublishStatus
+	reference_type: ReferenceType
 	type: AlertType
 }
 
