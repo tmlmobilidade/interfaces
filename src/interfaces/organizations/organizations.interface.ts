@@ -1,7 +1,8 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { HttpException, HttpStatus } from '@/lib';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateOrganizationDto, Organization, UpdateOrganizationDto } from '@/types';
-import { Filter, IndexDescription } from 'mongodb';
+import { Filter, IndexDescription, UpdateResult } from 'mongodb';
 
 class OrganizationsClass extends MongoCollectionClass<Organization, CreateOrganizationDto, UpdateOrganizationDto> {
 	private static _instance: OrganizationsClass;
@@ -38,6 +39,13 @@ class OrganizationsClass extends MongoCollectionClass<Organization, CreateOrgani
 	 */
 	async updateByCode(code: string, fields: Partial<Organization>) {
 		return this.mongoCollection.updateOne({ code } as Filter<Organization>, { $set: fields });
+	}
+
+	/**
+	 * Disable Update Many
+	 */
+	async updateMany(): Promise<UpdateResult<Organization>> {
+		throw new HttpException(HttpStatus.METHOD_NOT_ALLOWED, 'Method not allowed for organizations');
 	}
 
 	protected getCollectionIndexes(): IndexDescription[] {

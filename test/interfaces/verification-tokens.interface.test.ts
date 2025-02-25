@@ -1,4 +1,5 @@
 import { verificationTokens } from '@/interfaces';
+import { HttpException } from '@/lib';
 import { CreateVerificationTokenDto } from '@/types';
 import { generateRandomString } from '@/utils';
 
@@ -75,6 +76,12 @@ describe('VerificationTokensClass', () => {
 		it('should return deletedCount as 0 if no tokens match the filter', async () => {
 			const result = await verificationTokens.deleteMany({ token: 'NON_EXISTENT_TOKEN' });
 			expect(result.deletedCount).toBe(0);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should throw HttpException', async () => {
+			await expect(verificationTokens.updateMany()).rejects.toThrow(HttpException);
 		});
 	});
 });

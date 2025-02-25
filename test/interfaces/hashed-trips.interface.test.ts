@@ -1,4 +1,5 @@
 import { hashedTrips } from '@/interfaces';
+import { HttpException } from '@/lib';
 import { CreateHashedTripDto } from '@/types';
 
 const newHashedTrip: CreateHashedTripDto = {
@@ -79,6 +80,23 @@ describe('HashedTripsClass', () => {
 		it('should return null if the hashed trip is not found', async () => {
 			const updateResult = await hashedTrips.updateById('NON_EXISTENT_CODE', { line_long_name: 'Updated Long Line Name' });
 			expect(updateResult.modifiedCount).toBe(0);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should update all hashed trips', async () => {
+			const updateResult = await hashedTrips.updateMany({}, { line_long_name: 'Updated Long Line Name' });
+			expect(updateResult.modifiedCount).toEqual((await hashedTrips.all()).length);
+		});
+
+		it('should return modifiedCount as 0 if no hashed trips match the filter', async () => {
+			const updateResult = await hashedTrips.updateMany({ _id: 'NON_EXISTENT_CODE' }, { line_long_name: 'Should Not Update' });
+			expect(updateResult.modifiedCount).toBe(0);
+		});
+
+		it('should reject with HttpException if update fields are invalid', async () => {
+			await expect(hashedTrips.updateMany({}, { line_long_name: 1 as unknown as string }))
+				.rejects.toThrow(HttpException);
 		});
 	});
 });

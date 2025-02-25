@@ -1,4 +1,5 @@
 import { roles } from '@/interfaces';
+import { HttpException, HttpStatus } from '@/lib';
 import { CreateRoleDto } from '@/types';
 
 const newRole: CreateRoleDto = {
@@ -67,6 +68,12 @@ describe('RolesClass', () => {
 		it('should return modifiedCount as 0 if the role does not exist', async () => {
 			const updateResult = await roles.updateById('NON_EXISTENT_ID', { name: 'Should Not Update' });
 			expect(updateResult.modifiedCount).toBe(0);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should throw HttpException', async () => {
+			await expect(roles.updateMany()).rejects.toThrow(new HttpException(HttpStatus.METHOD_NOT_ALLOWED, 'Method not allowed for roles'));
 		});
 	});
 

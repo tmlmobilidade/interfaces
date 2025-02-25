@@ -1,4 +1,5 @@
 import { organizations } from '@/interfaces';
+import { HttpException, HttpStatus } from '@/lib';
 import { CreateOrganizationDto } from '@/types';
 
 const newOrganization: CreateOrganizationDto = {
@@ -51,6 +52,12 @@ describe('OrganizationsClass', () => {
 		it('should return modifiedCount as 0 if the organization does not exist', async () => {
 			const updateResult = await organizations.updateByCode('NON_EXISTENT_CODE', { name: 'Should Not Update' });
 			expect(updateResult.modifiedCount).toBe(0);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should throw HttpException', async () => {
+			await expect(organizations.updateMany()).rejects.toThrow(new HttpException(HttpStatus.METHOD_NOT_ALLOWED, 'Method not allowed for organizations'));
 		});
 	});
 

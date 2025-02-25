@@ -1,4 +1,5 @@
 import { sessions } from '@/interfaces';
+import { HttpException, HttpStatus } from '@/lib';
 import { CreateSessionDto } from '@/types';
 import { generateRandomString } from '@/utils';
 
@@ -79,6 +80,12 @@ describe('SessionsClass', () => {
 		it('should return deletedCount as 0 if no sessions match the filter', async () => {
 			const result = await sessions.deleteMany({ token: 'NON_EXISTENT_TOKEN' });
 			expect(result.deletedCount).toBe(0);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should throw HttpException', async () => {
+			await expect(sessions.updateMany()).rejects.toThrow(new HttpException(HttpStatus.METHOD_NOT_ALLOWED, 'Method not allowed for sessions'));
 		});
 	});
 });

@@ -1,4 +1,5 @@
 import { agencies } from '@/interfaces/agencies/agencies.interface';
+import { HttpException } from '@/lib';
 import { CreateAgencyDto, createOperationalDate } from '@/types';
 
 const newAgency: CreateAgencyDto = {
@@ -60,6 +61,23 @@ describe('AgenciesClass', () => {
 		it('should return modifiedCount as 0 if the agency does not exist', async () => {
 			const updateResult = await agencies.updateByCode('NON_EXISTENT_CODE', { name: 'Should Not Update' });
 			expect(updateResult.modifiedCount).toBe(0);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should update all agencies', async () => {
+			const updateResult = await agencies.updateMany({}, { price_per_km: 2.0 });
+			expect(updateResult.modifiedCount).toEqual((await agencies.all()).length);
+		});
+
+		it('should return modifiedCount as 0 if no agencies match the filter', async () => {
+			const updateResult = await agencies.updateMany({ code: 'NON_EXISTENT_CODE' }, { name: 'Should Not Update' });
+			expect(updateResult.modifiedCount).toBe(0);
+		});
+
+		it('should reject with HttpException if update fields are invalid', async () => {
+			await expect(agencies.updateMany({ code: { $in: [newAgency.code] } }, { price_per_km: 'THIS_IS_NOT_A_NUMBER' as unknown as number }))
+				.rejects.toThrow(HttpException);
 		});
 	});
 

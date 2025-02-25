@@ -1,4 +1,5 @@
 import { rides } from '@/interfaces';
+import { HttpException } from '@/lib';
 import { createOperationalDate, CreateRideDto } from '@/types';
 
 const newRide: CreateRideDto = {
@@ -77,6 +78,23 @@ describe('RidesClass', () => {
 		it('should return modifiedCount as 0 if the ride does not exist', async () => {
 			const updateResult = await rides.updateById('NON_EXISTENT_CODE', { system_status: 'complete' });
 			expect(updateResult.modifiedCount).toBe(0);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should update all rides', async () => {
+			const updateResult = await rides.updateMany({}, { system_status: 'complete' });
+			expect(updateResult.modifiedCount).toEqual((await rides.all()).length);
+		});
+
+		it('should return modifiedCount as 0 if no rides match the filter', async () => {
+			const updateResult = await rides.updateMany({ _id: 'NON_EXISTENT_CODE' }, { system_status: 'complete' });
+			expect(updateResult.modifiedCount).toBe(0);
+		});
+
+		it('should reject with HttpException if update fields are invalid', async () => {
+			await expect(rides.updateMany({}, { system_status: 1 as unknown as 'complete' }))
+				.rejects.toThrow(HttpException);
 		});
 	});
 

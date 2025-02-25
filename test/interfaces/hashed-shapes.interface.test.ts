@@ -1,4 +1,5 @@
 import { hashedShapes } from '@/interfaces';
+import { HttpException } from '@/lib';
 import { CreateHashedShapeDto } from '@/types';
 
 const newHashedShape: CreateHashedShapeDto = {
@@ -58,6 +59,23 @@ describe('HashedShapesClass', () => {
 		it('should return modifiedCount as 0 if the hashed shape does not exist', async () => {
 			const updateResult = await hashedShapes.updateById('NON_EXISTENT_CODE', { agency_id: 'should_not_update' });
 			expect(updateResult.modifiedCount).toBe(0);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should update all hashed shapes', async () => {
+			const updateResult = await hashedShapes.updateMany({}, { agency_id: 'updated_agency' });
+			expect(updateResult.modifiedCount).toEqual((await hashedShapes.all()).length);
+		});
+
+		it('should return modifiedCount as 0 if no hashed shapes match the filter', async () => {
+			const updateResult = await hashedShapes.updateMany({ _id: 'NON_EXISTENT_CODE' }, { agency_id: 'should_not_update' });
+			expect(updateResult.modifiedCount).toBe(0);
+		});
+
+		it('should reject with HttpException if update fields are invalid', async () => {
+			await expect(hashedShapes.updateMany({}, { agency_id: 1 as unknown as string }))
+				.rejects.toThrow(HttpException);
 		});
 	});
 

@@ -1,7 +1,8 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { HttpException, HttpStatus } from '@/lib';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateVerificationTokenDto, UpdateVerificationTokenDto, VerificationToken } from '@/types';
-import { IndexDescription } from 'mongodb';
+import { IndexDescription, UpdateResult } from 'mongodb';
 
 class VerificationTokensClass extends MongoCollectionClass<VerificationToken, CreateVerificationTokenDto, UpdateVerificationTokenDto> {
 	private static _instance: VerificationTokensClass;
@@ -27,6 +28,13 @@ class VerificationTokensClass extends MongoCollectionClass<VerificationToken, Cr
 	 */
 	async findByToken(token: string) {
 		return this.findOne({ token });
+	}
+
+	/**
+	 * Disable Update Many
+	 */
+	async updateMany(): Promise<UpdateResult<VerificationToken>> {
+		throw new HttpException(HttpStatus.METHOD_NOT_ALLOWED, 'Method not allowed for verification tokens');
 	}
 
 	protected getCollectionIndexes(): IndexDescription[] {

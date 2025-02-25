@@ -229,6 +229,27 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	// }
 
 	/**
+	 * Updates multiple documents matching the filter criteria.
+	 *
+	 * @param filter - The filter criteria to match documents to update
+	 * @param updateFields - The fields to update in the documents
+	 * @returns A promise that resolves to the result of the update operation
+	 */
+	async updateMany(filter: Filter<T>, updateFields: Partial<T>) {
+		let parsedUpdateFields = updateFields;
+		if (this.updateSchema) {
+			try {
+				parsedUpdateFields = this.updateSchema.parse(updateFields);
+			}
+			catch (error) {
+				throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
+			}
+		}
+
+		return this.mongoCollection.updateMany(filter, { $set: { ...parsedUpdateFields, updated_at: new Date() } } as unknown as Partial<T>);
+	}
+
+	/**
 	 * Updates a single document matching the filter criteria.
 	 *
 	 * @param filter - The filter criteria to match the document to update
@@ -251,26 +272,6 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 
 	// Abstract method for subclasses to provide the MongoDB collection indexes
 	protected abstract getCollectionIndexes(): IndexDescription[];
-
-	// /**
-	//  * Updates multiple documents matching the filter criteria.
-	//  *
-	//  * @param filter - The filter criteria to match documents to update
-	//  * @param updateFields - The fields to update in the documents
-	//  * @returns A promise that resolves to the result of the update operation
-	//  */
-	// async updateMany(filter: Filter<T>, updateFields: Partial<T>) {
-	// 	if (this.updateSchema) {
-	// 		try {
-	// 			this.updateSchema.parse(updateFields);
-	// 		}
-	// 		catch (error) {
-	// 			throw new HttpException(HttpStatus.BAD_REQUEST, error.message, { cause: error });
-	// 		}
-	// 	}
-
-	// 	return this.mongoCollection.updateMany(filter, { $set: { ...updateFields, updated_at: new Date() } });
-	// }
 
 	// Abstract method for subclasses to provide the MongoDB collection name
 	protected abstract getCollectionName(): string;

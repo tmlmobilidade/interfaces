@@ -1,7 +1,8 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { HttpException, HttpStatus } from '@/lib';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateRoleDto, Role, UpdateRoleDto } from '@/types';
-import { Filter, IndexDescription } from 'mongodb';
+import { Filter, IndexDescription, UpdateResult } from 'mongodb';
 
 class RolesClass extends MongoCollectionClass<Role, CreateRoleDto, UpdateRoleDto> {
 	private static _instance: RolesClass;
@@ -27,6 +28,13 @@ class RolesClass extends MongoCollectionClass<Role, CreateRoleDto, UpdateRoleDto
 	 */
 	async findByName(name: string) {
 		return this.mongoCollection.findOne({ name } as Filter<Role>);
+	}
+
+	/**
+	 * Disable Update Many
+	 */
+	async updateMany(): Promise<UpdateResult<Role>> {
+		throw new HttpException(HttpStatus.METHOD_NOT_ALLOWED, 'Method not allowed for roles');
 	}
 
 	protected getCollectionIndexes(): IndexDescription[] {

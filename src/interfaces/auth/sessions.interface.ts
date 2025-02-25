@@ -1,7 +1,8 @@
 import { MongoCollectionClass } from '@/classes/mongo-collection.class';
+import { HttpException, HttpStatus } from '@/lib';
 import { AsyncSingletonProxy } from '@/lib/utils';
 import { CreateSessionDto, Session, UpdateSessionDto } from '@/types';
-import { IndexDescription } from 'mongodb';
+import { IndexDescription, UpdateResult } from 'mongodb';
 
 class SessionsClass extends MongoCollectionClass<Session, CreateSessionDto, UpdateSessionDto> {
 	private static _instance: SessionsClass;
@@ -17,6 +18,13 @@ class SessionsClass extends MongoCollectionClass<Session, CreateSessionDto, Upda
 			SessionsClass._instance = instance;
 		}
 		return SessionsClass._instance;
+	}
+
+	/**
+	 * Disable Update Many
+	 */
+	async updateMany(): Promise<UpdateResult<Session>> {
+		throw new HttpException(HttpStatus.METHOD_NOT_ALLOWED, 'Method not allowed for sessions');
 	}
 
 	protected getCollectionIndexes(): IndexDescription[] {

@@ -1,4 +1,5 @@
 import { alerts } from '@/interfaces';
+import { HttpException } from '@/lib';
 import { CreateAlertDto } from '@/types';
 
 const newAlert: CreateAlertDto = {
@@ -107,6 +108,23 @@ describe('AlertsClass', () => {
 		it('should return modifiedCount as 0 if the alert does not exist', async () => {
 			const updateResult = await alerts.updateById('NON_EXISTENT_ID', { description: 'Should Not Update' });
 			expect(updateResult.modifiedCount).toBe(0);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should update all alerts', async () => {
+			const updateResult = await alerts.updateMany({ type: 'PLANNED' }, { type: 'REALTIME' });
+			expect(updateResult.modifiedCount).toEqual((await alerts.all()).length);
+		});
+
+		it('should return modifiedCount as 0 if no alerts match the filter', async () => {
+			const updateResult = await alerts.updateMany({ title: 'NON_EXISTENT_TITLE' }, { type: 'REALTIME' });
+			expect(updateResult.modifiedCount).toBe(0);
+		});
+
+		it('should reject with HttpException if update fields are invalid', async () => {
+			await expect(alerts.updateMany({ type: 'PLANNED' }, { type: 1 as unknown as 'PLANNED' | 'REALTIME' }))
+				.rejects.toThrow(HttpException);
 		});
 	});
 

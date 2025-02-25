@@ -1,4 +1,5 @@
 import { zones } from '@/interfaces';
+import { HttpException } from '@/lib';
 import { CreateZoneDto } from '@/types';
 
 const newZone: CreateZoneDto = {
@@ -65,6 +66,23 @@ describe('ZonesClass', () => {
 		it('should return modifiedCount as 0 if the zone does not exist', async () => {
 			const updateResult = await zones.updateByCode('NON_EXISTENT_CODE', { name: 'Should Not Update' });
 			expect(updateResult.modifiedCount).toBe(0);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should update all stops', async () => {
+			const updateResult = await zones.updateMany({}, { name: 'Updated Zone Name' });
+			expect(updateResult.modifiedCount).toEqual((await zones.all()).length);
+		});
+
+		it('should return modifiedCount as 0 if no stops match the filter', async () => {
+			const updateResult = await zones.updateMany({ _id: 'NON_EXISTENT_ID' }, { name: 'Updated Zone Name' });
+			expect(updateResult.modifiedCount).toBe(0);
+		});
+
+		it('should reject with HttpException if update fields are invalid', async () => {
+			await expect(zones.updateMany({}, { name: 1 as unknown as string }))
+				.rejects.toThrow(HttpException);
 		});
 	});
 

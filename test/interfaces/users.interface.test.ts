@@ -1,4 +1,5 @@
 import { users } from '@/interfaces';
+import { HttpException } from '@/lib';
 import { CreateUserDto, Email } from '@/types';
 import { generateRandomString } from '@/utils';
 import { mockUsers } from '@test/data/db-mock';
@@ -111,6 +112,23 @@ describe('UsersClass', () => {
 			const filter = { email: 'nonexistent@example.com' as Email };
 			const result = await users.findMany(filter);
 			expect(result).toEqual([]);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should update all stops', async () => {
+			const updateResult = await users.updateMany({}, { first_name: 'Updated First Name' });
+			expect(updateResult.modifiedCount).toEqual((await users.all()).length);
+		});
+
+		it('should return modifiedCount as 0 if no stops match the filter', async () => {
+			const updateResult = await users.updateMany({ _id: 'NON_EXISTENT_ID' }, { first_name: 'Updated First Name' });
+			expect(updateResult.modifiedCount).toBe(0);
+		});
+
+		it('should reject with HttpException if update fields are invalid', async () => {
+			await expect(users.updateMany({}, { email: 1 as unknown as string }))
+				.rejects.toThrow(HttpException);
 		});
 	});
 

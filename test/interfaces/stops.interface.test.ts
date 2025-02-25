@@ -1,4 +1,5 @@
 import { stops } from '@/interfaces';
+import { HttpException } from '@/lib';
 import { CreateStopDto } from '@/types';
 import { mockStops } from '@test/data/db-mock';
 
@@ -77,6 +78,23 @@ describe('StopsClass', () => {
 			expect(updatedStop?.locality_id).toBe('Updated Locality');
 			// Ensure other fields remain unchanged
 			expect(updatedStop?.name).toBe(originalStop?.name);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should update all stops', async () => {
+			const updateResult = await stops.updateMany({}, { bench_status: 'is_damaged' });
+			expect(updateResult.modifiedCount).toEqual((await stops.all()).length);
+		});
+
+		it('should return modifiedCount as 0 if no stops match the filter', async () => {
+			const updateResult = await stops.updateMany({ _id: 'NON_EXISTENT_ID' }, { bench_status: 'is_damaged' });
+			expect(updateResult.modifiedCount).toBe(0);
+		});
+
+		it('should reject with HttpException if update fields are invalid', async () => {
+			await expect(stops.updateMany({}, { bench_status: 1 as unknown as 'is_damaged' | 'is_missing' | 'is_ok' | 'not_applicable' | 'unknown' }))
+				.rejects.toThrow(HttpException);
 		});
 	});
 

@@ -1,4 +1,5 @@
 import { municipalities } from '@/interfaces';
+import { HttpException } from '@/lib';
 import { CreateMunicipalityDto } from '@/types';
 
 const newMunicipality: CreateMunicipalityDto = {
@@ -76,6 +77,23 @@ describe('MunicipalitiesClass', () => {
 		it('should return deletedCount as 0 if the municipality does not exist', async () => {
 			const result = await municipalities.deleteOne({ code: 'NON_EXISTENT_CODE' });
 			expect(result.deletedCount).toBe(0);
+		});
+	});
+
+	describe('updateMany', () => {
+		it('should update all municipalities', async () => {
+			const updateResult = await municipalities.updateMany({}, { name: 'Updated Municipality Name' });
+			expect(updateResult.modifiedCount).toEqual((await municipalities.all()).length);
+		});
+
+		it('should return modifiedCount as 0 if no municipalities match the filter', async () => {
+			const updateResult = await municipalities.updateMany({ code: 'NON_EXISTENT_CODE' }, { name: 'Should Not Update' });
+			expect(updateResult.modifiedCount).toBe(0);
+		});
+
+		it('should reject with HttpException if update fields are invalid', async () => {
+			await expect(municipalities.updateMany({}, { name: 1 as unknown as string }))
+				.rejects.toThrow(HttpException);
 		});
 	});
 });
