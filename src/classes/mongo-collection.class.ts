@@ -2,7 +2,7 @@ import { MongoConnector } from '@/connectors/mongo.connector';
 import { HttpException, HttpStatus } from '@/lib';
 import { createSchemaFactory } from '@/lib/schema.factory';
 import { generateRandomString } from '@/utils';
-import { Collection, DeleteResult, Document, Filter, IndexDescription, InsertOneResult, MongoClientOptions, OptionalUnlessRequiredId, Sort, UpdateResult, WithId } from 'mongodb';
+import { Collection, DeleteResult, Document, Filter, IndexDescription, InsertOneResult, MongoClientOptions, OptionalUnlessRequiredId, Sort, UpdateOptions, UpdateResult, WithId } from 'mongodb';
 import z from 'zod';
 
 export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate> {
@@ -254,9 +254,10 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 	 *
 	 * @param filter - The filter criteria to match the document to update
 	 * @param updateFields - The fields to update in the document
+	 * @param options - The options for the update operation
 	 * @returns A promise that resolves to the result of the update operation
 	 */
-	async updateOne(filter: Filter<T>, updateFields: TUpdate): Promise<UpdateResult> {
+	async updateOne(filter: Filter<T>, updateFields: TUpdate, options?: UpdateOptions): Promise<UpdateResult> {
 		let parsedUpdateFields = updateFields;
 		if (this.updateSchema) {
 			try {
@@ -267,7 +268,7 @@ export abstract class MongoCollectionClass<T extends Document, TCreate, TUpdate>
 			}
 		}
 
-		return this.mongoCollection.updateOne(filter, { $set: { ...parsedUpdateFields, updated_at: new Date() } } as unknown as Partial<T>);
+		return this.mongoCollection.updateOne(filter, { $set: { ...parsedUpdateFields, updated_at: new Date() } } as unknown as Partial<T>, options);
 	}
 
 	// Abstract method for subclasses to provide the MongoDB collection indexes
