@@ -3,7 +3,7 @@ import { HttpException } from '@/lib';
 import { CreateAlertDto } from '@/types';
 
 const newAlert: CreateAlertDto = {
-	active_period_end_date: new Date(),
+	active_period_end_date: undefined,
 	active_period_start_date: new Date(),
 	cause: 'UNKNOWN_CAUSE',
 	created_by: '1',
@@ -13,10 +13,10 @@ const newAlert: CreateAlertDto = {
 	info_url: 'http://example.com/info.html',
 	modified_by: '1',
 	municipality_ids: ['municipality_1'],
-	publish_end_date: new Date(),
+	publish_end_date: undefined,
 	publish_start_date: new Date(),
 	publish_status: 'PUBLISHED',
-	reference_type: 'route',
+	reference_type: 'ROUTE',
 	references: [
 		{
 			child_ids: [

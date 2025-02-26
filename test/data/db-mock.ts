@@ -330,7 +330,7 @@ export const mockAgencies: CreateAgencyDto[] = [
 
 export const mockAlerts: CreateAlertDto[] = [
 	{
-		active_period_end_date: new Date(),
+		active_period_end_date: undefined,
 		active_period_start_date: new Date(),
 		cause: 'ACCIDENT',
 		created_by: '1',
@@ -345,7 +345,7 @@ export const mockAlerts: CreateAlertDto[] = [
 		publish_end_date: new Date('20240201'),
 		publish_start_date: new Date('20240101'),
 		publish_status: 'PUBLISHED',
-		reference_type: 'stop',
+		reference_type: 'STOP',
 		references: [{
 			child_ids: ['1'],
 			parent_id: '1',
@@ -369,7 +369,7 @@ export const mockAlerts: CreateAlertDto[] = [
 		publish_end_date: new Date('20240201'),
 		publish_start_date: new Date('20240101'),
 		publish_status: 'PUBLISHED',
-		reference_type: 'route',
+		reference_type: 'ROUTE',
 		references: [{
 			child_ids: ['1'],
 			parent_id: '1',
@@ -393,7 +393,7 @@ export const mockAlerts: CreateAlertDto[] = [
 		publish_end_date: new Date('20240201'),
 		publish_start_date: new Date('20240101'),
 		publish_status: 'PUBLISHED',
-		reference_type: 'agency',
+		reference_type: 'AGENCY',
 		references: [{
 			child_ids: ['1'],
 			parent_id: '1',
