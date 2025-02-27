@@ -43,7 +43,7 @@ const ALERT_TYPE_VALUES = [
 ] as const;
 
 const REFERENCE_TYPE_VALUES = [
-	'ROUTE',
+	'LINE',
 	'STOP',
 	'AGENCY',
 	'TRIP',

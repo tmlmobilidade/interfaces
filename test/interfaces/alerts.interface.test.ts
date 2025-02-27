@@ -16,7 +16,7 @@ const newAlert: CreateAlertDto = {
 	publish_end_date: undefined,
 	publish_start_date: new Date(),
 	publish_status: 'PUBLISHED',
-	reference_type: 'ROUTE',
+	reference_type: 'LINE',
 	references: [
 		{
 			child_ids: [

@@ -369,7 +369,7 @@ export const mockAlerts: CreateAlertDto[] = [
 		publish_end_date: new Date('20240201'),
 		publish_start_date: new Date('20240101'),
 		publish_status: 'PUBLISHED',
-		reference_type: 'ROUTE',
+		reference_type: 'LINE',
 		references: [{
 			child_ids: ['1'],
 			parent_id: '1',
